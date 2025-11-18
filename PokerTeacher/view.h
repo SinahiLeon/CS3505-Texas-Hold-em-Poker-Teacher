@@ -2,6 +2,7 @@
 #define VIEW_H
 
 #include <QMainWindow>
+#include "game.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -14,7 +15,7 @@ class View : public QMainWindow
     Q_OBJECT
 
 public:
-    View(QWidget *parent = nullptr);
+    View(Game& game, QWidget *parent = nullptr);
     ~View();
 
 private:
