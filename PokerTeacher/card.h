@@ -25,6 +25,7 @@ public:
     /// @brief Defines card equality.
     /// @param other Card to test for equality.
     /// @returns Boolean indicating whether or not cards were equal.
+    /// @remarks This operator is required for <=> to auto-generate other operators.
     bool operator==(const Card& other) const;
 };
 
