@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include "card.h"
+#include "deck.h"
 #include <QObject>
 #include <vector>
 
@@ -12,6 +13,9 @@ class Game : public QObject
 public:
     std::vector<Card> river;
     explicit Game(QObject *parent = nullptr);
+
+private:
+    Deck deck;
 
 signals:
 };
