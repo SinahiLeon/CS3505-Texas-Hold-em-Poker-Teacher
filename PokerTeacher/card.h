@@ -13,6 +13,7 @@ public:
     /// @param suit Suit of the card.
     /// @param value Value of the card.
     Card(Suit suit, CardValue value);
+    Card& operator=(const Card& other);
     /// @brief Card suit (Heart, Club, Diamond, Spade).
     const Suit suit;
     /// @brief Card value (Ace, King, Queen, Jack and values 2-10).
