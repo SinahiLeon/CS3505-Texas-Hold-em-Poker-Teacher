@@ -28,7 +28,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         suit.h
         cardvalue.h
         game.h game.cpp
-        deck.h deck.cpp
+
         handtype.h
         cardhand.h cardhand.cpp
         cardlibrary.h cardlibrary.cpp

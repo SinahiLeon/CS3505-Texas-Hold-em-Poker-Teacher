@@ -2,7 +2,6 @@
 
 Game::Game(QObject *parent)
     : QObject{parent}
-    , deck()
 {
 
 }
