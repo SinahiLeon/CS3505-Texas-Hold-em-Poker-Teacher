@@ -2,7 +2,6 @@
 #define GAME_H
 
 #include "card.h"
-#include "cardlibrary.h"
 #include <QObject>
 #include <stack>
 #include <vector>
@@ -20,7 +19,6 @@ public:
 signals:
 
 private:
-    CardLibrary cards;
     std::stack<Card*> deck;
 };
 
