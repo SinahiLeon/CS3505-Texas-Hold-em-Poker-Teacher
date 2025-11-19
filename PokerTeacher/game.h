@@ -14,10 +14,10 @@ public:
     std::vector<Card> river;
     explicit Game(QObject *parent = nullptr);
 
+signals:
+
 private:
     Deck deck;
-
-signals:
 };
 
 #endif // GAME_H

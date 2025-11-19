@@ -18,7 +18,7 @@ public:
     const Suit suit;
     /// @brief Card value (Ace, King, Queen, Jack and values 2-10).
     const CardValue value;
-    /// @brief Card image from card_images folder
+    /// @brief Card image from card_images folder.
     const QImage image;
 
     /// @brief This operator inherently generates other comparison operators.
