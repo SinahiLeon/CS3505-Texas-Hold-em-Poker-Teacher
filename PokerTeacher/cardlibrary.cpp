@@ -1,8 +1,6 @@
 #include "cardlibrary.h"
 #include <QMap>
 
-CardLibrary::CardLibrary() {}
-
 const std::map<QString, Card> CardLibrary::cards = {
     // 13 Spades cards
     {QString("Ace of Spades"), Card(Suit::Spade, CardValue(14), QImage("card_images/ace_of_spades.png"))},

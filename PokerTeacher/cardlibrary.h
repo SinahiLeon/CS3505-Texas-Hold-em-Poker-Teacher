@@ -7,7 +7,6 @@
 class CardLibrary
 {
 public:
-    CardLibrary();
     /// @brief All card objects in a standard 52 card deck.
     static const std::map<QString, Card> cards;
 };
