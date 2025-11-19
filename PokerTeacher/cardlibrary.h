@@ -3,6 +3,7 @@
 
 #include "card.h"
 #include <map>
+#include <QString>
 
 class CardLibrary
 {

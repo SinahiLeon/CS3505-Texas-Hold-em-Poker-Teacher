@@ -1,5 +1,7 @@
+#include "card.h"
 #include "cardlibrary.h"
 #include <QMap>
+#include <QImage>
 
 const std::map<QString, Card> CardLibrary::cards = {
     // 13 Spades cards
