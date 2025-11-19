@@ -1,7 +1,7 @@
 #include "deck.h"
 #include "card.h"
 #include "suit.h"
-#include "cardValue.h"
+#include "cardvalue.h"
 
 Deck::Deck() {
 
