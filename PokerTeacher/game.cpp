@@ -13,8 +13,14 @@ Game::Game(QObject *parent)
     // TODO: initialize deck, shuffle, etc.
 }
 
-// ---------------------------
-// TODO: Add game logic methods here
-// (deal cards, post blinds, betting, transitions, etc.)
-// ---------------------------
+// Gives pot to the winner (used inside fold or showdown)
+void Game::awardPotToPlayer(bool playerWins)
+{
+    if (playerWins) {
+        playerChips += pot;
+    } else {
+        computerChips += pot;
+    }
 
+    pot = 0;
+}
