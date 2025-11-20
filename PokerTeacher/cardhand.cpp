@@ -49,6 +49,31 @@ HandType CardHand::decideBestHandType() {
     }
 }
 
+bool CardHand::royalFlushCheck() {
+    // TODO: Implement this
+    return false;
+}
+
+bool CardHand::straightFlushCheck() {
+    // TODO: Implement this
+    return false;
+}
+
+bool CardHand::fourKindCheck() {
+    // TODO: Implement this
+    return false;
+}
+
+bool CardHand::fullHouseCheck() {
+    // TODO: Implement this
+    return false;
+}
+
+bool CardHand::flushCheck() {
+    // TODO: Implement this
+    return false;
+}
+
 bool CardHand::straightCheck() {
     // Edge cases:
     // Ace case
@@ -65,6 +90,8 @@ bool CardHand::straightCheck() {
     // if (curr == 5) check for low ace
         // prog needed is four
     // if (curr index == 4) no straight possible
+
+    return false;
 }
 
 bool CardHand::threeKindCheck() {
