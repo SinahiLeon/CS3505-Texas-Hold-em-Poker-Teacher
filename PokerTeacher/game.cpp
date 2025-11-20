@@ -18,7 +18,7 @@ Game::Game(QObject *parent)
 void Game::shuffleDeck() {
     qDebug() << "Shuffling deck...";
     // Get pointers to all cards in library
-    std::vector<const std::pair<const QString, Card>*> shufflingCards;
+    std::vector<const std::pair<const QString, Card>*> shufflingCards;  // vector< pair<qstring, card>* >
     for (const auto& pair : CardLibrary::cards) {
         shufflingCards.push_back(&pair);
     }

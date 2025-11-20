@@ -23,7 +23,7 @@ public:
                     // reveal their hands. The player with the best five-card hand wins the pot.
     };
 
-    /// @brief A player or AI. Contains chips, currentBet, folded, and hand data.
+    /// @brief A player that containts their information on chips, currentBet, folded, and hand data.
     class Player {
     public:
         int chips = 0;
@@ -32,6 +32,9 @@ public:
         std::vector<Card*> hand;
     };
 
+    /// @brief Used to return which player we are on.
+    /// @param int Index within the players vector.
+    /// @return address of Player.
     Player& getPlayer(int index) { return players[index]; }
     int getPot() const { return pot; }
     void makeBet(int playerIndex, int chipAmount);
@@ -44,7 +47,7 @@ signals:    // Since a value changed, signal to update UI
 
 private:
     std::stack<const std::pair<const QString, Card>*> deck;
-    std::vector<const std::pair<const QString, Card>*> river;
+    std::vector<const std::pair<const QString, Card>*> communityCards;
     int pot;
     int currentBet;
     int bigBlind;
