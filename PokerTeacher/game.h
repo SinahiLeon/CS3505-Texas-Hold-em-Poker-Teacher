@@ -13,7 +13,7 @@ class Game : public QObject
 public:
     explicit Game(QObject *parent = nullptr);
 
-    // Different phases of Texas Hold'em poker
+    /// @brief Different phases of Texas Hold'em poker
     enum class Phases {
         Preflop,
         Flop,   // Three community cards are dealt in the middle of the table.
@@ -23,7 +23,7 @@ public:
                     // reveal their hands. The player with the best five-card hand wins the pot.
     };
 
-
+    /// @brief A player or AI. Contains chips, currentBet, folded, and hand data.
     class Player {
     public:
         int chips = 0;
@@ -32,15 +32,10 @@ public:
         std::vector<Card*> hand;
     };
 
-    void newGame();
-
     Player& getPlayer(int index) { return players[index]; }
     int getPot() const { return pot; }
     void makeBet(int playerIndex, int chipAmount);
     Phases getPhase() const { return phase; }
-    void awardPotToPlayer(int playerIndex);
-    void nextPhase();
-
 
 signals:    // Since a value changed, signal to update UI
     void chipsUpdated(int playerIndex, int newAmount);
@@ -48,27 +43,28 @@ signals:    // Since a value changed, signal to update UI
     //phaseUpdated
 
 private:
-    // Cards
     std::stack<const std::pair<const QString, Card>*> deck;
-    std::vector<const std::pair<const QString, Card>*> river;   // Community cards
-    std::vector<const std::pair<const QString, Card>*> playerHand;  // 2 cards
-    std::vector<const std::pair<const QString, Card>*> computerHand;    // 2 cards
-
+    std::vector<const std::pair<const QString, Card>*> river;
     int pot;
     int currentBet;
     int bigBlind;
     int smallBlind;
     int phaseIndex;
+    Phases phase;
     std::vector<Player> players;
     QMap<int, Phases> phaseIndices{{0, Phases::Preflop}, {1, Phases::Flop}, {2, Phases::Turn}, {3, Phases::River}, {4, Phases::Showdown}};
 
-    Phases phase;
+    /// @brief
+    void newGame();
     /// @brief Resets and shuffles the deck with all cards
     void shuffleDeck();
     /// @brief Helper method to empty the deck stack
     void clearDeck();
     /// @brief Gives pot to the winner (used inside fold or showdown)
     void awardPotToPlayer(bool playerWins);
+    void awardPotToPlayer(int playerIndex); // why are there two of these?
+    /// @brief
+    void nextPhase();
 };
 
 #endif // GAME_H

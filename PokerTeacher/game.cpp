@@ -31,12 +31,14 @@ void Game::shuffleDeck() {
     for (const auto& card : shufflingCards) {
         deck.push(card);
     }
+    qDebug() << "Top of deck:" << deck.top()->first;
+    // Card order for debugging
     std::vector<QString> cardOrder;
-    for (auto& card : shufflingCards)
+    for (auto& card : shufflingCards) {
         cardOrder.push_back(card->first);
+    }
     std::reverse(cardOrder.begin(), cardOrder.end());
     qDebug() << "New card order:" << cardOrder;
-    qDebug() << "Top of deck:" << deck.top()->first;
 }
 
 void Game::clearDeck() {
