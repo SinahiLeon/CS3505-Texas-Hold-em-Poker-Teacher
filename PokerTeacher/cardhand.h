@@ -26,7 +26,7 @@ private:
     HandType hand;
     const int MIN_RIVER_SIZE = 3;
 
-    void decideBestHand();
+    HandType decideBestHand();
     void autoAddKickers();
     bool inBestHand(const Card& card);
     bool onePairCheck();

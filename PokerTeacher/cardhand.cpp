@@ -15,10 +15,36 @@ void CardHand::recieveCards(vector<Card> riverCards) {
     decideBestHand();
 }
 
-void CardHand::decideBestHand() {
-
-    if(onePairCheck()) {
-        hand = HandType::OnePair;
+HandType CardHand::decideBestHand() {
+    if(royalFlushCheck()) {
+        return HandType::RoyalFlush;
+    }
+    else if(straightFlushCheck()) {
+        return HandType::StraightFlush;
+    }
+    else if(fourOfAKindCheck()) {
+        return HandType::FourKind;
+    }
+    else if(fullHouseCheck()) {
+        return HandType::FullHouse;
+    }
+    else if(flushCheck()) {
+        return HandType::Flush;
+    }
+    else if(straightCheck()) {
+        return HandType::Straight;
+    }
+    else if(threeOfAKindCheck()) {
+        return HandType::ThreeKind;
+    }
+    else if(twoPairCheck()) {
+        return HandType::ThreeKind;
+    }
+    else if(onePairCheck()) {
+        return HandType::OnePair;
+    }
+    else {
+        return HandType::HighCard;
     }
 
 }
