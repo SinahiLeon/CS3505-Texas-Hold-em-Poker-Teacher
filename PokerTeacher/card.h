@@ -4,6 +4,7 @@
 #include "cardvalue.h"
 #include "suit.h"
 #include <compare>
+#include <QImage>
 using std::strong_ordering;
 
 class Card
@@ -12,12 +13,14 @@ public:
     /// @brief Constructs a new Card.
     /// @param suit Suit of the card.
     /// @param value Value of the card.
-    Card(Suit suit, CardValue value);
+    Card(Suit suit, CardValue value, QImage image);
     Card& operator=(const Card& other);
     /// @brief Card suit (Heart, Club, Diamond, Spade).
     const Suit suit;
     /// @brief Card value (Ace, King, Queen, Jack and values 2-10).
     const CardValue value;
+    /// @brief Card image from card_images folder.
+    const QImage image;
 
     /// @brief This operator inherently generates other comparison operators.
     /// @param other Card to compare to.
@@ -26,9 +29,10 @@ public:
     /// @brief Defines card equality.
     /// @param other Card to test for equality.
     /// @returns Boolean indicating whether or not cards were equal.
-    /// @remarks This operator is required for <=> to auto-generate other operators.
     bool operator==(const Card& other) const;
     bool exactEqual(const Card& other) const;
+private:
+
 };
 
 #endif // CARD_H
