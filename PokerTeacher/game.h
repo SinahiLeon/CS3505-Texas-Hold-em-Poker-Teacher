@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include "card.h"
+#include "cardhand.h"
 #include <QObject>
 #include <stack>
 #include <vector>
@@ -23,15 +24,21 @@ public:
                     // reveal their hands. The player with the best five-card hand wins the pot.
     };
 
-    /// @brief A player or AI. Contains chips, currentBet, folded, and hand data.
+    /// @brief A player that containts their information on chips, currentBet, folded, and hand data.
     class Player {
     public:
         int chips = 0;
         int currentBet = 0;
         bool folded = false;
-        std::vector<Card*> hand;
+        bool handVisible = false;
+        std::vector<Card*> heldCards;
+        //Combined community and personal hand
+        CardHand fullhand;
     };
 
+    /// @brief Used to return which player we are on.
+    /// @param int Index within the players vector.
+    /// @return address of Player.
     Player& getPlayer(int index) { return players[index]; }
     int getPot() const { return pot; }
     void makeBet(int playerIndex, int chipAmount);
@@ -40,11 +47,12 @@ public:
 signals:    // Since a value changed, signal to update UI
     void chipsUpdated(int playerIndex, int newAmount);
     void potUpdated(int newAmount);
-    //phaseUpdated
+    void communityCardsUpdated();
+    void phaseUpdated(Phases currPhase);
 
 private:
-    std::stack<const std::pair<const QString, Card>*> deck;
-    std::vector<const std::pair<const QString, Card>*> river;
+    std::stack<Card*> deck;
+    std::vector<Card*> communityCards;
     int pot;
     int currentBet;
     int bigBlind;
@@ -61,8 +69,9 @@ private:
     /// @brief Helper method to empty the deck stack
     void clearDeck();
     /// @brief Gives pot to the winner (used inside fold or showdown)
-    void awardPotToPlayer(bool playerWins);
     void awardPotToPlayer(int playerIndex); // why are there two of these?
+    /// @brief
+    void dealCards(int cardAmount, std::vector<Card*>& target);
     /// @brief
     void nextPhase();
 };
