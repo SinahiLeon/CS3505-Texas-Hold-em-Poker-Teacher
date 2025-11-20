@@ -23,13 +23,21 @@ private:
     vector<Card> playerHand;
     vector<Card> allCards;
     vector<Card> bestHand;
-    HandType hand;
+    HandType handType;
     const int MIN_RIVER_SIZE = 3;
 
-    HandType decideBestHand();
+    HandType decideBestHandType();
     void autoAddKickers();
     bool inBestHand(const Card& card);
     bool onePairCheck();
+    bool twoPairCheck();
+    bool threeKindCheck();
+    bool straightCheck();
+    bool flushCheck();
+    bool fullHouseCheck();
+    bool fourKindCheck();
+    bool straightFlushCheck();
+    bool royalFlushCheck();
 };
 
 #endif // CARDHAND_H
