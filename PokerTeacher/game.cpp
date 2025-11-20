@@ -62,6 +62,10 @@ void Game::newGame() {
     emit potUpdated(pot);
 }
 
+void Game::dealCards(int cardAmount, std::vector<Card*>& target) {
+
+}
+
 void Game::makeBet(int playerIndex, int chipAmount) {
     if (playerIndex < 0 || playerIndex < players.size()) {
         return;

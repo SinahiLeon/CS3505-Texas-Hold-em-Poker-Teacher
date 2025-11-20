@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include "card.h"
+#include "cardhand.h"
 #include <QObject>
 #include <stack>
 #include <vector>
@@ -29,7 +30,10 @@ public:
         int chips = 0;
         int currentBet = 0;
         bool folded = false;
-        std::vector<Card*> hand;
+        bool handVisible = false;
+        std::vector<Card*> heldCards;
+        //Combined community and personal hand
+        CardHand fullhand;
     };
 
     /// @brief Used to return which player we are on.
@@ -43,11 +47,12 @@ public:
 signals:    // Since a value changed, signal to update UI
     void chipsUpdated(int playerIndex, int newAmount);
     void potUpdated(int newAmount);
-    //phaseUpdated
+    void communityCardsUpdated();
+    void phaseUpdated(Phases currPhase);
 
 private:
-    std::stack<const std::pair<const QString, Card>*> deck;
-    std::vector<const std::pair<const QString, Card>*> communityCards;
+    std::stack<Card*> deck;
+    std::vector<Card*> communityCards;
     int pot;
     int currentBet;
     int bigBlind;
@@ -64,8 +69,9 @@ private:
     /// @brief Helper method to empty the deck stack
     void clearDeck();
     /// @brief Gives pot to the winner (used inside fold or showdown)
-    void awardPotToPlayer(bool playerWins);
     void awardPotToPlayer(int playerIndex); // why are there two of these?
+    /// @brief
+    void dealCards(int cardAmount, std::vector<Card*>& target);
     /// @brief
     void nextPhase();
 };
