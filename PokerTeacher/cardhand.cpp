@@ -1,69 +1,31 @@
-#include <unordered_map>
+#include <algorithm>
 #include "cardhand.h"
-using std::unordered_map;
+using std::sort;
+using std::greater;
 
-CardHand::CardHand() {}
-
-void CardHand::recieveCards(vector<Card> playerCards) {
-    cards = playerCards;
-    hand = evaluateHandType();
+CardHand::CardHand(vector<Card> startHand) : playerHand(startHand) {
+    sort(playerHand.begin(), playerHand.end(), greater<Card>());
+    hand = HandType::HighCard;
 }
 
-HandType CardHand::evaluateHandType() {
-    vector<Card> straightCards = getStraightCards();
-    priority_queue<int> kinds = getKinds();
-
-    if (!straightCards.empty()) {
-        if (hasFlush(straightCards)) {
-            return HandType::StraightFlush;
-        }
-    }
-
-    if (kinds.top() == 4) {
-        return HandType::FourKind;
-    }
-
-    if (kinds.top() == 3) {
-        if (hasSecondPair()) {
-            return HandType::FullHouse;
-        }
-
-        return HandType::ThreeKind;
-    }
-
-    if (hasFlush()) {
-        return HandType::Flush;
-    }
-
-    if (!straightCards.empty()) {
-        return HandType::Straight;
-    }
-
-    if (kinds.top() == 2) {
-        if (hasSecondPair()) {
-            return HandType::TwoPair;
-        }
-    }
-
-    return HandType::HighCard;
+void CardHand::recieveCards(vector<Card> riverCards) {
+    allCards = playerHand;
+    allCards.insert(allCards.end(), riverCards.begin(), riverCards.end());
+    sort(allCards.begin(), allCards.end());
+    bestHand = getBestHand();
 }
 
-priority_queue<int> CardHand::getKinds() {
-    // Unordered map is faster than normal map O(1) instead of O(N)
-    unordered_map<CardValue, int> kindPairs;
-    priority_queue<int> kindQueue;
+vector<Card> CardHand::getBestHand() {
 
-    // Build map
-    for (const auto& card : cards) {
-        kindPairs[card.value]++;
-    }
-
-    // Add map items into priority queue, auto sorting them
-    for (const auto& pair : kindPairs) {
-        kindQueue.push(pair.second);
-    }
-
-    return kindQueue;
 }
 
+bool CardHand::onePairCheck() {
+    int start = 0;
+    int end = 4;
 
+    for (int x = 0; x < allCards.size() - 1; x++) {
+        if (allCards[x] == allCards[x + 1]) {
+            return true;
+        }
+    }
+}

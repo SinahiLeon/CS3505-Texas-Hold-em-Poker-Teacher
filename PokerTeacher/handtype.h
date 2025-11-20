@@ -2,7 +2,6 @@
 #define HANDTYPE_H
 
 enum class HandType {
-    Empty,
     HighCard,
     OnePair,
     TwoPair,
@@ -11,7 +10,8 @@ enum class HandType {
     Flush,
     FullHouse,
     FourKind,
-    StraightFlush
+    StraightFlush,
+    RoyalFlush
 };
 
 #endif // HANDTYPE_H

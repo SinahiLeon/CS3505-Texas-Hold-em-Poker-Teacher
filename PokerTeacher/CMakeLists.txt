@@ -77,3 +77,4 @@ install(TARGETS PokerTeacher
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(PokerTeacher)
 endif()
+add_subdirectory(PokerTests)

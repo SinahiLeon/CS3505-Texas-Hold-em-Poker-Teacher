@@ -3,32 +3,31 @@
 
 #include <compare>
 #include <vector>
-#include <queue>
+#include <set>
 #include "card.h"
 #include "handtype.h"
 using std::strong_ordering;
 using std::vector;
-using std::priority_queue;
+using std::set;
 
 class CardHand
 {
 public:
-    CardHand();
-    void recieveCards(vector<Card> playerCards);
+    CardHand(vector<Card> startHand);
+    void recieveCards(vector<Card> riverCards);
     Card getHighCard();
     vector<Card> getKickers();
     strong_ordering operator<=>(const CardHand& other) const;
     bool operator==(const Card& other) const;
 private:
-    vector<Card> cards;
-    HandType hand = HandType::Empty;
+    vector<Card> playerHand;
+    vector<Card> allCards;
+    vector<Card> bestHand;
+    HandType hand;
+    const int MIN_RIVER_SIZE = 3;
 
-    HandType evaluateHandType();
-    priority_queue<int> getKinds();
-    bool hasSecondPair();
-    vector<Card> getStraightCards();
-    bool hasFlush();
-    bool hasFlush(vector<Card>);
+    vector<Card> getBestHand();
+    bool onePairCheck();
 };
 
 #endif // CARDHAND_H
