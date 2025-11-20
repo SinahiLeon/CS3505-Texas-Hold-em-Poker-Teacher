@@ -18,7 +18,7 @@ void CardHand::recieveCards(vector<Card> riverCards) {
 void CardHand::decideBestHand() {
 
     if(onePairCheck()) {
-
+        hand = HandType::OnePair;
     }
 
 }
