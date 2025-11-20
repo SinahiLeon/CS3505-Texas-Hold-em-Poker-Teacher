@@ -16,33 +16,45 @@ public:
     // Different phases of Texas Hold'em poker
     enum class Phases {
         Preflop,
-        Flop,   // Three community cards are dealt face up in the middle of the table
-        River,  // The fifth and final community card is dealt face up
+        Flop,   // Three community cards are dealt in the middle of the table.
+        Turn,   // Fourth card card dealt.
+        River,  // The fifth and final community card is dealt.
         Showdown,   // If more than one player remains after the last betting round, players
                     // reveal their hands. The player with the best five-card hand wins the pot.
     };
 
 
+    class Player {
+    public:
+        int chips = 0;
+        int currentBet = 0;
+        bool folded = false;
+        std::vector<Card*> hand;
+    };
 
 
 
+    Player& getPlayer(int index) { return players[index]; }
+    int getPot() const { return pot; }
+    Phases getPhase() const { return phase; }
+    void awardPotToPlayer(int playerIndex);
 
-signals:
+
+
+signals:    // Since a value changed, signal to update UI
+    void chipsUpdated(int playerIndex, int newAmount);
+    void potUpdated(int newAmount);
 
 private:
     // Cards
-    std::stack<Card*> deck;
+    std::stack<Card*> deck; // 52 card deck
     std::vector<Card*> river;   // Community cards
-    std::vector<Card*> playerHand;  // 2 cards
-    std::vector<Card*> computerHand;    // 2 cards
+    std::vector<Player> players;
 
-    // Betting state
-    int playerChips;
-    int computerChips;
     int pot;
-    int currentBet;    // amount that must be called in this round
-    int smallBlind;
+    int currentBet;
     int bigBlind;
+    int smallBlind;
 
     Phases phase;
 };
