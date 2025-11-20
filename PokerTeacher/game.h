@@ -49,18 +49,26 @@ signals:    // Since a value changed, signal to update UI
 
 private:
     // Cards
-    std::stack<Card*> deck; // 52 card deck
-    std::vector<Card*> river;   // Community cards
-    std::vector<Player> players;
+    std::stack<const std::pair<const QString, Card>*> deck;
+    std::vector<const std::pair<const QString, Card>*> river;   // Community cards
+    std::vector<const std::pair<const QString, Card>*> playerHand;  // 2 cards
+    std::vector<const std::pair<const QString, Card>*> computerHand;    // 2 cards
 
     int pot;
     int currentBet;
     int bigBlind;
     int smallBlind;
     int phaseIndex;
+    std::vector<Player> players;
     QMap<int, Phases> phaseIndices{{0, Phases::Preflop}, {1, Phases::Flop}, {2, Phases::Turn}, {3, Phases::River}, {4, Phases::Showdown}};
 
     Phases phase;
+    /// @brief Resets and shuffles the deck with all cards
+    void shuffleDeck();
+    /// @brief Helper method to empty the deck stack
+    void clearDeck();
+    /// @brief Gives pot to the winner (used inside fold or showdown)
+    void awardPotToPlayer(bool playerWins);
 };
 
 #endif // GAME_H

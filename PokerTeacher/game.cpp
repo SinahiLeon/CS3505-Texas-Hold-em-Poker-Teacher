@@ -1,4 +1,8 @@
 #include "game.h"
+#include "cardlibrary.h"
+#include <qdebug.h>
+#include <QString>
+#include <random>
 
 Game::Game(QObject *parent)
     : QObject(parent),
@@ -7,7 +11,39 @@ Game::Game(QObject *parent)
     smallBlind(5),
     bigBlind(10),
     phase(Phases::Preflop)
-{}
+{
+    shuffleDeck();
+}
+
+void Game::shuffleDeck() {
+    qDebug() << "Shuffling deck...";
+    // Get pointers to all cards in library
+    std::vector<const std::pair<const QString, Card>*> shufflingCards;
+    for (const auto& pair : CardLibrary::cards) {
+        shufflingCards.push_back(&pair);
+    }
+    // Shuffle using random_device
+    std::random_device random;
+    std::default_random_engine rng(random());
+    std::shuffle(shufflingCards.begin(), shufflingCards.end(), rng);
+    // Add all shuffled cards to the deck
+    clearDeck();
+    for (const auto& card : shufflingCards) {
+        deck.push(card);
+    }
+    std::vector<QString> cardOrder;
+    for (auto& card : shufflingCards)
+        cardOrder.push_back(card->first);
+    std::reverse(cardOrder.begin(), cardOrder.end());
+    qDebug() << "New card order:" << cardOrder;
+    qDebug() << "Top of deck:" << deck.top()->first;
+}
+
+void Game::clearDeck() {
+    while (!deck.empty()) {
+        deck.pop();
+    }
+}
 
 void Game::newGame() {
     players.resize(3);
