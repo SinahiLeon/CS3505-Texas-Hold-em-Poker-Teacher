@@ -12,20 +12,43 @@ void CardHand::recieveCards(vector<Card> riverCards) {
     allCards = playerHand;
     allCards.insert(allCards.end(), riverCards.begin(), riverCards.end());
     sort(allCards.begin(), allCards.end());
-    bestHand = getBestHand();
+    decideBestHand();
 }
 
-vector<Card> CardHand::getBestHand() {
+void CardHand::decideBestHand() {
+
+    if(onePairCheck()) {
+
+    }
 
 }
 
-bool CardHand::onePairCheck() {
-    int start = 0;
-    int end = 4;
+void CardHand::autoAddKickers() {
+    for (int x = 0; x < allCards.size() && bestHand.size() < 6; x++) {
+        if (!inBestHand(allCards[x])) { // make sure we're not adding cards already in the best hand
+            bestHand.push_back(allCards[x]); // add the highest value kickers
+        }
+    }
+}
 
-    for (int x = 0; x < allCards.size() - 1; x++) {
-        if (allCards[x] == allCards[x + 1]) {
+bool CardHand::inBestHand(const Card& card) {
+    for (int i = 0; i < bestHand.size(); i++) {
+        if(card.exactEqual(bestHand[i])) {
             return true;
         }
     }
+    return false;
+}
+
+bool CardHand::onePairCheck() {
+    for (int x = 0; x < allCards.size() - 1; x++) {
+        if (allCards[x] == allCards[x + 1]) {
+            bestHand.push_back(allCards[x]); // add the pair to the hand
+            bestHand.push_back(allCards[x + 1]);
+
+            autoAddKickers();
+            return true;
+        }
+    }
+    return false;
 }
