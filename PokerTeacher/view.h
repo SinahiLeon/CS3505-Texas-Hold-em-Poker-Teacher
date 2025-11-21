@@ -17,10 +17,11 @@ class View : public QMainWindow
 public:
     View(Game& game, QWidget *parent = nullptr);
     ~View();
+public slots:
     void chipUpdate(int playerIndex, int newAmount);
     void potUpdate(int newAmount);
     void communityUpdate();
-    void newPhase(Game::Phases currPhase);
+    void phaseUpdate(Game::Phases currPhase);
 private:
     Ui::View *ui;
 };
