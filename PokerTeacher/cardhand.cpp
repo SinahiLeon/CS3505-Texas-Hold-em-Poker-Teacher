@@ -1,6 +1,8 @@
 #include <algorithm>
+#include <QDebug>
 #include "cardhand.h"
 using std::sort;
+using std::nullopt;
 
 CardHand::CardHand(vector<Card*> startHand) : playerHand(startHand) {
     comparator = [](Card* l, Card* r) { return l->value > r->value; };
@@ -8,85 +10,253 @@ CardHand::CardHand(vector<Card*> startHand) : playerHand(startHand) {
     handType = HandType::HighCard;
 }
 
-HandType CardHand::decideBestHandType(vector<Card*> river) {
-    vector<Card*> allCards = combineCards(river);
+void CardHand::calculateBestHand(vector<Card*> communityCards) {
+    vector<Card*> allCards = combineCards(communityCards);
 
     if (straightFlushCheck(allCards)) {
         if (royalFlushCheck(allCards)) {
-            return HandType::RoyalFlush;
+            handType = HandType::RoyalFlush;
         }
-
-        return HandType::StraightFlush;
+        else {
+            handType = HandType::StraightFlush;
+        }
     }
     else if (fourKindCheck(allCards)) {
-        return HandType::FourKind;
+        handType = HandType::FourKind;
     }
     else if (fullHouseCheck(allCards)) {
-        return HandType::FullHouse;
+        handType = HandType::FullHouse;
     }
     else if (flushCheck(allCards)) {
-        return HandType::Flush;
+        handType = HandType::Flush;
     }
     else if (straightCheck(allCards)) {
-        return HandType::Straight;
+        handType = HandType::Straight;
     }
     else if (threeKindCheck(allCards)) {
-        return HandType::ThreeKind;
+        handType = HandType::ThreeKind;
     }
     else if (twoPairCheck(allCards)) {
-        return HandType::TwoPair;
+        handType = HandType::TwoPair;
     }
     else if (onePairCheck(allCards)) {
-        return HandType::OnePair;
+        handType = HandType::OnePair;
     }
     else {
-        return HandType::HighCard;
+        handType = HandType::HighCard;
     }
 }
 
 bool CardHand::royalFlushCheck(vector<Card*>& allCards) {
-    // TODO: Implement this
-    return false;
+    return (bestHand[0]->value == CardValue::Ace);
 }
 
 bool CardHand::straightFlushCheck(vector<Card*>& allCards) {
-    // TODO: Implement this
+    if (allCards.size() < 5) {
+        return false;
+    }
+
+    for (int x = 0; x < allCards.size() - 3; x++) {
+        if (detectStraight(x, allCards, true) == 5) {
+            return true;
+        }
+
+    }
+
     return false;
 }
 
 bool CardHand::fourKindCheck(vector<Card*>& allCards) {
-    // TODO: Implement this
+    for (int x = 0; x < allCards.size() - 3; x++) {
+        if (*allCards[x] != *allCards[x + 1] || *allCards[x] != *allCards[x + 2] || *allCards[x] != *allCards[x + 3]) {
+            continue;
+        }
+
+        bestHand = vector<Card*> {
+            allCards[x],
+            allCards[x + 1],
+            allCards[x + 2],
+            allCards[x + 3]
+        };
+
+        autoAddKickers(allCards);
+        return true;
+    }
+
+    return false;
     return false;
 }
 
 bool CardHand::fullHouseCheck(vector<Card*>& allCards) {
-    // TODO: Implement this
+    if (allCards.size() < 5) {
+        return false;
+    }
+
+    bool threePair;
+    CardValue threePairValue;
+    vector<Card*> newHand;
+
+    // Three check
+    for (int x = 0; x < allCards.size() - 2; x++) {
+        if (*allCards[x] == *allCards[x + 1] &&
+            *allCards[x] == *allCards[x + 2])
+        {
+            threePair = true;
+            threePairValue = allCards[x]->value;
+            newHand.insert(newHand.end(), allCards.begin() + x, allCards.begin() + x + 2);
+        }
+    }
+
+    if (!threePair) {
+        return false;
+    }
+
+    // Two check
+    for (int x = 0; x < allCards.size() - 1; x++) {
+        if (*allCards[x] == *allCards[x + 1] &&
+            allCards[x]->value != threePairValue)
+        {
+            newHand.insert(newHand.end(), allCards.begin() + x, allCards.begin() + x + 1);
+            bestHand = vector<Card*>(std::move(newHand));
+            return true;
+        }
+    }
+
     return false;
 }
 
 bool CardHand::flushCheck(vector<Card*>& allCards) {
-    // TODO: Implement this
-    return false;
+    if (allCards.size() < 5) {
+        return false;
+    }
+
+    optional<Suit> highestSuit = getHighSuit(allCards);
+
+    if (!highestSuit.has_value()) {
+        return false;
+    }
+
+    vector<Card*> newHand;
+    for(int x = 0; x < allCards.size() && newHand.size() < 5; x++) {
+        if(allCards[x]->suit == *highestSuit) {
+            newHand.push_back(allCards[x]);
+        }
+    }
+
+    bestHand = vector<Card*>(std::move(newHand));
+
+    return true;
+}
+
+optional<Suit> CardHand::getHighSuit(vector<Card*>& allCards) {
+    int hearts = 0;
+    int diamonds = 0;
+    int clubs = 0;
+    int spades = 0;
+
+    for (int x = 0; x < allCards.size(); x++) {
+        switch(allCards[x]->suit) {
+        case Suit::Heart:
+            hearts++;
+            break;
+        case Suit::Diamond:
+            diamonds++;
+            break;
+        case Suit::Club:
+            clubs++;
+            break;
+        case Suit::Spade:
+            spades++;
+            break;
+        default:
+            qDebug() << "suit reading is not correct!";
+        }
+    }
+
+    if(hearts >= 5) {
+        return Suit::Heart;
+    }
+
+    else if(diamonds >= 5) {
+        return Suit::Diamond;
+    }
+
+    else if(clubs >= 5) {
+        return Suit::Club;
+    }
+
+    else if(spades >= 5) {
+        return Suit::Spade;
+    }
+
+    return nullopt;
 }
 
 bool CardHand::straightCheck(vector<Card*>& allCards) {
-    // Edge cases:
-    // Ace case
-    // Sift through duplicate cards to find straight
+    if (allCards.size() < 5) {
+        return false;
+    }
 
-    // On each step:
-    // if (curr == last) no straight progress
-    // if (curr == last - 1) straight progress
-    // if (curr <= last - 2) no straight
-
-    // On each start:
-    // prog needed is five
-    // if (first == ace) ace exists
-    // if (curr == 5) check for low ace
-        // prog needed is four
-    // if (curr index == 4) no straight possible
+    for (int x = 0; x < allCards.size() - 3; x++) {
+        if (detectStraight(x, allCards) == 5) {
+            return true;
+        }
+    }
 
     return false;
+}
+
+int CardHand::detectStraight(int start, vector<Card*>& allCards, bool detectFlush) {
+    vector<Card*> newHand = { allCards[start] };
+    int progress = 0;
+    Suit startingSuit = allCards[start]->suit;
+
+    for (int x = start; x < allCards.size() - 1; x++) {
+        int diff = allCards[x]->value - static_cast<int>(allCards[x + 1]->value);
+
+        if(detectFlush) {
+            if (allCards[x]->suit != allCards[x + 1]->suit ||
+                startingSuit != allCards[x]->suit)
+            {
+                continue;
+            }
+        }
+
+
+        // Cards are duplicates
+        if (diff == 0) {
+            continue;
+        }
+
+        // Correct straight diff
+        if (diff == 1) {
+            newHand.push_back(allCards[x + 1]);
+            progress++;
+        }
+
+        // Diff to big for straight
+        if (diff > 1) {
+            break;
+        }
+
+        // Straight found
+        if (progress == 5) {
+            bestHand = vector<Card*>(std::move(newHand));
+            break;
+        }
+    }
+
+    // Low ace straight case
+    if (allCards[0]->value == CardValue::Ace &&
+        progress == 4 &&
+        newHand[newHand.size() - 1]->value == CardValue::Two)
+    {
+        progress++;
+        newHand.push_back(allCards[0]);
+        bestHand = vector<Card*>(std::move(newHand));
+    }
+
+    return progress;
 }
 
 bool CardHand::threeKindCheck(vector<Card*>& allCards) {
@@ -95,8 +265,11 @@ bool CardHand::threeKindCheck(vector<Card*>& allCards) {
             continue;
         }
 
-        bestHand.push_back(allCards[x]); // add the pair to the hand
-        bestHand.push_back(allCards[x + 1]);
+        bestHand = vector<Card*> {
+            allCards[x],
+            allCards[x + 1],
+            allCards[x + 2]
+        };
 
         autoAddKickers(allCards);
         return true;
@@ -129,16 +302,15 @@ bool CardHand::twoPairCheck(vector<Card*>& allCards) {
 }
 
 bool CardHand::onePairCheck(vector<Card*>& allCards) {
-    vector<Card*> newHand;
-
     for (int x = 0; x < allCards.size() - 1; x++) {
         if (*allCards[x] != *allCards[x + 1]) {
             continue;
         }
 
-        newHand.push_back(allCards[x]); // add the pair to the hand
-        newHand.push_back(allCards[x + 1]);
-        bestHand = vector<Card*>(std::move(newHand));
+        bestHand = vector<Card*> {
+            allCards[x],
+            allCards[x + 1]
+        };
 
         autoAddKickers(allCards);
         return true;
