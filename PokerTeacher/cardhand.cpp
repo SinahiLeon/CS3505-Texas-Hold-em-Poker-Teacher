@@ -3,15 +3,16 @@
 #include "cardhand.h"
 using std::sort;
 using std::nullopt;
+using namespace std;
 
-CardHand::CardHand(vector<Card*> startHand) : playerHand(startHand) {
-    comparator = [](Card* l, Card* r) { return l->value > r->value; };
+CardHand::CardHand(vector<shared_ptr<Card>> startHand) : playerHand(startHand) {
+    comparator = [](shared_ptr<Card> l, shared_ptr<Card> r) { return l->value > r->value; };
     sort(playerHand.begin(), playerHand.end(), comparator);
     handType = HandType::HighCard;
 }
 
-void CardHand::calculateBestHand(vector<Card*> communityCards) {
-    vector<Card*> allCards = combineCards(communityCards);
+void CardHand::calculateBestHand(vector<shared_ptr<Card>> communityCards) {
+    vector<shared_ptr<Card>> allCards = combineCards(communityCards);
 
     if (straightFlushCheck(allCards)) {
         if (royalFlushCheck(allCards)) {
@@ -47,11 +48,11 @@ void CardHand::calculateBestHand(vector<Card*> communityCards) {
     }
 }
 
-bool CardHand::royalFlushCheck(vector<Card*>& allCards) {
+bool CardHand::royalFlushCheck(vector<shared_ptr<Card>>& allCards) {
     return (bestHand[0]->value == CardValue::Ace);
 }
 
-bool CardHand::straightFlushCheck(vector<Card*>& allCards) {
+bool CardHand::straightFlushCheck(vector<shared_ptr<Card>>& allCards) {
     if (allCards.size() < 5) {
         return false;
     }
@@ -66,13 +67,13 @@ bool CardHand::straightFlushCheck(vector<Card*>& allCards) {
     return false;
 }
 
-bool CardHand::fourKindCheck(vector<Card*>& allCards) {
+bool CardHand::fourKindCheck(vector<shared_ptr<Card>>& allCards) {
     for (int x = 0; x < allCards.size() - 3; x++) {
         if (*allCards[x] != *allCards[x + 1] || *allCards[x] != *allCards[x + 2] || *allCards[x] != *allCards[x + 3]) {
             continue;
         }
 
-        bestHand = vector<Card*> {
+        bestHand = vector<shared_ptr<Card>> {
             allCards[x],
             allCards[x + 1],
             allCards[x + 2],
@@ -87,14 +88,14 @@ bool CardHand::fourKindCheck(vector<Card*>& allCards) {
     return false;
 }
 
-bool CardHand::fullHouseCheck(vector<Card*>& allCards) {
+bool CardHand::fullHouseCheck(vector<shared_ptr<Card>>& allCards) {
     if (allCards.size() < 5) {
         return false;
     }
 
     bool threePair;
     CardValue threePairValue;
-    vector<Card*> newHand;
+    vector<shared_ptr<Card>> newHand;
 
     // Three check
     for (int x = 0; x < allCards.size() - 2; x++) {
@@ -117,7 +118,7 @@ bool CardHand::fullHouseCheck(vector<Card*>& allCards) {
             allCards[x]->value != threePairValue)
         {
             newHand.insert(newHand.end(), allCards.begin() + x, allCards.begin() + x + 1);
-            bestHand = vector<Card*>(std::move(newHand));
+            bestHand = vector<shared_ptr<Card>>(std::move(newHand));
             return true;
         }
     }
@@ -125,7 +126,7 @@ bool CardHand::fullHouseCheck(vector<Card*>& allCards) {
     return false;
 }
 
-bool CardHand::flushCheck(vector<Card*>& allCards) {
+bool CardHand::flushCheck(vector<shared_ptr<Card>>& allCards) {
     if (allCards.size() < 5) {
         return false;
     }
@@ -136,19 +137,19 @@ bool CardHand::flushCheck(vector<Card*>& allCards) {
         return false;
     }
 
-    vector<Card*> newHand;
+    vector<shared_ptr<Card>> newHand;
     for(int x = 0; x < allCards.size() && newHand.size() < 5; x++) {
         if(allCards[x]->suit == *highestSuit) {
             newHand.push_back(allCards[x]);
         }
     }
 
-    bestHand = vector<Card*>(std::move(newHand));
+    bestHand = vector<shared_ptr<Card>>(std::move(newHand));
 
     return true;
 }
 
-optional<Suit> CardHand::getHighSuit(vector<Card*>& allCards) {
+optional<Suit> CardHand::getHighSuit(vector<shared_ptr<Card>>& allCards) {
     int hearts = 0;
     int diamonds = 0;
     int clubs = 0;
@@ -192,7 +193,7 @@ optional<Suit> CardHand::getHighSuit(vector<Card*>& allCards) {
     return nullopt;
 }
 
-bool CardHand::straightCheck(vector<Card*>& allCards) {
+bool CardHand::straightCheck(vector<shared_ptr<Card>>& allCards) {
     if (allCards.size() < 5) {
         return false;
     }
@@ -206,8 +207,8 @@ bool CardHand::straightCheck(vector<Card*>& allCards) {
     return false;
 }
 
-int CardHand::detectStraight(int start, vector<Card*>& allCards, bool detectFlush) {
-    vector<Card*> newHand = { allCards[start] };
+int CardHand::detectStraight(int start, vector<shared_ptr<Card>>& allCards, bool detectFlush) {
+    vector<shared_ptr<Card>> newHand = { allCards[start] };
     int progress = 0;
     Suit startingSuit = allCards[start]->suit;
 
@@ -241,7 +242,7 @@ int CardHand::detectStraight(int start, vector<Card*>& allCards, bool detectFlus
 
         // Straight found
         if (progress == 5) {
-            bestHand = vector<Card*>(std::move(newHand));
+            bestHand = vector<shared_ptr<Card>>(std::move(newHand));
             break;
         }
     }
@@ -253,19 +254,19 @@ int CardHand::detectStraight(int start, vector<Card*>& allCards, bool detectFlus
     {
         progress++;
         newHand.push_back(allCards[0]);
-        bestHand = vector<Card*>(std::move(newHand));
+        bestHand = vector<shared_ptr<Card>>(std::move(newHand));
     }
 
     return progress;
 }
 
-bool CardHand::threeKindCheck(vector<Card*>& allCards) {
+bool CardHand::threeKindCheck(vector<shared_ptr<Card>>& allCards) {
     for (int x = 0; x < allCards.size() - 2; x++) {
         if (*allCards[x] != *allCards[x + 1] || *allCards[x] != *allCards[x + 2]) {
             continue;
         }
 
-        bestHand = vector<Card*> {
+        bestHand = vector<shared_ptr<Card>> {
             allCards[x],
             allCards[x + 1],
             allCards[x + 2]
@@ -278,9 +279,9 @@ bool CardHand::threeKindCheck(vector<Card*>& allCards) {
     return false;
 }
 
-bool CardHand::twoPairCheck(vector<Card*>& allCards) {
+bool CardHand::twoPairCheck(vector<shared_ptr<Card>>& allCards) {
     int pairs = 0;
-    vector<Card*> newHand;
+    vector<shared_ptr<Card>> newHand;
 
     for (int x = 0; x < allCards.size() - 1; x++) {
         if (*allCards[x] != *allCards[x + 1]) {
@@ -292,7 +293,7 @@ bool CardHand::twoPairCheck(vector<Card*>& allCards) {
         pairs++;
 
         if (pairs == 2) {
-            bestHand = vector<Card*>(std::move(newHand));
+            bestHand = vector<shared_ptr<Card>>(std::move(newHand));
             autoAddKickers(allCards);
             return true;
         }
@@ -301,13 +302,13 @@ bool CardHand::twoPairCheck(vector<Card*>& allCards) {
     return false;
 }
 
-bool CardHand::onePairCheck(vector<Card*>& allCards) {
+bool CardHand::onePairCheck(vector<shared_ptr<Card>>& allCards) {
     for (int x = 0; x < allCards.size() - 1; x++) {
         if (*allCards[x] != *allCards[x + 1]) {
             continue;
         }
 
-        bestHand = vector<Card*> {
+        bestHand = vector<shared_ptr<Card>> {
             allCards[x],
             allCards[x + 1]
         };
@@ -319,7 +320,7 @@ bool CardHand::onePairCheck(vector<Card*>& allCards) {
     return false;
 }
 
-void CardHand::autoAddKickers(vector<Card*>& allCards) {
+void CardHand::autoAddKickers(vector<shared_ptr<Card>>& allCards) {
     for (int x = 0; x < allCards.size() && bestHand.size() < 6; x++) {
         if (!inBestHand(allCards[x])) { // make sure we're not adding cards already in the best hand
             bestHand.push_back(allCards[x]); // add the highest value kickers
@@ -327,14 +328,14 @@ void CardHand::autoAddKickers(vector<Card*>& allCards) {
     }
 }
 
-vector<Card*> CardHand::combineCards(vector<Card*> river) {
-    vector<Card*> allCards = playerHand;
+vector<shared_ptr<Card>> CardHand::combineCards(vector<shared_ptr<Card>> river) {
+    vector<shared_ptr<Card>> allCards = playerHand;
     allCards.insert(allCards.end(), river.begin(), river.end());
     sort(allCards.begin(), allCards.end(), comparator);
     return allCards;
 }
 
-bool CardHand::inBestHand(const Card* card) {
+bool CardHand::inBestHand(const shared_ptr<Card> card) {
     for (int i = 0; i < bestHand.size(); i++) {
         if (card->exactEqual(*bestHand[i])) {
             return true;

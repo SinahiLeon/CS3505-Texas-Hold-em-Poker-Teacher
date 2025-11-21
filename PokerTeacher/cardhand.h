@@ -13,39 +13,40 @@ using std::vector;
 using std::set;
 using std::function;
 using std::optional;
+using namespace std;
 
 class CardHand
 {
 public:
-    CardHand(vector<Card*> startHand);
-    void recieveCard(Card* card);
-    Card* getHighCard();
+    CardHand(vector<shared_ptr<Card>> startHand);
+    void recieveCard(shared_ptr<Card> card);
+    shared_ptr<Card> getHighCard();
     strong_ordering operator<=>(const CardHand& other) const;
     bool operator==(const CardHand& other) const;
-    void calculateBestHand(vector<Card*> communityCards);
+    void calculateBestHand(vector<shared_ptr<Card>> communityCards);
     HandType getHandType();
 private:
-    vector<Card*> playerHand;
-    vector<Card*> bestHand;
+    vector<shared_ptr<Card>> playerHand;
+    vector<shared_ptr<Card>> bestHand;
     HandType handType;
-    function<bool(Card*, Card*)> comparator;
+    function<bool(shared_ptr<Card>, shared_ptr<Card>)> comparator;
     const int MIN_RIVER_SIZE = 3;
 
-    void autoAddKickers(vector<Card*>& allCards);
-    bool inBestHand(const Card* card);
-    bool onePairCheck(vector<Card*>& allCards);
-    bool twoPairCheck(vector<Card*>& allCards);
-    bool threeKindCheck(vector<Card*>& allCards);
-    bool straightCheck(vector<Card*>& allCards);
-    int detectStraight(int curr, vector<Card*>& allCards, bool detectFlush = false);
-    bool flushCheck(vector<Card*>& allCards);
-    optional<Suit> getHighSuit(vector<Card*>& allCards);
-    bool fullHouseCheck(vector<Card*>& allCards);
-    bool fourKindCheck(vector<Card*>& allCards);
-    bool straightFlushCheck(vector<Card*>& allCards);
-    int detectStraightFlush(int start, vector<Card*>& allCards);
-    bool royalFlushCheck(vector<Card*>& allCards);
-    vector<Card*> combineCards(vector<Card*> river);
+    void autoAddKickers(vector<shared_ptr<Card>>& allCards);
+    bool inBestHand(const shared_ptr<Card> card);
+    bool onePairCheck(vector<shared_ptr<Card>>& allCards);
+    bool twoPairCheck(vector<shared_ptr<Card>>& allCards);
+    bool threeKindCheck(vector<shared_ptr<Card>>& allCards);
+    bool straightCheck(vector<shared_ptr<Card>>& allCards);
+    int detectStraight(int curr, vector<shared_ptr<Card>>& allCards, bool detectFlush = false);
+    bool flushCheck(vector<shared_ptr<Card>>& allCards);
+    optional<Suit> getHighSuit(vector<shared_ptr<Card>>& allCards);
+    bool fullHouseCheck(vector<shared_ptr<Card>>& allCards);
+    bool fourKindCheck(vector<shared_ptr<Card>>& allCards);
+    bool straightFlushCheck(vector<shared_ptr<Card>>& allCards);
+    int detectStraightFlush(int start, vector<shared_ptr<Card>>& allCards);
+    bool royalFlushCheck(vector<shared_ptr<Card>>& allCards);
+    vector<shared_ptr<Card>> combineCards(vector<shared_ptr<Card>> river);
 };
 
 #endif // CARDHAND_H
