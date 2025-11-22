@@ -59,6 +59,10 @@ strong_ordering CardHand::operator<=>(const CardHand& other) const {
     }
 }
 
+bool CardHand::operator==(const CardHand& other) const {
+    return (*this <=> other) == strong_ordering::equivalent;
+}
+
 strong_ordering CardHand::rankKickers(const CardHand& other, int start) const {
     for (int x = start; x < bestHand.size(); x++) {
         if (*bestHand[x] != *other.bestHand[x]) {
@@ -73,7 +77,7 @@ void CardHand::calculateBestHand(vector<shared_ptr<Card>> communityCards) {
     vector<shared_ptr<Card>> allCards = combineCards(communityCards);
 
     if (straightFlushCheck(allCards)) {
-        if (royalFlushCheck(allCards)) {
+        if (royalFlushCheck()) {
             handType = HandType::RoyalFlush;
         }
         else {
@@ -106,7 +110,34 @@ void CardHand::calculateBestHand(vector<shared_ptr<Card>> communityCards) {
     }
 }
 
-bool CardHand::royalFlushCheck(vector<shared_ptr<Card>>& allCards) {
+void CardHand::autoAddKickers(vector<shared_ptr<Card>>& allCards) {
+    for (int x = 0; x < allCards.size() && bestHand.size() < 6; x++) {
+        if (!inBestHand(allCards[x])) { // make sure we're not adding cards already in the best hand
+            bestHand.push_back(allCards[x]); // add the highest value kickers
+        }
+    }
+}
+
+vector<shared_ptr<Card>> CardHand::combineCards(vector<shared_ptr<Card>> communityCards) const {
+    vector<shared_ptr<Card>> allCards = playerHand;
+
+    allCards.insert(allCards.end(), communityCards.begin(), communityCards.end());
+    sort(allCards.begin(), allCards.end(), comparator);
+
+    return allCards;
+}
+
+bool CardHand::inBestHand(const shared_ptr<Card> card) const {
+    for (int i = 0; i < bestHand.size(); i++) {
+        if (card->exactEqual(*bestHand[i])) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool CardHand::royalFlushCheck() {
     return (bestHand[0]->value == CardValue::Ace);
 }
 
@@ -189,7 +220,7 @@ bool CardHand::flushCheck(vector<shared_ptr<Card>>& allCards) {
         return false;
     }
 
-    optional<Suit> highestSuit = getHighSuit(allCards);
+    optional<Suit> highestSuit = getFlushSuit(allCards);
 
     if (!highestSuit.has_value()) {
         return false;
@@ -207,7 +238,7 @@ bool CardHand::flushCheck(vector<shared_ptr<Card>>& allCards) {
     return true;
 }
 
-optional<Suit> CardHand::getHighSuit(vector<shared_ptr<Card>>& allCards) {
+optional<Suit> CardHand::getFlushSuit(vector<shared_ptr<Card>>& allCards) {
     int hearts, diamonds, clubs, spades;
     hearts = diamonds = clubs = 0;
 
@@ -371,33 +402,6 @@ bool CardHand::onePairCheck(vector<shared_ptr<Card>>& allCards) {
 
         autoAddKickers(allCards);
         return true;
-    }
-
-    return false;
-}
-
-void CardHand::autoAddKickers(vector<shared_ptr<Card>>& allCards) {
-    for (int x = 0; x < allCards.size() && bestHand.size() < 6; x++) {
-        if (!inBestHand(allCards[x])) { // make sure we're not adding cards already in the best hand
-            bestHand.push_back(allCards[x]); // add the highest value kickers
-        }
-    }
-}
-
-vector<shared_ptr<Card>> CardHand::combineCards(vector<shared_ptr<Card>> river) const {
-    vector<shared_ptr<Card>> allCards = playerHand;
-
-    allCards.insert(allCards.end(), river.begin(), river.end());
-    sort(allCards.begin(), allCards.end(), comparator);
-
-    return allCards;
-}
-
-bool CardHand::inBestHand(const shared_ptr<Card> card) const {
-    for (int i = 0; i < bestHand.size(); i++) {
-        if (card->exactEqual(*bestHand[i])) {
-            return true;
-        }
     }
 
     return false;
