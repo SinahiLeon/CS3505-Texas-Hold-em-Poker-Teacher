@@ -32,7 +32,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         handtype.h
         cardhand.h cardhand.cpp
         cardlibrary.h cardlibrary.cpp
-
+        cardvalue.h
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET PokerTeacher APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
