@@ -1,6 +1,9 @@
 #ifndef CARDVALUE_H
 #define CARDVALUE_H
 
+#include <compare>
+using std::strong_ordering;
+
 enum class CardValue {
     // Values auto-increment
     Two = 2,

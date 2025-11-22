@@ -14,17 +14,18 @@ using std::set;
 using std::function;
 using std::optional;
 using std::shared_ptr;
+using std::pair;
 
 class CardHand
 {
 public:
     CardHand(vector<shared_ptr<Card>> startHand);
-    void recieveCard(shared_ptr<Card> card);
-    shared_ptr<Card> getHighCard();
+    /// @brief Returns the best card in the deck, either the highest non-kicker card or the highest card in general.
+    shared_ptr<Card> getBestCard() const;
     strong_ordering operator<=>(const CardHand& other) const;
     bool operator==(const CardHand& other) const;
     void calculateBestHand(vector<shared_ptr<Card>> communityCards);
-    HandType getHandType();
+    HandType getHandType() const;
 private:
     vector<shared_ptr<Card>> playerHand;
     vector<shared_ptr<Card>> bestHand;
@@ -32,8 +33,9 @@ private:
     function<bool(shared_ptr<Card>, shared_ptr<Card>)> comparator;
     const int MIN_RIVER_SIZE = 3;
 
+    strong_ordering rankKickers(const CardHand& other, int start) const;
     void autoAddKickers(vector<shared_ptr<Card>>& allCards);
-    bool inBestHand(const shared_ptr<Card> card);
+    bool inBestHand(const shared_ptr<Card> card) const;
     bool onePairCheck(vector<shared_ptr<Card>>& allCards);
     bool twoPairCheck(vector<shared_ptr<Card>>& allCards);
     bool threeKindCheck(vector<shared_ptr<Card>>& allCards);
@@ -46,7 +48,7 @@ private:
     bool straightFlushCheck(vector<shared_ptr<Card>>& allCards);
     int detectStraightFlush(int start, vector<shared_ptr<Card>>& allCards);
     bool royalFlushCheck(vector<shared_ptr<Card>>& allCards);
-    vector<shared_ptr<Card>> combineCards(vector<shared_ptr<Card>> river);
+    vector<shared_ptr<Card>> combineCards(vector<shared_ptr<Card>> river) const;
 };
 
 #endif // CARDHAND_H

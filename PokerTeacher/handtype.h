@@ -1,6 +1,9 @@
 #ifndef HANDTYPE_H
 #define HANDTYPE_H
 
+#include <compare>
+using std::strong_ordering;
+
 enum class HandType {
     HighCard,
     OnePair,

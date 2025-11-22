@@ -1,13 +1,72 @@
 #include <algorithm>
 #include <QDebug>
+#include <stdexcept>
 #include "cardhand.h"
 using std::sort;
 using std::nullopt;
+using std::domain_error;
 
 CardHand::CardHand(vector<shared_ptr<Card>> startHand) : playerHand(startHand) {
     comparator = [](shared_ptr<Card> l, shared_ptr<Card> r) { return l->value > r->value; };
     sort(playerHand.begin(), playerHand.end(), comparator);
+    bestHand = playerHand;
     handType = HandType::HighCard;
+}
+
+shared_ptr<Card> CardHand::getBestCard() const {
+    return bestHand[0];
+}
+
+HandType CardHand::getHandType() const {
+    return handType;
+}
+
+strong_ordering CardHand::operator<=>(const CardHand& other) const {
+    // Compare types
+    if (handType != other.handType) {
+        return handType <=> other.handType;
+    }
+
+    // Compare best card
+    if (*getBestCard() != *other.getBestCard()) {
+        return *getBestCard() <=> *other.getBestCard();
+    }
+
+    // Compare lower cards
+    switch (handType) {
+        case HandType::HighCard:
+            return rankKickers(other, 0);
+        case HandType::OnePair:
+            return rankKickers(other, 3);
+        case HandType::TwoPair:
+            if (*bestHand[2] != *other.bestHand[2]) {
+                return *bestHand[2] <=> *other.bestHand[2];
+            }
+
+            return *bestHand[4] <=> *other.bestHand[4];
+        case HandType::ThreeKind:
+            return rankKickers(other, 2);
+        case HandType::Flush:
+            return rankKickers(other, 1);
+        case HandType::FullHouse:
+             return *bestHand[3] <=> *other.bestHand[3];
+        case HandType::FourKind:
+            return *bestHand[4] <=> *other.bestHand[4];
+        case HandType::Straight:
+        case HandType::StraightFlush:
+        case HandType::RoyalFlush:
+            return strong_ordering::equivalent;
+    }
+}
+
+strong_ordering CardHand::rankKickers(const CardHand& other, int start) const {
+    for (int x = start; x < bestHand.size(); x++) {
+        if (*bestHand[x] != *other.bestHand[x]) {
+            return *bestHand[x] <=> *other.bestHand[x];
+        }
+    }
+
+    return strong_ordering::equivalent;
 }
 
 void CardHand::calculateBestHand(vector<shared_ptr<Card>> communityCards) {
@@ -149,10 +208,8 @@ bool CardHand::flushCheck(vector<shared_ptr<Card>>& allCards) {
 }
 
 optional<Suit> CardHand::getHighSuit(vector<shared_ptr<Card>>& allCards) {
-    int hearts = 0;
-    int diamonds = 0;
-    int clubs = 0;
-    int spades = 0;
+    int hearts, diamonds, clubs, spades;
+    hearts = diamonds = clubs = 0;
 
     for (int x = 0; x < allCards.size(); x++) {
         switch(allCards[x]->suit) {
@@ -173,19 +230,19 @@ optional<Suit> CardHand::getHighSuit(vector<shared_ptr<Card>>& allCards) {
         }
     }
 
-    if(hearts >= 5) {
+    if (hearts >= 5) {
         return Suit::Heart;
     }
 
-    else if(diamonds >= 5) {
+    else if (diamonds >= 5) {
         return Suit::Diamond;
     }
 
-    else if(clubs >= 5) {
+    else if (clubs >= 5) {
         return Suit::Club;
     }
 
-    else if(spades >= 5) {
+    else if (spades >= 5) {
         return Suit::Spade;
     }
 
@@ -212,9 +269,9 @@ int CardHand::detectStraight(int start, vector<shared_ptr<Card>>& allCards, bool
     Suit startingSuit = allCards[start]->suit;
 
     for (int x = start; x < allCards.size() - 1; x++) {
-        int diff = allCards[x]->value - static_cast<int>(allCards[x + 1]->value);
+        int diff = allCards[x]->value - allCards[x + 1]->value;
 
-        if(detectFlush) {
+        if (detectFlush) {
             if (allCards[x]->suit != allCards[x + 1]->suit ||
                 startingSuit != allCards[x]->suit)
             {
@@ -234,7 +291,7 @@ int CardHand::detectStraight(int start, vector<shared_ptr<Card>>& allCards, bool
             progress++;
         }
 
-        // Diff to big for straight
+        // Diff too big for straight
         if (diff > 1) {
             break;
         }
@@ -327,18 +384,21 @@ void CardHand::autoAddKickers(vector<shared_ptr<Card>>& allCards) {
     }
 }
 
-vector<shared_ptr<Card>> CardHand::combineCards(vector<shared_ptr<Card>> river) {
+vector<shared_ptr<Card>> CardHand::combineCards(vector<shared_ptr<Card>> river) const {
     vector<shared_ptr<Card>> allCards = playerHand;
+
     allCards.insert(allCards.end(), river.begin(), river.end());
     sort(allCards.begin(), allCards.end(), comparator);
+
     return allCards;
 }
 
-bool CardHand::inBestHand(const shared_ptr<Card> card) {
+bool CardHand::inBestHand(const shared_ptr<Card> card) const {
     for (int i = 0; i < bestHand.size(); i++) {
         if (card->exactEqual(*bestHand[i])) {
             return true;
         }
     }
+
     return false;
 }
