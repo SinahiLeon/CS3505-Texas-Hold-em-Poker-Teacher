@@ -6,7 +6,7 @@
 #include <QObject>
 #include <stack>
 #include <vector>
-#include <Qmap>
+#include <QMap>
 using namespace std;
 
 class Game : public QObject

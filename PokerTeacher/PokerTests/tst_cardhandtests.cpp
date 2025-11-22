@@ -4,7 +4,6 @@
 
 class CardHandTests : public QObject
 {
-    Q_OBJECT
 private slots:
     void returnsCorrrectCombinations();
 };

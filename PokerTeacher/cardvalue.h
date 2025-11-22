@@ -18,11 +18,11 @@ enum class CardValue {
     Ace
 };
 
-int operator-(const CardValue& l, const CardValue& r) {
+inline int operator-(const CardValue& l, const CardValue& r) {
     return static_cast<int>(l) - static_cast<int>(r);
 }
 
-int operator-(const CardValue& l, int r) {
+inline int operator-(const CardValue& l, int r) {
     return static_cast<int>(l) - r;
 }
 
