@@ -3,7 +3,6 @@
 #include "cardhand.h"
 using std::sort;
 using std::nullopt;
-using namespace std;
 
 CardHand::CardHand(vector<shared_ptr<Card>> startHand) : playerHand(startHand) {
     comparator = [](shared_ptr<Card> l, shared_ptr<Card> r) { return l->value > r->value; };

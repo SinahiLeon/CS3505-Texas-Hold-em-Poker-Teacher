@@ -5,9 +5,8 @@
 #include "cardhand.h"
 #include <QObject>
 #include <stack>
-#include <vector>
 #include <QMap>
-using namespace std;
+using std::stack;
 
 class Game : public QObject
 {
@@ -32,7 +31,7 @@ public:
         int currentBet = 0;
         bool folded = false;
         bool handVisible = false;
-        std::vector<std::shared_ptr<Card>> heldCards;
+        vector<shared_ptr<Card>> heldCards;
 
         // Combined community and personal hand - will reference shared_ptrs
         CardHand fullhand;
@@ -46,7 +45,7 @@ public:
     int getCurrentBet() const { return currentBet; }
     int getBigBlind() const { return bigBlind; }
     int getSmallBlind() const { return smallBlind; }
-    const std::vector<std::shared_ptr<Card>>& getCommunityCards() const { return communityCards; }
+    const vector<shared_ptr<Card>>& getCommunityCards() const { return communityCards; }
 
     void makeBet(int playerIndex, int chipAmount);
     void call(int playerIndex);
@@ -66,9 +65,9 @@ signals:    // Since a value changed, signal to update UI
     void currentBetUpdated(int newBet);
 
 private:
-    std::stack<std::shared_ptr<Card>> deck;
-    std::vector<std::shared_ptr<Card>> communityCards;
-    std::vector<Player> players;
+    stack<shared_ptr<Card>> deck;
+    vector<shared_ptr<Card>> communityCards;
+    vector<Player> players;
 
     int pot = 0;
     int currentBet = 0;
@@ -92,7 +91,7 @@ private:
     /// @brief Gives pot to the winner (used inside fold or showdown)
     void awardPotToPlayer(int playerIndex); // why are there two of these?
     /// @brief
-    void dealCards(int cardAmount, std::vector<std::shared_ptr<Card>>& target);
+    void dealCards(int cardAmount, vector<shared_ptr<Card>>& target);
     /// @brief
     void dealHoleCards();
 

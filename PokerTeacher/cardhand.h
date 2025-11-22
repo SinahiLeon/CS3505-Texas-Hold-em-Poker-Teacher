@@ -13,7 +13,7 @@ using std::vector;
 using std::set;
 using std::function;
 using std::optional;
-using namespace std;
+using std::shared_ptr;
 
 class CardHand
 {
