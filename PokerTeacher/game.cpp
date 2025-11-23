@@ -130,6 +130,29 @@ void Game::raise(int playerIndex, int chipAmount) {
     }
 }
 
+void Game::fold(int playerIndex) {
+    if (playerIndex < 0 || playerIndex >= players.size()) {
+        return;
+    }
+
+    players[playerIndex].folded = true;
+    emit playerFolded(playerIndex);
+
+    // Check if game should end
+    int activePlayers = 0;
+    int lastActivePlayer = -1;
+    for (int i = 0; i < players.size(); i++) {
+        if (!players[i].folded) {
+            activePlayers++;
+            lastActivePlayer = i;
+        }
+    }
+
+    if (activePlayers == 1) {
+        awardPotToPlayer(lastActivePlayer);
+        nextPhase(); // Move to showdown
+    }
+}
 
 
 // Gives pot to the winner (used inside fold or showdown)
