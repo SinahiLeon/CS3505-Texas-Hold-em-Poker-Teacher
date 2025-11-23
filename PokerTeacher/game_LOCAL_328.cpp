@@ -4,9 +4,6 @@
 #include <QString>
 #include <random>
 #include <algorithm>
-using std::make_shared;
-using std::random_device;
-using std::default_random_engine;
 
 Game::Game(QObject *parent)
     : QObject(parent)
@@ -18,16 +15,16 @@ void Game::shuffleDeck() {
     qDebug() << "Shuffling deck...";
 
     // Create a vector of all cards as shared_ptrs
-    vector<shared_ptr<Card>> shufflingCards;
+    std::vector<std::shared_ptr<Card>> shufflingCards;
     for (const auto& pair : CardLibrary::cards) {
         // Create shared_ptr for each card
-        shufflingCards.push_back(make_shared<Card>(pair.second));
+        shufflingCards.push_back(std::make_shared<Card>(pair.second));
     }
 
     // Shuffle
-    random_device random;
-    default_random_engine rng(random());
-    shuffle(shufflingCards.begin(), shufflingCards.end(), rng);
+    std::random_device random;
+    std::default_random_engine rng(random());
+    std::shuffle(shufflingCards.begin(), shufflingCards.end(), rng);
 
     // Add to deck
     clearDeck();
@@ -73,7 +70,7 @@ void Game::newGame() {
     emit phaseUpdated(phase);
 }
 
-void Game::dealCards(int cardAmount, vector<shared_ptr<Card>>& target) {
+void Game::dealCards(int cardAmount, std::vector<std::shared_ptr<Card>>& target) {
     for(int i = 0; i < cardAmount; i++) {
         if (!deck.empty()) {
             target.push_back(deck.top()); // This copies shared_ptr
@@ -94,41 +91,14 @@ void Game::makeBet(int playerIndex, int chipAmount) {
         return;
     }
 
-    Player& player = players[playerIndex];
-    int actualBet = std::min(chipAmount, player.chips);
-
-    player.chips -= actualBet;
-    player.currentBet += actualBet;
-    pot += actualBet;
-
+    getPlayer(playerIndex).chips -= chipAmount;
+    pot += chipAmount;
     emit chipsUpdated(playerIndex, players[playerIndex].chips);
     emit potUpdated(pot);
 }
 
-void Game::call(int playerIndex) {
-    if (playerIndex < 0 || playerIndex >= players.size()) {
-        return;
-    }
-
-    Player& player = players[playerIndex];
-    int callAmount = currentBet - player.currentBet;
-    if (callAmount > 0) {
-        makeBet(playerIndex, callAmount);
-    }
-}
-
-void Game::raise(int playerIndex, int chipAmount) {
-    if (playerIndex < 0 || playerIndex >= players.size()) {
-        return;
-    }
-
-    int totalBet = players[playerIndex].currentBet + chipAmount;
-    if (totalBet > currentBet) {
-        currentBet = totalBet;
-        makeBet(playerIndex, chipAmount);
-        emit currentBetUpdated(currentBet);
-    }
-}
+//call()
+//raise()
 
 
 
