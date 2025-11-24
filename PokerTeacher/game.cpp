@@ -75,6 +75,7 @@ void Game::newGame() {
     emit potUpdated(pot);
     emit currentBetUpdated(currentBet);
     emit phaseUpdated(phase);
+    emit communityCardsUpdated();
 }
 
 void Game::dealCards(int cardAmount, vector<shared_ptr<Card>>& target) {

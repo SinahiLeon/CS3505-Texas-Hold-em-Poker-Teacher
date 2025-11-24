@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>900</width>
+    <width>950</width>
     <height>600</height>
    </rect>
   </property>
@@ -22,7 +22,19 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0">
     <item>
-     <layout class="QGridLayout" name="gridLayout" rowstretch="1,0" columnstretch="0,2,0">
+     <layout class="QGridLayout" name="gridLayout" rowstretch="0,1" columnstretch="0,2,0">
+      <property name="leftMargin">
+       <number>6</number>
+      </property>
+      <property name="topMargin">
+       <number>6</number>
+      </property>
+      <property name="rightMargin">
+       <number>6</number>
+      </property>
+      <property name="bottomMargin">
+       <number>6</number>
+      </property>
       <item row="1" column="0">
        <widget class="QWidget" name="opponent1" native="true">
         <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,0,0">
@@ -30,16 +42,16 @@
           <number>4</number>
          </property>
          <property name="leftMargin">
-          <number>6</number>
+          <number>0</number>
          </property>
          <property name="topMargin">
-          <number>6</number>
+          <number>0</number>
          </property>
          <property name="rightMargin">
-          <number>6</number>
+          <number>0</number>
          </property>
          <property name="bottomMargin">
-          <number>6</number>
+          <number>0</number>
          </property>
          <item>
           <widget class="QLabel" name="opp1NameLabel">
@@ -93,11 +105,11 @@
            </property>
            <property name="sizeIncrement">
             <size>
-             <width>2</width>
-             <height>3</height>
+             <width>0</width>
+             <height>0</height>
             </size>
            </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,1,1,0">
+           <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,0,0,0">
             <property name="spacing">
              <number>4</number>
             </property>
@@ -105,16 +117,16 @@
              <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
             </property>
             <property name="leftMargin">
-             <number>6</number>
+             <number>0</number>
             </property>
             <property name="topMargin">
-             <number>6</number>
+             <number>0</number>
             </property>
             <property name="rightMargin">
-             <number>6</number>
+             <number>0</number>
             </property>
             <property name="bottomMargin">
-             <number>6</number>
+             <number>0</number>
             </property>
             <item>
              <spacer name="horizontalSpacer_10">
@@ -123,7 +135,7 @@
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>40</width>
+                <width>20</width>
                 <height>20</height>
                </size>
               </property>
@@ -139,7 +151,7 @@
               </property>
               <property name="minimumSize">
                <size>
-                <width>60</width>
+                <width>65</width>
                 <height>90</height>
                </size>
               </property>
@@ -197,7 +209,7 @@
               </property>
               <property name="minimumSize">
                <size>
-                <width>60</width>
+                <width>65</width>
                 <height>90</height>
                </size>
               </property>
@@ -252,7 +264,7 @@
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>40</width>
+                <width>20</width>
                 <height>20</height>
                </size>
               </property>
@@ -279,7 +291,19 @@
       </item>
       <item row="0" column="1">
        <widget class="QWidget" name="dealerInfo" native="true">
-        <layout class="QVBoxLayout" name="verticalLayout_5">
+        <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,0,0,1">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
          <item>
           <widget class="QLabel" name="dealerNameLabel">
            <property name="font">
@@ -337,6 +361,18 @@
             </size>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
             <item>
              <spacer name="horizontalSpacer_6">
               <property name="orientation">
@@ -344,7 +380,7 @@
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>40</width>
+                <width>20</width>
                 <height>20</height>
                </size>
               </property>
@@ -360,7 +396,7 @@
               </property>
               <property name="minimumSize">
                <size>
-                <width>60</width>
+                <width>65</width>
                 <height>90</height>
                </size>
               </property>
@@ -418,7 +454,7 @@
               </property>
               <property name="minimumSize">
                <size>
-                <width>60</width>
+                <width>65</width>
                 <height>90</height>
                </size>
               </property>
@@ -476,7 +512,7 @@
               </property>
               <property name="minimumSize">
                <size>
-                <width>60</width>
+                <width>65</width>
                 <height>90</height>
                </size>
               </property>
@@ -534,7 +570,7 @@
               </property>
               <property name="minimumSize">
                <size>
-                <width>60</width>
+                <width>65</width>
                 <height>90</height>
                </size>
               </property>
@@ -592,7 +628,7 @@
               </property>
               <property name="minimumSize">
                <size>
-                <width>60</width>
+                <width>65</width>
                 <height>90</height>
                </size>
               </property>
@@ -647,7 +683,7 @@
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>40</width>
+                <width>20</width>
                 <height>20</height>
                </size>
               </property>
@@ -675,6 +711,18 @@
       <item row="1" column="1">
        <widget class="QWidget" name="playerInfo" native="true">
         <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
          <item>
           <spacer name="verticalSpacer_2">
            <property name="orientation">
@@ -727,7 +775,13 @@
             </size>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
             <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
              <number>0</number>
             </property>
             <property name="bottomMargin">
@@ -751,7 +805,7 @@
               <property name="minimumSize">
                <size>
                 <width>100</width>
-                <height>150</height>
+                <height>140</height>
                </size>
               </property>
               <property name="frameShape">
@@ -791,7 +845,7 @@
               <property name="minimumSize">
                <size>
                 <width>100</width>
-                <height>150</height>
+                <height>140</height>
                </size>
               </property>
               <property name="frameShape">
@@ -847,7 +901,19 @@
       </item>
       <item row="1" column="2">
        <widget class="QWidget" name="opponent2" native="true">
-        <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0,0,1">
+        <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0,0,0">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
          <item>
           <widget class="QLabel" name="opp2NameLabel">
            <property name="font">
@@ -895,7 +961,7 @@
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>100</height>
+             <height>16777215</height>
             </size>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -906,16 +972,16 @@
              <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
             </property>
             <property name="leftMargin">
-             <number>6</number>
+             <number>0</number>
             </property>
             <property name="topMargin">
-             <number>6</number>
+             <number>0</number>
             </property>
             <property name="rightMargin">
-             <number>6</number>
+             <number>0</number>
             </property>
             <property name="bottomMargin">
-             <number>6</number>
+             <number>0</number>
             </property>
             <item>
              <spacer name="horizontalSpacer_8">
@@ -924,7 +990,7 @@
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>40</width>
+                <width>20</width>
                 <height>20</height>
                </size>
               </property>
@@ -940,7 +1006,7 @@
               </property>
               <property name="minimumSize">
                <size>
-                <width>60</width>
+                <width>65</width>
                 <height>90</height>
                </size>
               </property>
@@ -970,7 +1036,7 @@
                 <number>0</number>
                </property>
                <item row="0" column="0">
-                <widget class="QLabel" name="opp2Card1">
+                <widget class="QLabel" name="opp2card1">
                  <property name="text">
                   <string>image</string>
                  </property>
@@ -984,9 +1050,15 @@
             </item>
             <item>
              <widget class="QFrame" name="op2c2">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="minimumSize">
                <size>
-                <width>60</width>
+                <width>65</width>
                 <height>90</height>
                </size>
               </property>
@@ -1016,7 +1088,7 @@
                 <number>0</number>
                </property>
                <item row="0" column="0">
-                <widget class="QLabel" name="opp2Card2">
+                <widget class="QLabel" name="opp2card2">
                  <property name="text">
                   <string>image</string>
                  </property>
@@ -1035,7 +1107,7 @@
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>40</width>
+                <width>20</width>
                 <height>20</height>
                </size>
               </property>
@@ -1052,7 +1124,7 @@
            <property name="sizeHint" stdset="0">
             <size>
              <width>20</width>
-             <height>195</height>
+             <height>40</height>
             </size>
            </property>
           </spacer>
@@ -1069,6 +1141,18 @@
          </sizepolicy>
         </property>
         <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,1" columnstretch="1,0">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
          <property name="spacing">
           <number>0</number>
          </property>
@@ -1135,6 +1219,18 @@
       <item row="0" column="0">
        <widget class="QWidget" name="gameInfo" native="true">
         <layout class="QGridLayout" name="gridLayout_14">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
          <item row="2" column="0">
           <spacer name="verticalSpacer_7">
            <property name="orientation">
