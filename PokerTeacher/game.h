@@ -42,6 +42,8 @@ public:
     /// @param int Index within the players vector.
     /// @return address of Player.
     Player& getPlayer(int index) { return players[index]; }
+    vector<shared_ptr<Card>> communityCards;
+    vector<Player> players;
     int getPot() const { return pot; }
     int getCurrentBet() const { return currentBet; }
     int getBigBlind() const { return bigBlind; }
@@ -61,6 +63,7 @@ signals:    // Since a value changed, signal to update UI
     void chipsUpdated(int playerIndex, int newAmount);
     void potUpdated(int newAmount);
     void communityCardsUpdated();
+    void handCardsUpdated();
     void phaseUpdated(Game::Phase currPhase);
     void playerFolded(int playerIndex);
     void currentBetUpdated(int newBet);
@@ -70,8 +73,6 @@ public slots:
 
 private:
     stack<shared_ptr<Card>> deck;
-    vector<shared_ptr<Card>> communityCards;
-    vector<Player> players;
 
     int pot = 0;
     int currentBet = 0;

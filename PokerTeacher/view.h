@@ -25,8 +25,10 @@ public slots:
     void chipUpdate(int playerIndex, int newAmount);
     void potUpdate(int newAmount);
     void communityUpdate();
+    void handsUpdate();
     void phaseUpdate(Game::Phase currPhase);
 private:
     Ui::View *ui;
+    Game& game;
 };
 #endif // VIEW_H

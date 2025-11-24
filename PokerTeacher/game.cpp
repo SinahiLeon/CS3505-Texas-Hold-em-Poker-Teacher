@@ -61,6 +61,7 @@ void Game::newGame() {
 
     shuffleDeck();
     dealHoleCards();
+    emit handCardsUpdated();
 
     // Apply blinds
     makeBet(0, smallBlind);  // Small blind
@@ -80,7 +81,7 @@ void Game::dealCards(int cardAmount, vector<shared_ptr<Card>>& target) {
     for(int i = 0; i < cardAmount; i++) {
         if (!deck.empty()) {
             target.push_back(deck.top()); // This copies shared_ptr
-            qDebug() << "Dealt" << deck.top()->name << "to player" << playerIndex(target);
+            qDebug() << "Dealt" << deck.top()->name << "to player" << playerIndex(target) << "with" << deck.top()->image;
             deck.pop();
         }
     }
@@ -165,7 +166,6 @@ void Game::fold(int playerIndex) {
     }
 }
 
-
 // Gives pot to the winner (used inside fold or showdown)
 void Game::awardPotToPlayer(int playerIndex) {
     if (playerIndex < 0 || playerIndex < players.size()) {
@@ -178,7 +178,6 @@ void Game::awardPotToPlayer(int playerIndex) {
     pot = 0;
     emit potUpdated(pot);
 }
-
 
 void Game::nextPhase() {
     if (phaseIndex < 4) {

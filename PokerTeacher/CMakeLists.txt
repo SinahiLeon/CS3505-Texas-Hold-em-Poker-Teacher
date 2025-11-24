@@ -38,6 +38,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(PokerTeacher
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        ${CMAKE_CURRENT_SOURCE_DIR}/card_images.qrc   # <-- THIS MUST BE INSIDE EXE
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET PokerTeacher APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

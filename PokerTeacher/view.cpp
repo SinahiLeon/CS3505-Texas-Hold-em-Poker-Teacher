@@ -1,9 +1,13 @@
 #include "view.h"
 #include "./ui_view.h"
+#include "cardlibrary.h"
+#include <QImageReader>
+#include <qdir.h>
 
 View::View(Game& game, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::View)
+    , game(game)
 {
     ui->setupUi(this);
 
@@ -11,6 +15,8 @@ View::View(Game& game, QWidget *parent)
             this, &View::chipUpdate);
     connect(&game, &Game::communityCardsUpdated,
             this, &View::communityUpdate);
+    connect(&game, &Game::handCardsUpdated,
+            this, &View::handsUpdate);
     connect(&game, &Game::potUpdated,
             this, &View::potUpdate);
     connect(&game, &Game::phaseUpdated,
@@ -45,6 +51,26 @@ void View::potUpdate(int newAmount) {
 void View::communityUpdate() {
     //update displayed community cards to match backend
     //TODO DISPLAY CARD IMAGES
+    qDebug() << "Drawing community cards.";
+    qDebug() << "NOT IMPLEMENTED";
+
+}
+void View::handsUpdate() {
+    qDebug() << "Drawing hand cards.";
+    // ui->playerCard1->setPixmap(QPixmap::fromImage(CardLibrary::cardBack));
+    // ui->playerCard2->setPixmap(QPixmap::fromImage(CardLibrary::cardBack));
+
+
+    // ui->playerCard2->setPixmap(QPixmap::fromImage(CardLibrary::cardBack));
+    ui->playerCard1->setPixmap((game.players[0].heldCards.size() > 0) ?
+                                                    game.players[0].heldCards.at(0)->image :
+                                                    CardLibrary::noCard);
+    ui->playerCard2->setPixmap((game.players[0].heldCards.size() > 1) ?
+                                                    game.players[0].heldCards.at(1)->image :
+                                                    CardLibrary::noCard);
+    ui->playerCard1->setPixmap(QPixmap(":/Resources/card_images/ace_of_spades.png"));
+    ui->playerCard1->setScaledContents(true);
+    ui->playerCard2->setScaledContents(true);
 }
 void View::phaseUpdate(Game::Phase currPhase) {
     //update phase label to match current phase

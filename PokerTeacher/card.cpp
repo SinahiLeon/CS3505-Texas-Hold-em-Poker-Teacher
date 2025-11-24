@@ -1,12 +1,12 @@
 #include "card.h"
-#include <qimage.h>
 
-Card::Card(QString name, Suit suit, CardValue value, QImage image)
+Card::Card(QString name, Suit suit, CardValue value, QString image)
     : name(name)
     , suit(suit)
     , value(value)
+    , image(image)
 {
-    image = image;
+
 }
 
 strong_ordering Card::operator<=>(const Card& other) const {
