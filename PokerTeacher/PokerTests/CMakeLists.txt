@@ -11,11 +11,11 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(CardHandTests tst_cardhandtests.cpp)
 add_test(NAME CardHandTests COMMAND CardHandTests)
 
 target_link_libraries(CardHandTests PRIVATE Qt${QT_VERSION_MAJOR}::Test)
-
+target_link_libraries(CardHandTests PRIVATE PokerCore)

@@ -380,6 +380,9 @@ bool CardHand::twoPairCheck(vector<shared_ptr<Card>>& allCards) {
         pairs++;
 
         if (pairs == 2) {
+            // Sort the deck so the highest pair comes first
+            sort(newHand.begin(), newHand.end(), comparator);
+
             bestHand = vector<shared_ptr<Card>>(std::move(newHand));
             autoAddKickers(allCards);
             return true;

@@ -20,19 +20,24 @@ set(PROJECT_SOURCES
         view.ui
 )
 
+add_library(PokerCore STATIC
+    card.h card.cpp
+    suit.h
+    game.h game.cpp
+    handtype.h
+    cardhand.h cardhand.cpp
+    cardlibrary.h cardlibrary.cpp
+    cardvalue.h
+)
+
+target_include_directories(PokerCore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(PokerCore PUBLIC Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(PokerCore PUBLIC Qt${QT_VERSION_MAJOR}::Core)
+
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(PokerTeacher
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        card.h card.cpp
-        suit.h
-
-        game.h game.cpp
-
-        handtype.h
-        cardhand.h cardhand.cpp
-        cardlibrary.h cardlibrary.cpp
-        cardvalue.h
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET PokerTeacher APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -52,6 +57,7 @@ else()
     endif()
 endif()
 
+target_link_libraries(PokerTeacher PRIVATE PokerCore)
 target_link_libraries(PokerTeacher PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(PokerTeacher PRIVATE Qt${QT_VERSION_MAJOR}::Core)
 
