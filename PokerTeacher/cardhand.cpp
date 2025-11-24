@@ -57,6 +57,8 @@ strong_ordering CardHand::operator<=>(const CardHand& other) const {
         case HandType::RoyalFlush:
             return strong_ordering::equivalent;
     }
+    // Required non-switch backup return statement
+    return rankKickers(other, 0);
 }
 
 bool CardHand::operator==(const CardHand& other) const {

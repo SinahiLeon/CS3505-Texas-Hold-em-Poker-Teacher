@@ -15,6 +15,8 @@ View::View(Game& game, QWidget *parent)
             this, &View::potUpdate);
     connect(&game, &Game::phaseUpdated,
             this, &View::phaseUpdate);
+    connect(this, &View::viewInitialized,
+            &game, &Game::onViewInitialized);
 }
 
 View::~View()
@@ -44,22 +46,22 @@ void View::communityUpdate() {
     //update displayed community cards to match backend
     //TODO DISPLAY CARD IMAGES
 }
-void View::phaseUpdate(Game::Phases currPhase) {
+void View::phaseUpdate(Game::Phase currPhase) {
     //update phase label to match current phase
     switch(currPhase) {
-    case Game::Phases::Preflop:
+    case Game::Phase::Preflop:
         ui->phaseLabel->setText("Current Phase: Preflop");
         break;
-    case Game::Phases::Flop:
+    case Game::Phase::Flop:
         ui->phaseLabel->setText("Current Phase: Flop");
         break;
-    case Game::Phases::Turn:
+    case Game::Phase::Turn:
         ui->phaseLabel->setText("Current Phase: Turn");
         break;
-    case Game::Phases::River:
+    case Game::Phase::River:
         ui->phaseLabel->setText("Current Phase: River");
         break;
-    case Game::Phases::Showdown:
+    case Game::Phase::Showdown:
         ui->phaseLabel->setText("Current Phase: Showdown");
         break;
     }

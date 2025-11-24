@@ -11,7 +11,7 @@ using std::default_random_engine;
 Game::Game(QObject *parent)
     : QObject(parent)
 {
-    shuffleDeck();
+
 }
 
 void Game::shuffleDeck() {
@@ -19,9 +19,9 @@ void Game::shuffleDeck() {
 
     // Create a vector of all cards as shared_ptrs
     vector<shared_ptr<Card>> shufflingCards;
-    for (const auto& pair : CardLibrary::cards) {
+    for (const auto& card : CardLibrary::cards) {
         // Create shared_ptr for each card
-        shufflingCards.push_back(make_shared<Card>(pair.second));
+        shufflingCards.push_back(make_shared<Card>(card));
     }
 
     // Shuffle
@@ -45,16 +45,19 @@ void Game::clearDeck() {
 }
 
 void Game::newGame() {
+    qDebug() << "New game: Creating new players...";
     players.clear();
-    players[0].chips = 50;
-    players[1].chips = 50;
-    players[2].chips = 50;
+    for (int i = 0; i < 3; i++) {
+        Player player;
+        players.push_back(player);
+    }
 
+    qDebug() << "New game: Setting up phase...";
     communityCards.clear();
     pot = 0;
     currentBet = 0;
     phaseIndex = 0;
-    phase = Phases::Preflop;
+    phase = Phase::Preflop;
 
     shuffleDeck();
     dealHoleCards();
@@ -77,9 +80,17 @@ void Game::dealCards(int cardAmount, vector<shared_ptr<Card>>& target) {
     for(int i = 0; i < cardAmount; i++) {
         if (!deck.empty()) {
             target.push_back(deck.top()); // This copies shared_ptr
+            qDebug() << "Dealt" << deck.top()->name << "to player" << playerIndex(target);
             deck.pop();
         }
     }
+}
+
+int Game::playerIndex(vector<shared_ptr<Card>>& target) {
+    for (int i = 0; i < players.size(); i++)
+        if (&target == &players.at(i).heldCards)
+            return i;
+    return -1;
 }
 
 void Game::dealHoleCards() {
@@ -176,18 +187,22 @@ void Game::nextPhase() {
 
         // Deal community cards based on phase
         switch (phase) {
-        case Phases::Flop:
+        case Phase::Preflop:
+            break;
+        case Phase::Flop:
             dealCards(3, communityCards);
             break;
-        case Phases::Turn:
-        case Phases::River:
+        case Phase::Turn:
             dealCards(1, communityCards);
             break;
-        case Phases::Showdown:
+        case Phase::River:
+            dealCards(1, communityCards);
+            break;
+        case Phase::Showdown:
             break;
         }
 
-        if (phase != Phases::Showdown) {
+        if (phase != Phase::Showdown) {
 
         }
 
@@ -197,3 +212,6 @@ void Game::nextPhase() {
     }
 }
 
+void Game::onViewInitialized(){
+    newGame();
+}

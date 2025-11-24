@@ -1,8 +1,9 @@
 #include "card.h"
 #include <qimage.h>
 
-Card::Card(Suit suit, CardValue value, QImage image)
-    : suit(suit)
+Card::Card(QString name, Suit suit, CardValue value, QImage image)
+    : name(name)
+    , suit(suit)
     , value(value)
 {
     image = image;

@@ -158,7 +158,7 @@ vector<shared_ptr<Card>> CardHandTests::genHand(vector<QString> cards) {
     vector<shared_ptr<Card>> hand;
 
     for (int x = 0; x < cards.size(); x++) {
-        shared_ptr<Card> card = make_shared<Card>(CardLibrary::cards.at(cards[x]));
+        shared_ptr<Card> card = make_shared<Card>(CardLibrary::cards.at(x));
         hand.push_back(card);
     }
 

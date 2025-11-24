@@ -15,7 +15,7 @@ public:
     explicit Game(QObject *parent = nullptr);
 
     /// @brief Different phases of Texas Hold'em poker
-    enum class Phases {
+    enum class Phase {
         Preflop,
         Flop,   // Three community cards are dealt in the middle of the table.
         Turn ,   // Fourth card card dealt.
@@ -27,7 +27,8 @@ public:
     /// @brief A player that containts their information on chips, currentBet, folded, and hand data.
     class Player {
     public:
-        int chips = 0;
+        Player() : fullhand(heldCards) {}
+        int chips = 50;
         int currentBet = 0;
         bool folded = false;
         bool handVisible = false;
@@ -51,7 +52,7 @@ public:
     void call(int playerIndex);
     void raise(int playerIndex, int chipAmount);
     void fold(int playerIndex);
-    Phases getPhase() const { return phase; }
+    Phase getPhase() const { return phase; }
 
     void newGame();
     void nextPhase();
@@ -60,9 +61,12 @@ signals:    // Since a value changed, signal to update UI
     void chipsUpdated(int playerIndex, int newAmount);
     void potUpdated(int newAmount);
     void communityCardsUpdated();
-    void phaseUpdated(Phases currPhase);
+    void phaseUpdated(Game::Phase currPhase);
     void playerFolded(int playerIndex);
     void currentBetUpdated(int newBet);
+
+public slots:
+    void onViewInitialized();
 
 private:
     stack<shared_ptr<Card>> deck;
@@ -74,14 +78,14 @@ private:
     int bigBlind = 10;
     int smallBlind = 5;
     int phaseIndex = 0;
-    Phases phase = Phases::Preflop;
+    Phase phase = Phase::Preflop;
 
-    QMap<int, Phases> phaseIndices{
-        {0, Phases::Preflop},
-        {1, Phases::Flop},
-        {2, Phases::Turn},
-        {3, Phases::River},
-        {4, Phases::Showdown}};
+    QMap<int, Phase> phaseIndices{
+        {0, Phase::Preflop},
+        {1, Phase::Flop},
+        {2, Phase::Turn},
+        {3, Phase::River},
+        {4, Phase::Showdown}};
 
 
     /// @brief Resets and shuffles the deck with all cards
@@ -94,6 +98,7 @@ private:
     void dealCards(int cardAmount, vector<shared_ptr<Card>>& target);
     /// @brief
     void dealHoleCards();
+    int playerIndex(vector<shared_ptr<Card>>& target);
 
 };
 
