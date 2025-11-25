@@ -24,6 +24,8 @@ View::View(Game& game, QWidget *parent)
             this, &View::currentBetUpdate);
     connect(&game, &Game::phaseUpdated,
             this, &View::phaseUpdate);
+    connect(&game, &Game::updateLastAction,
+            this, &View::updateLastAction);
     connect(this, &View::viewInitialized,
             &game, &Game::onViewInitialized);
 }
@@ -166,5 +168,14 @@ void View::phaseUpdate(Game::Phase currPhase) {
     case Game::Phase::Showdown:
         ui->phaseLabel->setText("Current Phase: Showdown");
         break;
+    }
+}
+
+void View::updateLastAction(int playerIndex, QString action) {
+    if (playerIndex == 1) {
+        ui->opp1LastAction->setText(QString("Opponent 1 ").append(action));
+    }
+    else if (playerIndex == 2) {
+        ui->opp2LastAction->setText(QString("Opponent 2 ").append(action));
     }
 }

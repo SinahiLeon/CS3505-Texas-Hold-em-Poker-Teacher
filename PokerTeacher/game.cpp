@@ -4,6 +4,7 @@
 #include <QString>
 #include <random>
 #include <algorithm>
+#include <QRandomGenerator>
 using std::make_shared;
 using std::random_device;
 using std::default_random_engine;
@@ -21,11 +22,56 @@ void Game::newGame() {
     }
 
     // Set up start of first hand
+    dealerIndex = 0;
     newHand();
+    // Start the game loop
+    continueRound();
+}
 
-    // Apply blinds
-    makeBet(1, smallBlind);  // Small blind
-    makeBet(2, bigBlind);    // Big blind
+void Game::newHand() {
+    qDebug() << "Setting up new hand...";
+    currentBet = 0;
+    phaseIndex = 0;
+
+    currentBet = bigBlind;
+    emit currentBetUpdated(currentBet);
+
+    phase = Phase::Preflop;
+    emit phaseUpdated(phase);
+
+    communityCards.clear();
+    emit communityCardsUpdated();
+
+    shuffleDeck();
+    dealHoleCards();
+    emit handCardsUpdated();
+
+    emit updateLastAction(1, QString("is waiting."));
+    emit updateLastAction(2, QString("is waiting."));
+}
+
+void Game::continueRound() {
+    qDebug() << "Playing round with player" << getDealerIndex() << "as dealer.";
+    int player = getDealerIndex() + 1;
+    if (player >= players.size()) player = 0; // Loop back to player
+    while (player != 0) { // While it's a bot's turn
+        // Bot chooses action based on its held cards:
+        /* TEMPORARY RANDOMIZER */
+        /* REPLACE THIS WITH DECISION CODE */
+        int choice = QRandomGenerator::global()->bounded(0, 2);
+        if (choice == 0) {
+            if (noBetsYet()) check(player);
+            else call(player); }
+        if (choice == 1) {
+            if (noBetsYet()) makeBet(player, getCurrentBet());
+            else raise(player, getCurrentBet()); }
+        if (choice == 2) fold(player);
+        /* END OF TEMPORARY RANDOMIZER */
+
+        // Go to next bot's turn
+        player++;
+        if (player >= players.size()) player = 0; // Loop back to player
+    }
 
     // Update UI
     for (int i = 0; i < players.size(); i++) {
@@ -33,20 +79,6 @@ void Game::newGame() {
     }
     emit potUpdated(pot);
     emit currentBetUpdated(currentBet);
-    emit phaseUpdated(phase);
-}
-
-void Game::newHand() {
-    qDebug() << "Setting up new hand...";
-    currentBet = 0;
-    phaseIndex = 0;
-    currentBet = bigBlind;
-    phase = Phase::Preflop;
-    communityCards.clear();
-    shuffleDeck();
-    dealHoleCards();
-    emit handCardsUpdated();
-    emit communityCardsUpdated();
 }
 
 void Game::shuffleDeck() {
@@ -106,6 +138,12 @@ void Game::dealHoleCards() {
     }
 }
 
+void Game::check(int playerIndex) {
+    if (!validPlayer(playerIndex)) return;
+    qDebug() << "Player" << playerIndex << "checked.";
+    emit updateLastAction(playerIndex, QString("checked."));
+}
+
 void Game::makeBet(int playerIndex, int chipAmount) {
     if (!validPlayer(playerIndex)) return;
     qDebug() << "Player" << playerIndex << "made a bet of" << chipAmount;
@@ -119,6 +157,7 @@ void Game::makeBet(int playerIndex, int chipAmount) {
 
     emit chipsUpdated(playerIndex, players[playerIndex].chips);
     emit potUpdated(pot);
+    emit updateLastAction(playerIndex, QString("bet %1.").arg(actualBet));
 }
 
 void Game::call(int playerIndex) {
@@ -130,6 +169,7 @@ void Game::call(int playerIndex) {
     if (callAmount > 0) {
         makeBet(playerIndex, callAmount);
     }
+    emit updateLastAction(playerIndex, QString("called."));
 }
 
 void Game::raise(int playerIndex, int chipAmount) {
@@ -142,6 +182,7 @@ void Game::raise(int playerIndex, int chipAmount) {
         makeBet(playerIndex, chipAmount);
         emit currentBetUpdated(currentBet);
     }
+    emit updateLastAction(playerIndex, QString("raised %1.").arg(chipAmount));
 }
 
 void Game::fold(int playerIndex) {
@@ -165,6 +206,7 @@ void Game::fold(int playerIndex) {
         awardPotToPlayer(lastActivePlayer);
         nextPhase(); // Move to showdown
     }
+    emit updateLastAction(playerIndex, QString("folded."));
 }
 
 void Game::awardPotToPlayer(int playerIndex) {
@@ -211,6 +253,10 @@ void Game::nextPhase() {
     }
 }
 
-void Game::onViewInitialized(){
+bool Game::noBetsYet() {
+    return getCurrentBet() == bigBlind;
+}
+
+void Game::onViewInitialized() {
     newGame();
 }

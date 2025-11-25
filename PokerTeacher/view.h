@@ -28,6 +28,7 @@ public slots:
     void communityUpdate();
     void handsUpdate();
     void phaseUpdate(Game::Phase currPhase);
+    void updateLastAction(int playerIndex, QString action);
 private:
     Ui::View *ui;
     Game& game;

@@ -44,21 +44,19 @@ public:
     Player& getPlayer(int index) { return players[index]; }
     vector<shared_ptr<Card>> communityCards;
     vector<Player> players;
+    int getDealerIndex() { return dealerIndex; }
     int getPot() const { return pot; }
     int getCurrentBet() const { return currentBet; }
     int getBigBlind() const { return bigBlind; }
     int getSmallBlind() const { return smallBlind; }
     const vector<shared_ptr<Card>>& getCommunityCards() const { return communityCards; }
 
+    void check(int playerIndex);
     void makeBet(int playerIndex, int chipAmount);
     void call(int playerIndex);
     void raise(int playerIndex, int chipAmount);
     void fold(int playerIndex);
     Phase getPhase() const { return phase; }
-
-    void newGame();
-    void newHand();
-    void nextPhase();
 
 signals:    // Since a value changed, signal to update UI
     void chipsUpdated(int playerIndex, int newAmount);
@@ -68,13 +66,14 @@ signals:    // Since a value changed, signal to update UI
     void phaseUpdated(Game::Phase currPhase);
     void playerFolded(int playerIndex);
     void currentBetUpdated(int newBet);
+    void updateLastAction(int playerIndex, QString action);
 
 public slots:
     void onViewInitialized();
 
 private:
     stack<shared_ptr<Card>> deck;
-
+    int dealerIndex = 0;
     int pot = 0;
     int currentBet = 0;
     int bigBlind = 10;
@@ -89,6 +88,10 @@ private:
         {3, Phase::River},
         {4, Phase::Showdown}};
 
+    void newGame();
+    void newHand();
+    void continueRound();
+    void nextPhase();
 
     /// @brief Resets and shuffles the deck with all cards
     void shuffleDeck();
@@ -104,6 +107,8 @@ private:
     int playerIndex(vector<shared_ptr<Card>>& target);
     /// @brief Helper method to check if a player index is valid.
     bool validPlayer(int playerIndex);
+    /// @brief Helper method that quickly checks if anyone has bid yet this hand.
+    bool noBetsYet();
 
 };
 
