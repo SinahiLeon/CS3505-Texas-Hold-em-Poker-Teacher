@@ -48,8 +48,8 @@ public:
     int getDealerIndex() { return dealerIndex; }
     int getPot() const { return pot; }
     int getBetAmount() const { return currentBet; }
-    int getRaiseAmount() const { return getBetAmount() + getBigBlind(); }
-    int getBigBlind() const { return bigBlind; }
+    int getRaiseAmount() const { return getBetAmount() + getLargeBlind(); }
+    int getLargeBlind() const { return bigBlind; }
     int getSmallBlind() const { return smallBlind; }
     const vector<shared_ptr<Card>>& getCommunityCards() const { return communityCards; }
 
@@ -59,6 +59,7 @@ public:
     void raise(int playerIndex, int chipAmount);
     void fold(int playerIndex);
     Phase getPhase() const { return phase; }
+    bool noBetsYetThisPhase;
 
 signals:    // Since a value changed, signal to update UI
     void chipsUpdated(int playerIndex, int newAmount);
@@ -69,6 +70,7 @@ signals:    // Since a value changed, signal to update UI
     void playerFolded(int playerIndex);
     void currentBetUpdated(int newBet);
     void updateLastAction(int playerIndex, QString action);
+    void updateAvailableActions();
 
 public slots:
     void onViewInitialized();
@@ -86,7 +88,9 @@ private:
     int smallBlind = 5;
     int phaseIndex = 0;
     Phase phase = Phase::Preflop;
-    bool noBetsYetThisPhase;
+    bool smallBlindPaid = false;
+    bool largeBlindPaid = false;
+    int numPlayersCalled = 0;
 
     QMap<int, Phase> phaseIndices{
         {0, Phase::Preflop},
@@ -97,7 +101,8 @@ private:
 
     void newGame();
     void newHand();
-    void continueRound();
+    void startRound();
+    void continueRound(int playerIndex);
     void nextPhase();
 
     /// @brief Resets and shuffles the deck with all cards

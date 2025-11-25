@@ -26,6 +26,8 @@ View::View(Game& game, QWidget *parent)
             this, &View::phaseUpdate);
     connect(&game, &Game::updateLastAction,
             this, &View::updateLastAction);
+    connect(&game, &Game::updateAvailableActions,
+            this, &View::updateAvailableActions);
     connect(this, &View::viewInitialized,
             &game, &Game::onViewInitialized);
     connect(ui->betButton, &QPushButton::clicked,
@@ -37,6 +39,17 @@ View::View(Game& game, QWidget *parent)
 View::~View()
 {
     delete ui;
+}
+
+void View::updateAvailableActions() {
+    bool canCheck = game.noBetsYetThisPhase && !(game.getPhase() == Game::Phase::Showdown);
+    ui->checkButton->setDisabled(!canCheck);
+    bool canBet = game.players[0].canBet(game.getBetAmount()) && !(game.getPhase() == Game::Phase::Showdown);
+    ui->betButton->setDisabled(!canBet);
+    ui->betAmount->setMaximum(game.players[0].chips);
+    bool canCall = game.players[0].canBet(game.getBetAmount()) && !(game.getPhase() == Game::Phase::Showdown);
+    ui->callButton->setDisabled(!canCall);
+    qDebug() << "UI: Available actions: Check =" << canCheck << "Bet =" << canBet << "Call =" << canCall << "Fold = true";
 }
 
 void View::chipUpdate(int playerIndex, int newAmount) {
@@ -193,10 +206,13 @@ void View::phaseUpdate(Game::Phase currPhase) {
 }
 
 void View::updateLastAction(int playerIndex, QString action) {
-    if (playerIndex == 1) {
-        ui->opp1LastAction->setText(QString("Opponent 1 ").append(action));
+    if (playerIndex == 0) {
+        ui->playerLastAction->setText(QString("You ").append(action));
     }
-    else if (playerIndex == 2) {
-        ui->opp2LastAction->setText(QString("Opponent 2 ").append(action));
+    else {
+        switch (playerIndex) {
+            case (1) : { ui->opp1LastAction->setText(QString("Opponent 1 ").append(action)); break; }
+            case (2) : { ui->opp2LastAction->setText(QString("Opponent 2 ").append(action)); break; }
+        }
     }
 }

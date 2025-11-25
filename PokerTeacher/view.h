@@ -29,6 +29,7 @@ public slots:
     void handsUpdate();
     void phaseUpdate(Game::Phase currPhase);
     void updateLastAction(int playerIndex, QString action);
+    void updateAvailableActions();
     void onBetButtonClicked();
     void onCallButtonClicked();
     void onCheckButtonClicked();
