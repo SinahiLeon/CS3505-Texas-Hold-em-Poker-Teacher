@@ -13,7 +13,7 @@ Card::Card(Suit suit, CardValue value, QString image)
     : suit(suit)
     , value(value)
     , image(image)
-    , name(toString())
+    , name(toString(suit, value))
 {
 
 }
@@ -31,65 +31,71 @@ bool Card::exactEqual(const Card& other) const {
 }
 
 QString Card::toString() const {
-    QString name = " of ";
-    switch(value) {
+    return toString(suit, value);
+}
+
+QString Card::toString(Suit cardSuit, CardValue cardValue) const {
+    QString valueString;
+    QString of = " of ";
+    QString suitString;
+    switch(cardValue) {
     case CardValue::Ace:
-        name = "Ace"+name;
+        valueString = "Ace";
         break;
     case CardValue::Two:
-        name = "2"+name;
+        valueString = "2";
         break;
     case CardValue::Three:
-        name = "3"+name;
+        valueString = "3";
         break;
     case CardValue::Four:
-        name = "4"+name;
+        valueString = "4";
         break;
     case CardValue::Five:
-        name = "5"+name;
+        valueString = "5";
         break;
     case CardValue::Six:
-        name = "6"+name;
+        valueString = "6";
         break;
     case CardValue::Seven:
-        name = "7"+name;
+        valueString = "7";
         break;
     case CardValue::Eight:
-        name = "8"+name;
+        valueString = "8";
         break;
     case CardValue::Nine:
-        name = "9"+name;
+        valueString = "9";
         break;
     case CardValue::Ten:
-        name = "10"+name;
+        valueString = "10";
         break;
     case CardValue::Jack:
-        name = "Jack"+name;
+        valueString = "Jack";
         break;
     case CardValue::Queen:
-        name = "Queen"+name;
+        valueString = "Queen";
         break;
     case CardValue::King:
-        name = "King"+name;
+        valueString = "King";
         break;
     default:
-        name = name+"ERROR";
+        valueString = "ERROR";
     }
-    switch(suit) {
+    switch(cardSuit) {
     case Suit::Club:
-        name = name+"Clubs";
+        suitString = "Clubs";
         break;
     case Suit::Diamond:
-        name = name+"Diamonds";
+        suitString = "Diamonds";
         break;
     case Suit::Heart:
-        name = name+"Hearts";
+        suitString = "Hearts";
         break;
     case Suit::Spade:
-        name = name+"Spades";
+        suitString = "Spades";
         break;
     default:
-        name = name+"ERROR";
+        suitString = "ERROR";
     }
-    return name;
+    return valueString+of+suitString;
 }

@@ -6,6 +6,7 @@
 #include <compare>
 #include <QString>
 using std::strong_ordering;
+using std::string;
 
 class Card
 {
@@ -40,6 +41,7 @@ public:
 
 private:
     QString toString() const;
+    QString toString(Suit cardSuit, CardValue cardValue) const;
 };
 
 #endif // CARD_H
