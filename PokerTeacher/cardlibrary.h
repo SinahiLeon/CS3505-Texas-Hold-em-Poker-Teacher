@@ -3,12 +3,14 @@
 
 #include "card.h"
 #include <QString>
+#include <map>
+using std::map;
 
 class CardLibrary
 {
 public:
     /// @brief All card objects in a standard 52 card deck.
-    static const std::vector<Card> cards;
+    static const map<QString, Card> cards;
     static const QString cardBack;
     static const QString noCard;
 };

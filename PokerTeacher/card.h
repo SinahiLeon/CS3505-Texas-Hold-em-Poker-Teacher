@@ -13,10 +13,8 @@ public:
     /// @brief Constructs a new Card.
     /// @param suit Suit of the card.
     /// @param value Value of the card.
-    Card(QString name, Suit suit, CardValue value, QString image);
+    Card(Suit suit, CardValue value, QString image);
     Card& operator=(const Card& other);
-    /// @brief Card name ("Ace of Spades", "2 of Clubs", etc.).
-    const QString name;
     /// @brief Card suit (Heart, Club, Diamond, Spade).
     const Suit suit;
     /// @brief Card value (Ace, King, Queen, Jack and values 2-10).
