@@ -113,7 +113,7 @@ void CardHand::calculateBestHand(vector<shared_ptr<Card>> communityCards) {
 }
 
 void CardHand::autoAddKickers(vector<shared_ptr<Card>>& allCards) {
-    for (int x = 0; x < allCards.size() && bestHand.size() < 6; x++) {
+    for (int x = 0; x < allCards.size() && bestHand.size() < 5; x++) {
         if (!inBestHand(allCards[x])) { // make sure we're not adding cards already in the best hand
             bestHand.push_back(allCards[x]); // add the highest value kickers
         }
