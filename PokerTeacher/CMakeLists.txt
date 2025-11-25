@@ -28,6 +28,8 @@ add_library(PokerCore STATIC
     cardhand.h cardhand.cpp
     cardlibrary.h cardlibrary.cpp
     cardvalue.h
+    phase.h
+    player.h
 )
 
 target_include_directories(PokerCore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
