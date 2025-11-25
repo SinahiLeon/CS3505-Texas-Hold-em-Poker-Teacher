@@ -24,6 +24,7 @@ signals:
 public slots:
     void chipUpdate(int playerIndex, int newAmount);
     void potUpdate(int newAmount);
+    void currentBetUpdate(int currentBet);
     void communityUpdate();
     void handsUpdate();
     void phaseUpdate(Game::Phase currPhase);

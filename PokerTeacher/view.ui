@@ -19,8 +19,33 @@
   <property name="windowTitle">
    <string>How to Play Texas Hold 'Em</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow {
+background:qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgba(23, 73, 24, 255), stop:1 rgba(11, 37, 11, 255));
+}
+QFrame {
+background: rgba(0, 0, 0, 55);
+border: none;
+border-radius: 5px;
+}
+QLabel {
+background: rgba(0, 0, 0, 0);
+}</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0">
+    <property name="leftMargin">
+     <number>6</number>
+    </property>
+    <property name="topMargin">
+     <number>6</number>
+    </property>
+    <property name="rightMargin">
+     <number>6</number>
+    </property>
+    <property name="bottomMargin">
+     <number>6</number>
+    </property>
     <item>
      <layout class="QGridLayout" name="gridLayout" rowstretch="0,1" columnstretch="0,2,0">
       <property name="leftMargin">
@@ -58,6 +83,7 @@
            <property name="font">
             <font>
              <pointsize>12</pointsize>
+             <bold>true</bold>
             </font>
            </property>
            <property name="text">
@@ -291,7 +317,7 @@
       </item>
       <item row="0" column="1">
        <widget class="QWidget" name="dealerInfo" native="true">
-        <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,0,0,1">
+        <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,0,0">
          <property name="leftMargin">
           <number>0</number>
          </property>
@@ -309,6 +335,7 @@
            <property name="font">
             <font>
              <pointsize>12</pointsize>
+             <bold>true</bold>
             </font>
            </property>
            <property name="text">
@@ -692,19 +719,6 @@
            </layout>
           </widget>
          </item>
-         <item>
-          <spacer name="verticalSpacer_5">
-           <property name="orientation">
-            <enum>Qt::Orientation::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
         </layout>
        </widget>
       </item>
@@ -715,7 +729,7 @@
           <number>0</number>
          </property>
          <property name="topMargin">
-          <number>0</number>
+          <number>12</number>
          </property>
          <property name="rightMargin">
           <number>0</number>
@@ -724,6 +738,132 @@
           <number>0</number>
          </property>
          <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_8">
+           <item>
+            <spacer name="horizontalSpacer_12">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QFrame" name="gameInfoBox">
+             <property name="styleSheet">
+              <string notr="true">#gameInfoBox {
+color: white;
+background: rgb(82, 11, 11)
+;
+border: 1px solid white;
+border-radius: 10px;
+}</string>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::Shape::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Shadow::Raised</enum>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_6">
+              <property name="leftMargin">
+               <number>16</number>
+              </property>
+              <property name="topMargin">
+               <number>8</number>
+              </property>
+              <property name="rightMargin">
+               <number>16</number>
+              </property>
+              <property name="bottomMargin">
+               <number>8</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="blindLabel">
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Small Blind: $5    Big Blind: $10</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="dealerLabel">
+                <property name="font">
+                 <font>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Opponent 1 is the Dealer this hand.</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="phaseLabel">
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Current Phase: </string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="currentBetLabel">
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Current bet: $</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_13">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+         <item>
           <spacer name="verticalSpacer_2">
            <property name="orientation">
             <enum>Qt::Orientation::Vertical</enum>
@@ -731,7 +871,7 @@
            <property name="sizeHint" stdset="0">
             <size>
              <width>20</width>
-             <height>40</height>
+             <height>20</height>
             </size>
            </property>
           </spacer>
@@ -741,6 +881,7 @@
            <property name="font">
             <font>
              <pointsize>14</pointsize>
+             <bold>true</bold>
             </font>
            </property>
            <property name="text">
@@ -755,7 +896,7 @@
           <widget class="QLabel" name="playerChipsLabel">
            <property name="font">
             <font>
-             <pointsize>12</pointsize>
+             <pointsize>11</pointsize>
             </font>
            </property>
            <property name="text">
@@ -919,6 +1060,7 @@
            <property name="font">
             <font>
              <pointsize>12</pointsize>
+             <bold>true</bold>
             </font>
            </property>
            <property name="text">
@@ -1192,6 +1334,12 @@
              <height>16777215</height>
             </size>
            </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="text">
             <string>Info</string>
            </property>
@@ -1257,13 +1405,6 @@
            </property>
           </spacer>
          </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="phaseLabel">
-           <property name="text">
-            <string>Current Phase: </string>
-           </property>
-          </widget>
-         </item>
         </layout>
        </widget>
       </item>
@@ -1277,12 +1418,12 @@
         <height>50</height>
        </size>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,4,1">
+      <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,5,1">
        <property name="topMargin">
-        <number>0</number>
+        <number>6</number>
        </property>
        <property name="bottomMargin">
-        <number>0</number>
+        <number>6</number>
        </property>
        <item>
         <spacer name="horizontalSpacer">
@@ -1311,6 +1452,12 @@
            <height>40</height>
           </size>
          </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
          <property name="frameShape">
           <enum>QFrame::Shape::StyledPanel</enum>
          </property>
@@ -1318,6 +1465,128 @@
           <enum>QFrame::Shadow::Raised</enum>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <property name="leftMargin">
+           <number>4</number>
+          </property>
+          <property name="topMargin">
+           <number>4</number>
+          </property>
+          <property name="rightMargin">
+           <number>4</number>
+          </property>
+          <property name="bottomMargin">
+           <number>4</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="checkButton">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>14</pointsize>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">#checkButton{color:#ffea44;}</string>
+            </property>
+            <property name="text">
+             <string> Check 👍</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="betControls" native="true">
+            <property name="styleSheet">
+             <string notr="true">#betControls * {
+color: #8fff8f;
+}</string>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_7">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="betButton">
+               <property name="minimumSize">
+                <size>
+                 <width>120</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>14</pointsize>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Bet/Raise</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="betAmount">
+               <property name="minimumSize">
+                <size>
+                 <width>75</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>75</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>14</pointsize>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="frame">
+                <bool>false</bool>
+               </property>
+               <property name="readOnly">
+                <bool>false</bool>
+               </property>
+               <property name="prefix">
+                <string>$</string>
+               </property>
+               <property name="minimum">
+                <number>5</number>
+               </property>
+               <property name="maximum">
+                <number>95</number>
+               </property>
+               <property name="singleStep">
+                <number>5</number>
+               </property>
+               <property name="value">
+                <number>5</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
           <item>
            <widget class="QPushButton" name="callButton">
             <property name="sizePolicy">
@@ -1329,40 +1598,20 @@
             <property name="minimumSize">
              <size>
               <width>0</width>
-              <height>30</height>
+              <height>40</height>
              </size>
             </property>
             <property name="font">
              <font>
               <pointsize>14</pointsize>
+              <bold>true</bold>
              </font>
             </property>
-            <property name="text">
-             <string>Call</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="raiseButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>14</pointsize>
-             </font>
+            <property name="styleSheet">
+             <string notr="true">#callButton{color:#5ec5ff;}</string>
             </property>
             <property name="text">
-             <string>Raise</string>
+             <string> Call ▶️</string>
             </property>
            </widget>
           </item>
@@ -1377,16 +1626,22 @@
             <property name="minimumSize">
              <size>
               <width>0</width>
-              <height>30</height>
+              <height>40</height>
              </size>
             </property>
             <property name="font">
              <font>
               <pointsize>14</pointsize>
+              <bold>true</bold>
              </font>
             </property>
+            <property name="styleSheet">
+             <string notr="true">#foldButton {
+color: #fa5e8a;
+}</string>
+            </property>
             <property name="text">
-             <string>Fold</string>
+             <string> Fold ❌</string>
             </property>
            </widget>
           </item>

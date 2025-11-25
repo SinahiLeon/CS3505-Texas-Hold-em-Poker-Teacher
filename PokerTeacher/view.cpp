@@ -1,6 +1,7 @@
 #include "view.h"
 #include "./ui_view.h"
 #include "cardlibrary.h"
+#include <QString>
 #include <QImageReader>
 #include <qdir.h>
 
@@ -19,6 +20,8 @@ View::View(Game& game, QWidget *parent)
             this, &View::handsUpdate);
     connect(&game, &Game::potUpdated,
             this, &View::potUpdate);
+    connect(&game, &Game::currentBetUpdated,
+            this, &View::currentBetUpdate);
     connect(&game, &Game::phaseUpdated,
             this, &View::phaseUpdate);
     connect(this, &View::viewInitialized,
@@ -44,14 +47,21 @@ void View::chipUpdate(int playerIndex, int newAmount) {
         break;
     }
 }
+
 void View::potUpdate(int newAmount) {
     //update pot label to match pot amount
     ui->potLabel->setText("Pot: $" + QString::number(newAmount));
 }
+
+void View::currentBetUpdate(int currentBet) {
+    ui->currentBetLabel->setText(QString("Current bet: $%1").arg(std::to_string(game.getCurrentBet())));
+    ui->betAmount->setMinimum(game.getCurrentBet());
+}
+
 void View::communityUpdate() {
     //update displayed community cards to match backend
     //TODO DISPLAY CARD IMAGES
-    qDebug() << "Drawing community cards.";
+    qDebug() << "UI: Updating community cards.";
     QSize commCardSize(80,110);
     QPixmap comm1 = (game.communityCards.size() > 0)
                         ? game.communityCards.at(0)->image
@@ -84,8 +94,9 @@ void View::communityUpdate() {
     ui->commCard4->setFixedSize(commCardSize);
     ui->commCard5->setFixedSize(commCardSize);
 }
+
 void View::handsUpdate() {
-    qDebug() << "Drawing hand cards.";
+    qDebug() << "UI: Updating hand cards.";
     QSize playerCardSize(100,140);
     QSize opponentCardSize(80,110);
     // Player
@@ -136,6 +147,7 @@ void View::handsUpdate() {
     ui->opp2card1->setFixedSize(opponentCardSize);
     ui->opp2card2->setFixedSize(opponentCardSize);
 }
+
 void View::phaseUpdate(Game::Phase currPhase) {
     //update phase label to match current phase
     switch(currPhase) {
