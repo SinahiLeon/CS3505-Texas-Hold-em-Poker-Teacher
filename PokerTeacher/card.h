@@ -14,6 +14,10 @@ public:
     /// @param suit Suit of the card.
     /// @param value Value of the card.
     Card(QString name, Suit suit, CardValue value, QString image);
+    /// @brief Constructs a new Card, the name is determined by the other parameters.
+    /// @param suit Suit of the card.
+    /// @param value Value of the card.
+    Card(Suit suit, CardValue value, QString image);
     Card& operator=(const Card& other);
     /// @brief Card name ("Ace of Spades", "2 of Clubs", etc.).
     const QString name;
@@ -33,8 +37,9 @@ public:
     /// @returns Boolean indicating whether or not cards were equal.
     bool operator==(const Card& other) const;
     bool exactEqual(const Card& other) const;
-private:
 
+private:
+    QString toString() const;
 };
 
 #endif // CARD_H

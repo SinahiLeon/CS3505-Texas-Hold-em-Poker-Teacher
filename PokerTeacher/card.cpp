@@ -9,6 +9,15 @@ Card::Card(QString name, Suit suit, CardValue value, QString image)
 
 }
 
+Card::Card(Suit suit, CardValue value, QString image)
+    : suit(suit)
+    , value(value)
+    , image(image)
+    , name(toString())
+{
+
+}
+
 strong_ordering Card::operator<=>(const Card& other) const {
     return value <=> other.value;
 }
