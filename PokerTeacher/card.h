@@ -12,13 +12,15 @@ class Card
 {
 public:
     /// @brief Constructs a new Card.
+    /// @param name Name of the card.
     /// @param suit Suit of the card.
     /// @param value Value of the card.
+    /// @param image File path to an image of the card.
     Card(QString name, Suit suit, CardValue value, QString image);
-    /// @brief Constructs a new Card, the name is determined by the other parameters.
+    /// @brief Constructs a new Card, the name and image filepath are determined by the other parameters.
     /// @param suit Suit of the card.
     /// @param value Value of the card.
-    Card(Suit suit, CardValue value, QString image);
+    Card(Suit suit, CardValue value);
     Card& operator=(const Card& other);
     /// @brief Card name ("Ace of Spades", "2 of Clubs", etc.).
     const QString name;
@@ -40,8 +42,23 @@ public:
     bool exactEqual(const Card& other) const;
 
 private:
+    /// @brief Gets the name of the card.
+    /// @returns A string represneting the name of the card.
     QString toString() const;
+    /// @brief Gets the name of a specified card.
+    /// @param cardSuit The card suit.
+    /// @param cardValue The card value.
+    /// @returns A string represneting the name of the card.
     QString toString(Suit cardSuit, CardValue cardValue) const;
+
+    /// @brief Gets the file path of the card.
+    /// @returns A string represneting the file path of the card.
+    QString toFilePath() const;
+    /// @brief Gets the file path of a specified card.
+    /// @param cardSuit The card suit.
+    /// @param cardValue The card value.
+    /// @returns A string represneting the file path of the card.
+    QString toFilePath(Suit cardSuit, CardValue cardValue) const;
 };
 
 #endif // CARD_H
