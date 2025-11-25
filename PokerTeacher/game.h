@@ -28,6 +28,7 @@ public:
     class Player {
     public:
         Player() : fullhand(heldCards) {}
+        bool canBet(int amount) { return chips >= amount; }
         int chips = 50;
         int currentBet = 0;
         bool folded = false;
@@ -46,7 +47,8 @@ public:
     vector<Player> players;
     int getDealerIndex() { return dealerIndex; }
     int getPot() const { return pot; }
-    int getCurrentBet() const { return currentBet; }
+    int getBetAmount() const { return currentBet; }
+    int getRaiseAmount() const { return getBetAmount() + getBigBlind(); }
     int getBigBlind() const { return bigBlind; }
     int getSmallBlind() const { return smallBlind; }
     const vector<shared_ptr<Card>>& getCommunityCards() const { return communityCards; }
@@ -70,16 +72,21 @@ signals:    // Since a value changed, signal to update UI
 
 public slots:
     void onViewInitialized();
+    void playerMakesBet(int amount);
+    void playerCalls();
+    void playerChecks();
+    void playerFolds();
 
 private:
     stack<shared_ptr<Card>> deck;
-    int dealerIndex = 0;
+    int dealerIndex = 2;
     int pot = 0;
     int currentBet = 0;
     int bigBlind = 10;
     int smallBlind = 5;
     int phaseIndex = 0;
     Phase phase = Phase::Preflop;
+    bool noBetsYetThisPhase;
 
     QMap<int, Phase> phaseIndices{
         {0, Phase::Preflop},
@@ -108,7 +115,7 @@ private:
     /// @brief Helper method to check if a player index is valid.
     bool validPlayer(int playerIndex);
     /// @brief Helper method that quickly checks if anyone has bid yet this hand.
-    bool noBetsYet();
+    bool noBetsYet() { return noBetsYetThisPhase; }
 
 };
 

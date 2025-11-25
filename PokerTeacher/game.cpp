@@ -22,9 +22,9 @@ void Game::newGame() {
     }
 
     // Set up start of first hand
-    dealerIndex = 0;
     newHand();
     // Start the game loop
+    dealerIndex = 2;
     continueRound();
 }
 
@@ -51,26 +51,56 @@ void Game::newHand() {
 }
 
 void Game::continueRound() {
-    qDebug() << "Playing round with player" << getDealerIndex() << "as dealer.";
-    int player = getDealerIndex() + 1;
-    if (player >= players.size()) player = 0; // Loop back to player
-    while (player != 0) { // While it's a bot's turn
-        // Bot chooses action based on its held cards:
-        /* TEMPORARY RANDOMIZER */
-        /* REPLACE THIS WITH DECISION CODE */
-        int choice = QRandomGenerator::global()->bounded(0, 2);
-        if (choice == 0) {
-            if (noBetsYet()) check(player);
-            else call(player); }
-        if (choice == 1) {
-            if (noBetsYet()) makeBet(player, getCurrentBet());
-            else raise(player, getCurrentBet()); }
-        if (choice == 2) fold(player);
-        /* END OF TEMPORARY RANDOMIZER */
-
-        // Go to next bot's turn
+    qDebug() << "Continuing round with player" << getDealerIndex() << "as dealer.";
+    int player = getDealerIndex();
+    while (true) { // Loop until it's the player's turn
         player++;
-        if (player >= players.size()) player = 0; // Loop back to player
+        if (player >= players.size() || player == 0) {
+            qDebug() << "It's the player's turn...";
+            break;
+        }
+        qDebug() << "Opponent" << player <<
+            "is deciding what to do... noBetsYet =" << noBetsYet() <<
+            "and bigBlind =" << getBigBlind();
+        // Bot chooses action based on its held cards:
+
+        /* TEMPORARY RANDOMIZER */
+        /* REPLACE QRandomGenerator WITH DECISION CODE */
+        if (noBetsYet()) {
+            if (players[player].canBet(getBetAmount())) {
+                switch (int choice = QRandomGenerator::global()->bounded(0, 2)) {
+                    case (0) : { check(player); continue; }
+                    case (1) : { makeBet(player, getBetAmount()); continue; }
+                    case (2) : { fold(player); continue; }
+                }
+            }
+            else { // No bets yet but player can't bet
+                switch (int choice = QRandomGenerator::global()->bounded(0, 1)) {
+                    case (0) : { check(player); continue; }
+                    case (1) : { fold(player); continue; }
+                }
+            }
+        }
+        else { // There has been a bet
+            if (players[player].canBet(getRaiseAmount())) { // Can raise
+                switch (int choice = QRandomGenerator::global()->bounded(0, 2)) {
+                    case (0) : { call(player); continue; }
+                    case (1) : { raise(player, getBigBlind()); continue; }
+                    case (2) : { fold(player); continue; }
+                }
+            }
+            if (players[player].canBet(getBetAmount())) { // Can call
+                switch (int choice = QRandomGenerator::global()->bounded(0, 1)) {
+                case (0) : { call(player); continue; }
+                case (1) : { fold(player); continue; }
+                }
+            }
+            else { // Can't check, call, or raise
+                fold(player);
+                continue;
+            }
+        }
+        /* END OF TEMPORARY RANDOMIZER */
     }
 
     // Update UI
@@ -155,6 +185,7 @@ void Game::makeBet(int playerIndex, int chipAmount) {
     player.currentBet += actualBet;
     pot += actualBet;
 
+    noBetsYetThisPhase = false;
     emit chipsUpdated(playerIndex, players[playerIndex].chips);
     emit potUpdated(pot);
     emit updateLastAction(playerIndex, QString("bet %1.").arg(actualBet));
@@ -253,8 +284,25 @@ void Game::nextPhase() {
     }
 }
 
-bool Game::noBetsYet() {
-    return getCurrentBet() == bigBlind;
+void Game::playerMakesBet(int amount) {
+    (noBetsYet()) ? makeBet(0, amount)
+                  : raise(0, amount);
+    continueRound();
+}
+
+void Game::playerCalls() {
+    call(0);
+    continueRound();
+}
+
+void Game::playerChecks() {
+    check(0);
+    continueRound();
+}
+
+void Game::playerFolds() {
+    fold(0);
+    continueRound();
 }
 
 void Game::onViewInitialized() {

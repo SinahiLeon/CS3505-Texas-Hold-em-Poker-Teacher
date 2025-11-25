@@ -28,6 +28,10 @@ View::View(Game& game, QWidget *parent)
             this, &View::updateLastAction);
     connect(this, &View::viewInitialized,
             &game, &Game::onViewInitialized);
+    connect(ui->betButton, &QPushButton::clicked,
+            this, &View::onBetButtonClicked);
+    connect(ui->callButton, &QPushButton::clicked,
+            this, &View::onCallButtonClicked);
 }
 
 View::~View()
@@ -56,8 +60,25 @@ void View::potUpdate(int newAmount) {
 }
 
 void View::currentBetUpdate(int currentBet) {
-    ui->currentBetLabel->setText(QString("Current bet: $%1").arg(std::to_string(game.getCurrentBet())));
-    ui->betAmount->setMinimum(game.getCurrentBet());
+    ui->currentBetLabel->setText(QString("Current bet: $%1").arg(std::to_string(game.getBetAmount())));
+    ui->betAmount->setMinimum(game.getBetAmount());
+}
+
+void View::onBetButtonClicked() {
+    int amount = ui->betAmount->value();
+    game.playerMakesBet(amount);
+}
+
+void View::onCallButtonClicked() {
+    game.playerCalls();
+}
+
+void View::onCheckButtonClicked() {
+    game.playerChecks();
+}
+
+void View::onFoldButtonClicked() {
+    game.playerFolds();
 }
 
 void View::communityUpdate() {
