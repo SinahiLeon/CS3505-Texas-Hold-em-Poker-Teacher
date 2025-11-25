@@ -17,6 +17,11 @@ public:
     /// @param value Value of the card.
     /// @param image File path to an image of the card.
     Card(QString name, Suit suit, CardValue value, QString image);
+    /// @brief Constructs a new Card.
+    /// @param suit Suit of the card.
+    /// @param value Value of the card.
+    /// @param image File path to an image of the card.
+    Card(Suit suit, CardValue value, QString image);
     /// @brief Constructs a new Card, the name and image filepath are determined by the other parameters.
     /// @param suit Suit of the card.
     /// @param value Value of the card.

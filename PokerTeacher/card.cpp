@@ -9,11 +9,20 @@ Card::Card(QString name, Suit suit, CardValue value, QString image)
 
 }
 
+Card::Card(Suit suit, CardValue value, QString image)
+    : name(toString(suit, value))
+    , suit(suit)
+    , value(value)
+    , image(image)
+{
+
+}
+
 Card::Card(Suit suit, CardValue value)
-    : suit(suit)
+    : name(toString(suit, value))
+    , suit(suit)
     , value(value)
     , image(toFilePath(suit, value))
-    , name(toString(suit, value))
 {
 
 }
