@@ -1,7 +1,8 @@
 #include "card.h"
 
-Card::Card(Suit suit, CardValue value, QString image)
-    : suit(suit)
+Card::Card(QString name, Suit suit, CardValue value, QString image)
+    : name(name)
+    , suit(suit)
     , value(value)
     , image(image)
 {
