@@ -57,6 +57,7 @@ public:
     Phase getPhase() const { return phase; }
 
     void newGame();
+    void newHand();
     void nextPhase();
 
 signals:    // Since a value changed, signal to update UI
@@ -99,7 +100,10 @@ private:
     void dealCards(int cardAmount, vector<shared_ptr<Card>>& target);
     /// @brief
     void dealHoleCards();
+    /// @brief Helper method to get player number for printing debug messages.
     int playerIndex(vector<shared_ptr<Card>>& target);
+    /// @brief Helper method to check if a player index is valid.
+    bool validPlayer(int playerIndex);
 
 };
 

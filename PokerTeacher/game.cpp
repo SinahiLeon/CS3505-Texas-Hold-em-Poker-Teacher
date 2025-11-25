@@ -8,10 +8,45 @@ using std::make_shared;
 using std::random_device;
 using std::default_random_engine;
 
-Game::Game(QObject *parent)
-    : QObject(parent)
-{
+Game::Game(QObject *parent) : QObject(parent) {}
 
+void Game::newGame() {
+    // Set up start of game
+    qDebug() << "Setting up new game...";
+    pot = 0;
+    players.clear();
+    for (int i = 0; i < 3; i++) {
+        Player player;
+        players.push_back(player);
+    }
+
+    // Set up start of first hand
+    newHand();
+
+    // Apply blinds
+    makeBet(1, smallBlind);  // Small blind
+    makeBet(2, bigBlind);    // Big blind
+
+    // Update UI
+    for (int i = 0; i < players.size(); i++) {
+        emit chipsUpdated(i, players[i].chips);
+    }
+    emit potUpdated(pot);
+    emit currentBetUpdated(currentBet);
+    emit phaseUpdated(phase);
+}
+
+void Game::newHand() {
+    qDebug() << "Setting up new hand...";
+    currentBet = 0;
+    phaseIndex = 0;
+    currentBet = bigBlind;
+    phase = Phase::Preflop;
+    communityCards.clear();
+    shuffleDeck();
+    dealHoleCards();
+    emit handCardsUpdated();
+    emit communityCardsUpdated();
 }
 
 void Game::shuffleDeck() {
@@ -34,8 +69,6 @@ void Game::shuffleDeck() {
     for (auto& card : shufflingCards) {
         deck.push(std::move(card));
     }
-
-    qDebug() << "Deck shuffled with" << deck.size() << "cards";
 }
 
 void Game::clearDeck() {
@@ -44,45 +77,11 @@ void Game::clearDeck() {
     }
 }
 
-void Game::newGame() {
-    qDebug() << "New game: Creating new players...";
-    players.clear();
-    for (int i = 0; i < 3; i++) {
-        Player player;
-        players.push_back(player);
-    }
-
-    qDebug() << "New game: Setting up phase...";
-    communityCards.clear();
-    pot = 0;
-    currentBet = 0;
-    phaseIndex = 0;
-    phase = Phase::Preflop;
-
-    shuffleDeck();
-    dealHoleCards();
-    emit handCardsUpdated();
-
-    // Apply blinds
-    makeBet(0, smallBlind);  // Small blind
-    makeBet(1, bigBlind);    // Big blind
-    currentBet = bigBlind;
-
-    // Update UI
-    for (int i = 0; i < players.size(); i++) {
-        emit chipsUpdated(i, players[i].chips);
-    }
-    emit potUpdated(pot);
-    emit currentBetUpdated(currentBet);
-    emit phaseUpdated(phase);
-    emit communityCardsUpdated();
-}
-
 void Game::dealCards(int cardAmount, vector<shared_ptr<Card>>& target) {
     for(int i = 0; i < cardAmount; i++) {
         if (!deck.empty()) {
             target.push_back(deck.top()); // This copies shared_ptr
-            qDebug() << "Dealt add card to string function" << "to player" << playerIndex(target) << "with" << deck.top()->image;
+            qDebug() << "Dealt" << deck.top()->name << "to player" << playerIndex(target) << "with" << deck.top()->image;
             deck.pop();
         }
     }
@@ -95,7 +94,12 @@ int Game::playerIndex(vector<shared_ptr<Card>>& target) {
     return -1;
 }
 
+bool Game::validPlayer(int playerIndex) {
+    return (playerIndex >= 0 && playerIndex < players.size());
+}
+
 void Game::dealHoleCards() {
+    qDebug() << "Dealing hole cards...";
     for (auto& player : players) {
         player.heldCards.clear();
         dealCards(2, player.heldCards);
@@ -103,9 +107,8 @@ void Game::dealHoleCards() {
 }
 
 void Game::makeBet(int playerIndex, int chipAmount) {
-    if (playerIndex < 0 || playerIndex < players.size()) {
-        return;
-    }
+    if (!validPlayer(playerIndex)) return;
+    qDebug() << "Player" << playerIndex << "made a bet of" << chipAmount;
 
     Player& player = players[playerIndex];
     int actualBet = std::min(chipAmount, player.chips);
@@ -119,9 +122,8 @@ void Game::makeBet(int playerIndex, int chipAmount) {
 }
 
 void Game::call(int playerIndex) {
-    if (playerIndex < 0 || playerIndex >= players.size()) {
-        return;
-    }
+    if (!validPlayer(playerIndex)) return;
+    qDebug() << "Player" << playerIndex << "called at" << currentBet;
 
     Player& player = players[playerIndex];
     int callAmount = currentBet - player.currentBet;
@@ -131,9 +133,8 @@ void Game::call(int playerIndex) {
 }
 
 void Game::raise(int playerIndex, int chipAmount) {
-    if (playerIndex < 0 || playerIndex >= players.size()) {
-        return;
-    }
+    if (!validPlayer(playerIndex)) return;
+    qDebug() << "Player" << playerIndex << "raised" << chipAmount;
 
     int totalBet = players[playerIndex].currentBet + chipAmount;
     if (totalBet > currentBet) {
@@ -144,9 +145,8 @@ void Game::raise(int playerIndex, int chipAmount) {
 }
 
 void Game::fold(int playerIndex) {
-    if (playerIndex < 0 || playerIndex >= players.size()) {
-        return;
-    }
+    if (!validPlayer(playerIndex)) return;
+    qDebug() << "Player" << playerIndex << "folded.";
 
     players[playerIndex].folded = true;
     emit playerFolded(playerIndex);
@@ -167,11 +167,9 @@ void Game::fold(int playerIndex) {
     }
 }
 
-// Gives pot to the winner (used inside fold or showdown)
 void Game::awardPotToPlayer(int playerIndex) {
-    if (playerIndex < 0 || playerIndex < players.size()) {
-        return;
-    }
+    if (!validPlayer(playerIndex)) return;
+    qDebug() << "Awarding pot of" << pot << "to Player" << playerIndex;
 
     players[playerIndex].chips += pot;
     emit chipsUpdated(playerIndex, players[playerIndex].chips);
@@ -181,6 +179,7 @@ void Game::awardPotToPlayer(int playerIndex) {
 }
 
 void Game::nextPhase() {
+    qDebug() << "Moving from" << phaseIndex << "to phase" << phaseIndex+1;
     if (phaseIndex < 4) {
         phaseIndex++;
         phase = phaseIndices[phaseIndex];
