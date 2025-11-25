@@ -21,7 +21,7 @@ void Game::shuffleDeck() {
     vector<shared_ptr<Card>> shufflingCards;
     for (const auto& card : CardLibrary::cards) {
         // Create shared_ptr for each card
-        shufflingCards.push_back(make_shared<Card>(card));
+        shufflingCards.push_back(make_shared<Card>(card.second));
     }
 
     // Shuffle
@@ -82,7 +82,7 @@ void Game::dealCards(int cardAmount, vector<shared_ptr<Card>>& target) {
     for(int i = 0; i < cardAmount; i++) {
         if (!deck.empty()) {
             target.push_back(deck.top()); // This copies shared_ptr
-            qDebug() << "Dealt" << deck.top()->name << "to player" << playerIndex(target) << "with" << deck.top()->image;
+            qDebug() << "Dealt add card to string function" << "to player" << playerIndex(target) << "with" << deck.top()->image;
             deck.pop();
         }
     }

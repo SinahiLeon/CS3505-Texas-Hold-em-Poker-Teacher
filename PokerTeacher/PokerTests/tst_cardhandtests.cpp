@@ -74,7 +74,7 @@ void CardHandTests::straight() {
     hand.calculateBestHand(river);
 
     QCOMPARE(hand.getHandType(), HandType::Straight);
-    QCOMPARE(hand.getBestCard()->value, CardValue::Jack);
+    QCOMPARE(hand.getBestCard()->value, CardValue::Queen);
 }
 
 void CardHandTests::lowAceStraight() {
@@ -96,7 +96,7 @@ void CardHandTests::duplicateStraight() {
     hand.calculateBestHand(river);
 
     QCOMPARE(hand.getHandType(), HandType::Straight);
-    QCOMPARE(hand.getBestCard()->value, CardValue::Jack);
+    QCOMPARE(hand.getBestCard()->value, CardValue::Queen);
 }
 
 void CardHandTests::flush() {
@@ -158,7 +158,7 @@ vector<shared_ptr<Card>> CardHandTests::genHand(vector<QString> cards) {
     vector<shared_ptr<Card>> hand;
 
     for (int x = 0; x < cards.size(); x++) {
-        shared_ptr<Card> card = make_shared<Card>(CardLibrary::cards.at(x));
+        shared_ptr<Card> card = make_shared<Card>(CardLibrary::cards.at(cards[x]));
         hand.push_back(card);
     }
 

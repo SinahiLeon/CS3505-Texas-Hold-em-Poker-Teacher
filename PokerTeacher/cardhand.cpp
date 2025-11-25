@@ -184,7 +184,7 @@ bool CardHand::fullHouseCheck(vector<shared_ptr<Card>>& allCards) {
         return false;
     }
 
-    bool threePair;
+    bool threePair = false;
     CardValue threePairValue;
     vector<shared_ptr<Card>> newHand;
 
@@ -242,7 +242,7 @@ bool CardHand::flushCheck(vector<shared_ptr<Card>>& allCards) {
 
 optional<Suit> CardHand::getFlushSuit(vector<shared_ptr<Card>>& allCards) {
     int hearts, diamonds, clubs, spades;
-    hearts = diamonds = clubs = 0;
+    hearts = diamonds = clubs = spades = 0;
 
     for (int x = 0; x < allCards.size(); x++) {
         switch(allCards[x]->suit) {
@@ -298,7 +298,7 @@ bool CardHand::straightCheck(vector<shared_ptr<Card>>& allCards) {
 
 int CardHand::detectStraight(int start, vector<shared_ptr<Card>>& allCards, bool detectFlush) {
     vector<shared_ptr<Card>> newHand = { allCards[start] };
-    int progress = 0;
+    int progress = 1;
     Suit startingSuit = allCards[start]->suit;
 
     for (int x = start; x < allCards.size() - 1; x++) {
@@ -319,13 +319,13 @@ int CardHand::detectStraight(int start, vector<shared_ptr<Card>>& allCards, bool
         }
 
         // Correct straight diff
-        if (diff == 1) {
+        else if (diff == 1) {
             newHand.push_back(allCards[x + 1]);
             progress++;
         }
 
         // Diff too big for straight
-        if (diff > 1) {
+        else if (diff > 1) {
             break;
         }
 
