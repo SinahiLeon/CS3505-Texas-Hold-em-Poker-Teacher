@@ -30,6 +30,9 @@ border-radius: 5px;
 }
 QLabel {
 background: rgba(0, 0, 0, 0);
+}
+QMenuBar {
+background: rgba(0, 0, 0, 55);
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -79,7 +82,7 @@ background: rgba(0, 0, 0, 0);
           <number>0</number>
          </property>
          <item>
-          <widget class="QLabel" name="opp1NameLabel">
+          <widget class="QLabel" name="opp1Name">
            <property name="font">
             <font>
              <pointsize>12</pointsize>
@@ -102,7 +105,7 @@ background: rgba(0, 0, 0, 0);
             </font>
            </property>
            <property name="text">
-            <string>Chips: $50</string>
+            <string>Chips: $100 - Bet: $10</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -326,8 +329,8 @@ background: rgba(0, 0, 0, 0);
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QWidget" name="dealerInfo" native="true">
-        <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,0,0">
+       <widget class="QWidget" name="communityInfo" native="true">
+        <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,0">
          <property name="leftMargin">
           <number>0</number>
          </property>
@@ -338,39 +341,8 @@ background: rgba(0, 0, 0, 0);
           <number>0</number>
          </property>
          <property name="bottomMargin">
-          <number>0</number>
+          <number>6</number>
          </property>
-         <item>
-          <widget class="QLabel" name="dealerNameLabel">
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-             <bold>true</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>Dealer</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignmentFlag::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="potLabel">
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Pot: $0</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignmentFlag::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
          <item>
           <widget class="QWidget" name="opponent1CardLayout_3" native="true">
            <property name="sizePolicy">
@@ -729,6 +701,21 @@ background: rgba(0, 0, 0, 0);
            </layout>
           </widget>
          </item>
+         <item>
+          <widget class="QLabel" name="potLabel">
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Pot: $0</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
       </item>
@@ -890,7 +877,7 @@ border-radius: 10px;
           </spacer>
          </item>
          <item>
-          <widget class="QLabel" name="playerNameLabel">
+          <widget class="QLabel" name="playerName">
            <property name="font">
             <font>
              <pointsize>14</pointsize>
@@ -1079,7 +1066,7 @@ border-radius: 10px;
           <number>0</number>
          </property>
          <item>
-          <widget class="QLabel" name="opp2NameLabel">
+          <widget class="QLabel" name="opp2Name">
            <property name="font">
             <font>
              <pointsize>12</pointsize>
@@ -1102,7 +1089,7 @@ border-radius: 10px;
             </font>
            </property>
            <property name="text">
-            <string>Chips: $50</string>
+            <string>Chips: $100 - Bet: $10</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -1492,7 +1479,9 @@ border-radius: 10px;
           <bool>false</bool>
          </property>
          <property name="styleSheet">
-          <string notr="true"/>
+          <string notr="true">#actionBar *:disabled {
+background-color: rgb(26, 26, 26);
+}</string>
          </property>
          <property name="frameShape">
           <enum>QFrame::Shape::StyledPanel</enum>
@@ -1502,16 +1491,16 @@ border-radius: 10px;
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <property name="leftMargin">
-           <number>4</number>
+           <number>6</number>
           </property>
           <property name="topMargin">
-           <number>0</number>
+           <number>6</number>
           </property>
           <property name="rightMargin">
-           <number>4</number>
+           <number>6</number>
           </property>
           <property name="bottomMargin">
-           <number>4</number>
+           <number>6</number>
           </property>
           <item>
            <widget class="QPushButton" name="checkButton">
@@ -1708,7 +1697,7 @@ color: #fa5e8a;
      <x>0</x>
      <y>0</y>
      <width>950</width>
-     <height>21</height>
+     <height>17</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuLessons">

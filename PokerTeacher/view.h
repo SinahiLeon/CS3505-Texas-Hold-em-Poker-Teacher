@@ -22,7 +22,8 @@ signals:
     void viewInitialized();
 
 public slots:
-    void chipUpdate(int playerIndex, int newAmount);
+    void chipsUpdate(int playerIndex, int chips, int bet);
+    void dealerUpdate(int PlayerIndex);
     void potUpdate(int newAmount);
     void currentBetUpdate(int currentBet);
     void communityUpdate();

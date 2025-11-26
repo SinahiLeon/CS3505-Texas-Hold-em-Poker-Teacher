@@ -13,7 +13,9 @@ View::View(Game& game, QWidget *parent)
     ui->setupUi(this);
 
     connect(&game, &Game::chipsUpdated,
-            this, &View::chipUpdate);
+            this, &View::chipsUpdate);
+    connect(&game, &Game::dealerUpdate,
+            this, &View::dealerUpdate);
     connect(&game, &Game::communityCardsUpdated,
             this, &View::communityUpdate);
     connect(&game, &Game::handCardsUpdated,
@@ -30,6 +32,8 @@ View::View(Game& game, QWidget *parent)
             this, &View::updateAvailableActions);
     connect(this, &View::viewInitialized,
             &game, &Game::onViewInitialized);
+    connect(ui->checkButton, &QPushButton::clicked,
+            this, &View::onCheckButtonClicked);
     connect(ui->betButton, &QPushButton::clicked,
             this, &View::onBetButtonClicked);
     connect(ui->callButton, &QPushButton::clicked,
@@ -52,17 +56,17 @@ void View::updateAvailableActions() {
     qDebug() << "UI: Available actions: Check =" << canCheck << "Bet =" << canBet << "Call =" << canCall << "Fold = true";
 }
 
-void View::chipUpdate(int playerIndex, int newAmount) {
+void View::chipsUpdate(int playerIndex, int chips, int bet) {
     //update player at playerIndex's chip count to given newAmount
     switch(playerIndex) {
     case 0:  //0 is you
-        ui->playerChipsLabel->setText("Chips: $" + QString::number(newAmount));
+        ui->playerChipsLabel->setText(QString("Chips: $%1 - Bet: $%2").arg(chips).arg(bet));
         break;
     case 1: //1 is opponent 1
-        ui->opp1ChipsLabel->setText("Chips: $" + QString::number(newAmount));
+        ui->opp1ChipsLabel->setText(QString("Chips: $%1 - Bet: $%2").arg(chips).arg(bet));
         break;
     case 2: //2 is opponent 2
-        ui->opp2ChipsLabel->setText("Chips: $" + QString::number(newAmount));
+        ui->opp2ChipsLabel->setText(QString("Chips: $%1 - Bet: $%2").arg(chips).arg(bet));
         break;
     }
 }
@@ -215,4 +219,13 @@ void View::updateLastAction(int playerIndex, QString action) {
             case (2) : { ui->opp2LastAction->setText(QString("Opponent 2 ").append(action)); break; }
         }
     }
+}
+
+void View::dealerUpdate(int playerIndex) {
+    (playerIndex == 0) ? ui->playerName->setText(QString("You 🪙"))
+                       : ui->playerName->setText(QString("You"));
+    (playerIndex == 1) ? ui->opp1Name->setText(QString("Opponent 1 🪙"))
+                       : ui->opp1Name->setText(QString("Opponent 1"));
+    (playerIndex == 2) ? ui->opp2Name->setText(QString("Opponent 2 🪙"))
+                       : ui->opp2Name->setText(QString("Opponent 2"));
 }
