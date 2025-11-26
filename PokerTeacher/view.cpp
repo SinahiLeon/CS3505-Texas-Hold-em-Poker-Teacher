@@ -42,12 +42,12 @@ View::~View()
 }
 
 void View::updateAvailableActions() {
-    bool canCheck = game.noBetsYetThisPhase && !(game.getPhase() == Game::Phase::Showdown);
+    bool canCheck = game.noBetsYetThisPhase && !(game.getPhase() == Phase::Showdown);
     ui->checkButton->setDisabled(!canCheck);
-    bool canBet = game.players[0].canBet(game.getBetAmount()) && !(game.getPhase() == Game::Phase::Showdown);
+    bool canBet = game.players[0].canBet(game.getBetAmount()) && !(game.getPhase() == Phase::Showdown);
     ui->betButton->setDisabled(!canBet);
     ui->betAmount->setMaximum(game.players[0].chips);
-    bool canCall = game.players[0].canBet(game.getBetAmount()) && !(game.getPhase() == Game::Phase::Showdown);
+    bool canCall = game.players[0].canBet(game.getBetAmount()) && !(game.getPhase() == Phase::Showdown);
     ui->callButton->setDisabled(!canCall);
     qDebug() << "UI: Available actions: Check =" << canCheck << "Bet =" << canBet << "Call =" << canCall << "Fold = true";
 }
@@ -150,12 +150,12 @@ void View::handsUpdate() {
     ui->playerCard2->setFixedSize(playerCardSize);
     // Opponent 1
     QPixmap opp1card1 = (game.players[1].heldCards.size() > 0)
-                            ? ((game.getPhase() == Game::Phase::Showdown)
+                            ? ((game.getPhase() == Phase::Showdown)
                                    ? game.players[1].heldCards.at(0)->image
                                    : CardLibrary::cardBack)
                             : CardLibrary::noCard;
     QPixmap opp1card2 = (game.players[1].heldCards.size() > 1)
-                            ? ((game.getPhase() == Game::Phase::Showdown)
+                            ? ((game.getPhase() == Phase::Showdown)
                                    ? game.players[1].heldCards.at(1)->image
                                    : CardLibrary::cardBack)
                             : CardLibrary::noCard;
@@ -167,12 +167,12 @@ void View::handsUpdate() {
     ui->opp1Card2->setFixedSize(opponentCardSize);
     // Opponent 2
     QPixmap opp2card1 = (game.players[2].heldCards.size() > 0)
-                            ? ((game.getPhase() == Game::Phase::Showdown)
+                            ? ((game.getPhase() == Phase::Showdown)
                                    ? game.players[2].heldCards.at(0)->image
                                    : CardLibrary::cardBack)
                             : CardLibrary::noCard;
     QPixmap opp2card2 = (game.players[2].heldCards.size() > 1)
-                            ? ((game.getPhase() == Game::Phase::Showdown)
+                            ? ((game.getPhase() == Phase::Showdown)
                                    ? game.players[2].heldCards.at(1)->image
                                    : CardLibrary::cardBack)
                             : CardLibrary::noCard;
@@ -184,22 +184,22 @@ void View::handsUpdate() {
     ui->opp2card2->setFixedSize(opponentCardSize);
 }
 
-void View::phaseUpdate(Game::Phase currPhase) {
+void View::phaseUpdate(Phase currPhase) {
     //update phase label to match current phase
     switch(currPhase) {
-    case Game::Phase::Preflop:
+    case Phase::Preflop:
         ui->phaseLabel->setText("Current Phase: Preflop");
         break;
-    case Game::Phase::Flop:
+    case Phase::Flop:
         ui->phaseLabel->setText("Current Phase: Flop");
         break;
-    case Game::Phase::Turn:
+    case Phase::Turn:
         ui->phaseLabel->setText("Current Phase: Turn");
         break;
-    case Game::Phase::River:
+    case Phase::River:
         ui->phaseLabel->setText("Current Phase: River");
         break;
-    case Game::Phase::Showdown:
+    case Phase::Showdown:
         ui->phaseLabel->setText("Current Phase: Showdown");
         break;
     }
