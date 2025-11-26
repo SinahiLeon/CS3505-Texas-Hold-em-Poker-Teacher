@@ -8,7 +8,7 @@ class Player {
 public:
     Player() : fullhand(heldCards) {}
     bool canBet(int amount) { return chips >= amount; }
-    int chips = 50;
+    int chips = 1000;
     int currentBet = 0;
     bool folded = false;
     bool handVisible = false;

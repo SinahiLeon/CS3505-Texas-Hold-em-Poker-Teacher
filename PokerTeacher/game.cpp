@@ -28,6 +28,26 @@ void Game::newGame() {
     startRound();
 }
 
+void Game::startRound() {
+    qDebug() << "Starting round with player" << getDealerIndex() << "as dealer.";
+    emit dealerUpdate(getDealerIndex());
+    // Force small and large blinds if they haven't been paid yet
+    int player = getDealerIndex();
+    player++;
+    if (player >= players.size()) player = 0; // Loop back to user
+    makeBet(player, getSmallBlind());
+    smallBlindPaid = true;
+    qDebug() << "Player" << player << "paid the small blind of" << getSmallBlind();
+    emit updateLastAction(player, QString("paid the small blind: $%1.").arg(getSmallBlind()));
+    player++;
+    makeBet(player, getLargeBlind());
+    largeBlindPaid = true;
+    qDebug() << "Player" << player << "paid the large blind of" << getLargeBlind();
+    emit updateLastAction(player, QString("paid the large blind: $%1.").arg(getLargeBlind()));
+    noBetsYetThisPhase = true;
+    continueRound(player);
+}
+
 void Game::newHand() {
     qDebug() << "Setting up new hand...";
     currentBet = 0;
@@ -50,25 +70,6 @@ void Game::newHand() {
     emit updateLastAction(2, QString("is waiting."));
 }
 
-void Game::startRound() {
-    qDebug() << "Starting round with player" << getDealerIndex() << "as dealer.";
-    int player = getDealerIndex();
-    player++;
-    if (player >= players.size()) player = 0; // Loop back to user
-    // Force small and large blinds if they haven't been paid yet
-    makeBet(player, getSmallBlind());
-    smallBlindPaid = true;
-    qDebug() << "Player" << player << "paid the small blind of" << getSmallBlind();
-    emit updateLastAction(player, QString("paid the small blind: $%1.").arg(getSmallBlind()));
-    player++;
-    makeBet(player, getLargeBlind());
-    largeBlindPaid = true;
-    qDebug() << "Player" << player << "paid the large blind of" << getLargeBlind();
-    emit updateLastAction(player, QString("paid the large blind: $%1.").arg(getLargeBlind()));
-    noBetsYetThisPhase = true;
-    continueRound(player);
-}
-
 void Game::continueRound(int playerIndex) {
     qDebug() << "Continuing round after player" << playerIndex;
     int player = playerIndex;
@@ -82,7 +83,7 @@ void Game::continueRound(int playerIndex) {
             }
             qDebug() << "Opponent" << player <<
                 "is deciding what to do... noBetsYet =" << noBetsYet() <<
-                "and bigBlind =" << getLargeBlind();
+                "and currentBet =" << getBetAmount();
             // Bot chooses action based on its held cards:
 
             /* TEMPORARY RANDOMIZER */
@@ -129,7 +130,7 @@ void Game::continueRound(int playerIndex) {
 
     // Update UI
     for (int i = 0; i < players.size(); i++) {
-        emit chipsUpdated(i, players[i].chips);
+        emit chipsUpdated(i, players[i].chips, players[i].currentBet);
     }
     emit potUpdated(pot);
     emit currentBetUpdated(currentBet);
@@ -197,6 +198,11 @@ void Game::check(int playerIndex) {
     if (!validPlayer(playerIndex)) return;
     qDebug() << "Player" << playerIndex << "checked.";
     emit updateLastAction(playerIndex, QString("checked."));
+    numPlayersChecked++;
+    if (numPlayersChecked == players.size()) {
+        qDebug() << "All players have checked back-to-back. Advancing phase...";
+        nextPhase();
+    }
 }
 
 void Game::makeBet(int playerIndex, int chipAmount) {
@@ -210,11 +216,27 @@ void Game::makeBet(int playerIndex, int chipAmount) {
     player.currentBet += actualBet;
     pot += actualBet;
 
+    numPlayersChecked = 0;
     numPlayersCalled = 0;
     noBetsYetThisPhase = false;
-    emit chipsUpdated(playerIndex, players[playerIndex].chips);
+    emit chipsUpdated(playerIndex, player.chips, player.currentBet);
     emit potUpdated(pot);
     emit updateLastAction(playerIndex, QString("bet %1.").arg(actualBet));
+}
+
+void Game::raise(int playerIndex, int chipAmount) {
+    if (!validPlayer(playerIndex)) return;
+    qDebug() << "Player" << playerIndex << "raised" << chipAmount;
+
+    Player& player = players[playerIndex];
+    int totalBet = currentBet + chipAmount;
+    int raiseAmount = totalBet - player.currentBet;
+    if (totalBet > currentBet) {
+        makeBet(playerIndex, raiseAmount);
+        currentBet = totalBet;
+        emit currentBetUpdated(currentBet);
+    }
+    emit updateLastAction(playerIndex, QString("raised %1. Total bet: %2").arg(chipAmount).arg(totalBet));
 }
 
 void Game::call(int playerIndex) {
@@ -232,19 +254,6 @@ void Game::call(int playerIndex) {
         qDebug() << "All players have called back-to-back. Advancing phase...";
         nextPhase();
     }
-}
-
-void Game::raise(int playerIndex, int chipAmount) {
-    if (!validPlayer(playerIndex)) return;
-    qDebug() << "Player" << playerIndex << "raised" << chipAmount;
-
-    int totalBet = players[playerIndex].currentBet + chipAmount;
-    if (totalBet > currentBet) {
-        currentBet = totalBet;
-        makeBet(playerIndex, chipAmount);
-        emit currentBetUpdated(currentBet);
-    }
-    emit updateLastAction(playerIndex, QString("raised %1. Total bet: %2").arg(chipAmount).arg(totalBet));
 }
 
 void Game::fold(int playerIndex) {
@@ -275,9 +284,9 @@ void Game::fold(int playerIndex) {
 void Game::awardPotToPlayer(int playerIndex) {
     if (!validPlayer(playerIndex)) return;
     qDebug() << "Awarding pot of" << pot << "to Player" << playerIndex;
-
-    players[playerIndex].chips += pot;
-    emit chipsUpdated(playerIndex, players[playerIndex].chips);
+    Player& player = players[playerIndex];
+    player.chips += pot;
+    emit chipsUpdated(playerIndex, player.chips, player.currentBet);
 
     pot = 0;
     emit potUpdated(pot);
@@ -285,6 +294,8 @@ void Game::awardPotToPlayer(int playerIndex) {
 
 void Game::nextPhase() {
     qDebug() << "Moving from" << phaseIndex << "to phase" << phaseIndex+1;
+    numPlayersChecked = 0;
+    numPlayersCalled = 0;
     noBetsYetThisPhase = false;
     if (phaseIndex < 4) {
         phaseIndex++;

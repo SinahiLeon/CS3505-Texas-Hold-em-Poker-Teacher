@@ -40,7 +40,8 @@ public:
     bool noBetsYetThisPhase;
 
 signals:    // Since a value changed, signal to update UI
-    void chipsUpdated(int playerIndex, int newAmount);
+    void chipsUpdated(int playerIndex, int chips, int bet);
+    void dealerUpdate(int playerIndex);
     void potUpdated(int newAmount);
     void communityCardsUpdated();
     void handCardsUpdated();
@@ -68,6 +69,7 @@ private:
     Phase phase = Phase::Preflop;
     bool smallBlindPaid = false;
     bool largeBlindPaid = false;
+    int numPlayersChecked = 0;
     int numPlayersCalled = 0;
 
     QMap<int, Phase> phaseIndices{
