@@ -42,6 +42,8 @@ View::View(Game& game, QWidget *parent)
             this, &View::onBetButtonClicked);
     connect(ui->callButton, &QPushButton::clicked,
             this, &View::onCallButtonClicked);
+    connect(ui->foldButton, &QPushButton::clicked,
+            this, &View::onFoldButtonClicked);
     connect(ui->infoButton, &QPushButton::clicked,
             this, &View::onInfoButtonClicked);
 }
