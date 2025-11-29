@@ -55,4 +55,7 @@
         <file>card_images/queen_of_hearts.png</file>
         <file>card_images/queen_of_spades.png</file>
     </qresource>
+    <qresource prefix="/">
+        <file>texas_holdem_glossary.txt</file>
+    </qresource>
 </RCC>

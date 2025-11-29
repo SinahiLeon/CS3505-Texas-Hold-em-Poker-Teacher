@@ -35,6 +35,7 @@ public slots:
     void onCallButtonClicked();
     void onCheckButtonClicked();
     void onFoldButtonClicked();
+    void onInfoButtonClicked();
 private:
     Ui::View *ui;
     Game& game;
