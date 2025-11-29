@@ -20,6 +20,7 @@ public:
 
 signals:
     void viewInitialized();
+    void closeInfobox();
 
 public slots:
     void chipsUpdate(int playerIndex, int chips, int bet);
@@ -35,8 +36,11 @@ public slots:
     void onCallButtonClicked();
     void onCheckButtonClicked();
     void onFoldButtonClicked();
+    void onInfoButtonClicked();
+
 private:
     Ui::View *ui;
     Game& game;
+    bool infoShowing;
 };
 #endif // VIEW_H

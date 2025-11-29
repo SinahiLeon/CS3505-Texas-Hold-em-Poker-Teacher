@@ -18,7 +18,12 @@ set(PROJECT_SOURCES
         view.cpp
         view.h
         view.ui
+        infobox.h
+        infobox.cpp
+        infobox.ui
 )
+
+find_package(Qt6 REQUIRED COMPONENTS Core)
 
 add_library(PokerCore STATIC
     card.h card.cpp
@@ -30,11 +35,13 @@ add_library(PokerCore STATIC
     cardvalue.h
     phase.h
     player.h
+    lesson.h lesson.cpp
 )
 
 target_include_directories(PokerCore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(PokerCore PUBLIC Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(PokerCore PUBLIC Qt${QT_VERSION_MAJOR}::Core)
+target_link_libraries(PokerCore PRIVATE Qt6::Core)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(PokerTeacher

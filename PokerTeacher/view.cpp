@@ -4,11 +4,13 @@
 #include <QString>
 #include <QImageReader>
 #include <qdir.h>
+#include <infobox.h>
 
 View::View(Game& game, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::View)
     , game(game)
+    , infoShowing(false)
 {
     ui->setupUi(this);
 
@@ -38,6 +40,8 @@ View::View(Game& game, QWidget *parent)
             this, &View::onBetButtonClicked);
     connect(ui->callButton, &QPushButton::clicked,
             this, &View::onCallButtonClicked);
+    connect(ui->infoButton, &QPushButton::clicked,
+            this, &View::onInfoButtonClicked);
 }
 
 View::~View()
@@ -228,4 +232,21 @@ void View::dealerUpdate(int playerIndex) {
                        : ui->opp1Name->setText(QString("Opponent 1"));
     (playerIndex == 2) ? ui->opp2Name->setText(QString("Opponent 2 🪙"))
                        : ui->opp2Name->setText(QString("Opponent 2"));
+}
+
+void View::onInfoButtonClicked() {
+    if (infoShowing) {
+        qDebug() << "Closing info box.";
+        emit closeInfobox();
+        infoShowing = false;
+        return;
+    }
+
+    qDebug() << "Opening text box.";
+    // New dialogs need to be declared on the heap instead of the stack. The deletion of this infobox is handled by a connect call in its constructor.
+    InfoBox* infobox = new InfoBox(this);
+    connect(this, &View::closeInfobox,
+            infobox, &InfoBox::close);
+    infoShowing = true;
+    infobox->show();
 }
