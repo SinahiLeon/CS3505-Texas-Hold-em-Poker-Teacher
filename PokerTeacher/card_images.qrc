@@ -57,5 +57,6 @@
     </qresource>
     <qresource prefix="/">
         <file>texas_holdem_glossary.txt</file>
+        <file>glossary.txt</file>
     </qresource>
 </RCC>

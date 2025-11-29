@@ -277,7 +277,7 @@ void View::onInfoButtonClicked() {
         return;
     }
 
-    qDebug() << "Opening text box.";
+    qDebug() << "Opening info box.";
     // New dialogs need to be declared on the heap instead of the stack. The deletion of this infobox is handled by a connect call in its constructor.
     InfoBox* infobox = new InfoBox(this);
     connect(this, &View::closeInfobox,

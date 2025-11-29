@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-/// @brief The model for the infobox
+/// @brief The model for the infobox.
 class Lesson : public QObject
 {
     Q_OBJECT

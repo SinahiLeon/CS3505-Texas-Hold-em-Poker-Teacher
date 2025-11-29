@@ -21,6 +21,9 @@ set(PROJECT_SOURCES
         infobox.h
         infobox.cpp
         infobox.ui
+        glossarydialog.h
+        glossarydialog.cpp
+        glossarydialog.ui
 )
 
 find_package(Qt6 REQUIRED COMPONENTS Core)
@@ -36,6 +39,7 @@ add_library(PokerCore STATIC
     phase.h
     player.h
     lesson.h lesson.cpp
+    definition.h
 )
 
 target_include_directories(PokerCore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
