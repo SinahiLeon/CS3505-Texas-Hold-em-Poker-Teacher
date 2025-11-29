@@ -281,6 +281,28 @@ void Game::fold(int playerIndex) {
     emit updateLastAction(playerIndex, QString("folded."));
 }
 
+int Game::determineIndexOfWinner(){
+    int indexOfWinner = -1;
+    for (int i = 0; i < players.size(); i++){
+        if (!players[i].folded) {
+            CardHand currentHand(players[i].heldCards);
+            currentHand.calculateBestHand(communityCards);
+
+            if (indexOfWinner == -1) {  // first iteration
+                indexOfWinner = i;
+            } else {
+                CardHand bestSoFar(players[indexOfWinner].heldCards);
+                bestSoFar.calculateBestHand(communityCards);
+
+                if (currentHand > bestSoFar) {
+                    indexOfWinner = i;
+                }
+            }
+        }
+    }
+    return indexOfWinner;
+}
+
 void Game::awardPotToPlayer(int playerIndex) {
     if (!validPlayer(playerIndex)) return;
     qDebug() << "Awarding pot of" << pot << "to Player" << playerIndex;
@@ -315,18 +337,21 @@ void Game::nextPhase() {
             dealCards(1, communityCards);
             break;
         case Phase::Showdown:
+            if (pot > 0) {
+                int winner = determineIndexOfWinner();
+                if (winner != -1) {
+                    awardPotToPlayer(winner);
+                    emit updateLastAction(winner, QString(" was awarded the pot."));
+                }
+            }
             break;
         }
-
-        if (phase != Phase::Showdown) {
-
-        }
-
         emit communityCardsUpdated();
         emit phaseUpdated(phase);
         emit currentBetUpdated(currentBet);
     }
 }
+
 
 void Game::playerMakesBet(int amount) {
     (noBetsYet()) ? makeBet(0, amount)

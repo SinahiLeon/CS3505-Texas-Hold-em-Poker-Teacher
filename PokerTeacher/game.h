@@ -36,6 +36,9 @@ public:
     void call(int playerIndex);
     void raise(int playerIndex, int chipAmount);
     void fold(int playerIndex);
+    /// @brief Compares players best hands to determine winner.
+    /// @return int of the player who will be awarded the pot.
+    int determineIndexOfWinner();
     Phase getPhase() const { return phase; }
     bool noBetsYetThisPhase;
 
