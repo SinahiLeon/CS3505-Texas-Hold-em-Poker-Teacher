@@ -5,6 +5,10 @@
 #include <QImageReader>
 #include <qdir.h>
 #include <infobox.h>
+#include <QFile>
+#include <QDialog>
+#include <QPlainTextEdit>
+#include <QVBoxLayout>
 
 View::View(Game& game, QWidget *parent)
     : QMainWindow(parent)
@@ -40,6 +44,8 @@ View::View(Game& game, QWidget *parent)
             this, &View::onBetButtonClicked);
     connect(ui->callButton, &QPushButton::clicked,
             this, &View::onCallButtonClicked);
+    connect(ui->foldButton, &QPushButton::clicked,
+            this, &View::onFoldButtonClicked);
     connect(ui->infoButton, &QPushButton::clicked,
             this, &View::onInfoButtonClicked);
 }
@@ -101,6 +107,35 @@ void View::onCheckButtonClicked() {
 void View::onFoldButtonClicked() {
     game.playerFolds();
 }
+
+void View::glossaryTest()
+{
+    QFile file(":/texas_holdem_glossary.txt");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << "Failed to open glossary resource.";
+        return;
+    }
+
+    QString text = QString::fromUtf8(file.readAll());
+    file.close();
+
+    QDialog dialog(this);
+    dialog.setWindowTitle("Texas Hold'em Glossary");
+    dialog.resize(600, 400);  // default size
+
+    QVBoxLayout *layout = new QVBoxLayout(&dialog);
+
+    // Read-only text box that is scrollable
+    QPlainTextEdit *textEdit = new QPlainTextEdit(&dialog);
+    textEdit->setReadOnly(true);
+    textEdit->setPlainText(text);
+
+    layout->addWidget(textEdit);
+
+    dialog.setLayout(layout);
+    dialog.exec();
+}
+
 
 void View::communityUpdate() {
     //update displayed community cards to match backend
@@ -226,11 +261,11 @@ void View::updateLastAction(int playerIndex, QString action) {
 }
 
 void View::dealerUpdate(int playerIndex) {
-    (playerIndex == 0) ? ui->playerName->setText(QString("You 🪙"))
+    (playerIndex == 0) ? ui->playerName->setText(QString("You �"))
                        : ui->playerName->setText(QString("You"));
-    (playerIndex == 1) ? ui->opp1Name->setText(QString("Opponent 1 🪙"))
+    (playerIndex == 1) ? ui->opp1Name->setText(QString("Opponent 1 �"))
                        : ui->opp1Name->setText(QString("Opponent 1"));
-    (playerIndex == 2) ? ui->opp2Name->setText(QString("Opponent 2 🪙"))
+    (playerIndex == 2) ? ui->opp2Name->setText(QString("Opponent 2 �"))
                        : ui->opp2Name->setText(QString("Opponent 2"));
 }
 
