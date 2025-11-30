@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(CardHandTests LANGUAGES CXX)
+project(PokerTests LANGUAGES CXX)
 
 enable_testing()
 
@@ -14,8 +14,11 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(CardHandTests tst_cardhandtests.cpp)
-add_test(NAME CardHandTests COMMAND CardHandTests)
+add_executable(PokerTests tst_cardhandtests.cpp
+    tst_lessontests.cpp
 
-target_link_libraries(CardHandTests PRIVATE Qt${QT_VERSION_MAJOR}::Test)
-target_link_libraries(CardHandTests PRIVATE PokerCore)
+)
+add_test(NAME PokerTests COMMAND PokerTests)
+
+target_link_libraries(PokerTests PRIVATE Qt${QT_VERSION_MAJOR}::Test)
+target_link_libraries(PokerTests PRIVATE PokerCore)

@@ -58,5 +58,8 @@
     <qresource prefix="/">
         <file>texas_holdem_glossary.txt</file>
         <file>glossary.txt</file>
+        <file>Lessons/TestLesson/cpuActions.csv</file>
+        <file>Lessons/TestLesson/test.html</file>
+        <file>Lessons/TestLesson/test2.html</file>
     </qresource>
 </RCC>

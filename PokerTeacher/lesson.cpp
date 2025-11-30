@@ -1,3 +1,3 @@
 #include "lesson.h"
 
-Lesson::Lesson() {}
+Lesson::Lesson(QString folderPath, QObject *parent) {}

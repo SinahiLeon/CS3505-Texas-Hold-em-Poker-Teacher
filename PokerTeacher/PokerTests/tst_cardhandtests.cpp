@@ -6,7 +6,7 @@ using std::make_shared;
 
 class CardHandTests : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
 private:
     vector<shared_ptr<Card>> genHand(vector<QString> cards);
@@ -164,7 +164,5 @@ vector<shared_ptr<Card>> CardHandTests::genHand(vector<QString> cards) {
 
     return hand;
 }
-
-QTEST_APPLESS_MAIN(CardHandTests)
 
 #include "tst_cardhandtests.moc"

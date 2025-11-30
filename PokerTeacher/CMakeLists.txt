@@ -40,6 +40,8 @@ add_library(PokerCore STATIC
     player.h
     lesson.h lesson.cpp
     definition.h
+    action.h
+    computerplayer.h computerplayer.cpp
 )
 
 target_include_directories(PokerCore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
