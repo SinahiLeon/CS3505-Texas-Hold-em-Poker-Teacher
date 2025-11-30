@@ -3,10 +3,11 @@
 
 #include <QObject>
 
-/// @brief The model for the infobox.
+/// @brief The model for the infobox and an encapsulation of a game lesson.
 class Lesson : public QObject
 {
     Q_OBJECT
+
 public:
     Lesson();
 };

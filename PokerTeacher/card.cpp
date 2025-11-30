@@ -1,4 +1,5 @@
 #include "card.h"
+#include <QRegularExpression>
 
 Card::Card(QString name, Suit suit, CardValue value, QString image)
     : name(name)
@@ -114,67 +115,13 @@ QString Card::toFilePath() const {
 }
 
 QString Card::toFilePath(Suit cardSuit, CardValue cardValue) const {
-    QString basePath = ":/Resources/card_images/%1_of_%2.png";
-    QString valueString;
-    QString suitString;
-    switch(cardValue) {
-    case CardValue::Ace:
-        valueString = "ace";
-        break;
-    case CardValue::Two:
-        valueString = "2";
-        break;
-    case CardValue::Three:
-        valueString = "3";
-        break;
-    case CardValue::Four:
-        valueString = "4";
-        break;
-    case CardValue::Five:
-        valueString = "5";
-        break;
-    case CardValue::Six:
-        valueString = "6";
-        break;
-    case CardValue::Seven:
-        valueString = "7";
-        break;
-    case CardValue::Eight:
-        valueString = "8";
-        break;
-    case CardValue::Nine:
-        valueString = "9";
-        break;
-    case CardValue::Ten:
-        valueString = "10";
-        break;
-    case CardValue::Jack:
-        valueString = "jack";
-        break;
-    case CardValue::Queen:
-        valueString = "queen";
-        break;
-    case CardValue::King:
-        valueString = "king";
-        break;
-    default:
-        valueString = "ERROR";
-    }
-    switch(cardSuit) {
-    case Suit::Club:
-        suitString = "clubs";
-        break;
-    case Suit::Diamond:
-        suitString = "diamonds";
-        break;
-    case Suit::Heart:
-        suitString = "hearts";
-        break;
-    case Suit::Spade:
-        suitString = "spades";
-        break;
-    default:
-        suitString = "ERROR";
-    }
-    return basePath.arg(valueString, suitString);
+    QString basePath = ":/Resources/card_images/%1.png";
+
+    // Format card name
+    QString name = toString(cardSuit, cardValue);
+    name = name.toLower();
+    QRegularExpression getSpaces(" ");
+    name = name.replace(getSpaces, "_");
+
+    return basePath.arg(name);
 }
