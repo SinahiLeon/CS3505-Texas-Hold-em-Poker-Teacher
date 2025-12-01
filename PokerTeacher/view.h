@@ -37,6 +37,7 @@ public slots:
     void onCheckButtonClicked();
     void onFoldButtonClicked();
     void onInfoButtonClicked();
+    void freeplayClicked();
     void glossaryTest();
 
 private:
