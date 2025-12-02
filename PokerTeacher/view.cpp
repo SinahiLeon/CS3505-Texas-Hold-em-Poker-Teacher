@@ -50,6 +50,10 @@ View::View(Game& game, QWidget *parent)
             this, &View::onInfoButtonClicked);
     connect(ui->actionLesson_1, &QAction::triggered,
             this, [this]() { this->onLessonActionClicked(1); });
+    connect(ui->actionFreeplay, &QAction::triggered,
+            this, &View::freeplayClicked);
+    connect(ui->actionFreeplay, &QAction::triggered,
+            &game, &Game::startNewGame);
 }
 
 View::~View()
@@ -270,6 +274,11 @@ void View::dealerUpdate(int playerIndex) {
     (playerIndex == 2) ? ui->opp2Name->setText(QString("Opponent 2 �"))
                        : ui->opp2Name->setText(QString("Opponent 2"));
 }
+
+void View::freeplayClicked() {
+    qDebug() << "Freeplay button clicked.";
+}
+
 
 void View::onInfoButtonClicked() {
     if (infoShowing) {

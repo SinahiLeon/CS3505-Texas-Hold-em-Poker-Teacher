@@ -352,7 +352,6 @@ void Game::nextPhase() {
     }
 }
 
-
 void Game::playerMakesBet(int amount) {
     (noBetsYet()) ? makeBet(0, amount)
                   : raise(0, amount);
@@ -375,5 +374,9 @@ void Game::playerFolds() {
 }
 
 void Game::onViewInitialized() {
+    newGame();
+}
+
+void Game::startNewGame() {
     newGame();
 }
