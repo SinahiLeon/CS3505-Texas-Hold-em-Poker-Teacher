@@ -1,12 +1,13 @@
 #include "infobox.h"
 #include "ui_infobox.h"
 
-InfoBox::InfoBox(Lesson& lesson, QWidget *parent)
+InfoBox::InfoBox(Lesson *lesson, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::InfoBox)
     , lesson(lesson)
 {
     ui->setupUi(this);
+    setAttribute(Qt::WA_DeleteOnClose);
 
     connect(this, &QDialog::finished,
             this, &QObject::deleteLater);
@@ -15,22 +16,23 @@ InfoBox::InfoBox(Lesson& lesson, QWidget *parent)
     connect(ui->nextButton, &QPushButton::clicked,
             this, &InfoBox::next);
 
-    ui->lessonBrowser->setSource(lesson.getCurrentUrl());
+    ui->lessonBrowser->setSource(lesson->getCurrentUrl());
 }
 
 InfoBox::~InfoBox()
 {
     delete ui;
+    delete lesson;
 }
 
 void InfoBox::back() {
-    bool hasPageHistory = lesson.back();
+    bool hasPageHistory = lesson->back();
 
     if (hasPageHistory && !ui->nextButton->isEnabled()) {
         ui->nextButton->setEnabled(true);
     }
 
-    if (lesson.atStart()) {
+    if (lesson->atStart()) {
         ui->backButton->setEnabled(false);
     }
 
@@ -38,15 +40,15 @@ void InfoBox::back() {
 }
 
 void InfoBox::next() {
-    bool hasNext = lesson.nextPage();
+    bool hasNext = lesson->nextPage();
 
     if (hasNext && !ui->backButton->isEnabled()) {
         ui->backButton->setEnabled(true);
     }
 
-    if (lesson.atEnd()) {
+    if (lesson->atEnd()) {
         ui->nextButton->setEnabled(false);
     }
 
-    ui->lessonBrowser->setSource(lesson.getCurrentUrl());
+    ui->lessonBrowser->setSource(lesson->getCurrentUrl());
 }

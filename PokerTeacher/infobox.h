@@ -14,12 +14,12 @@ class InfoBox : public QDialog
     Q_OBJECT
 
 public:
-    explicit InfoBox(Lesson& lesson, QWidget *parent = nullptr);
+    explicit InfoBox(Lesson *lesson, QWidget *parent = nullptr);
     ~InfoBox();
 
 private:
     Ui::InfoBox *ui;
-    Lesson& lesson;
+    Lesson *lesson;
 
 private slots:
     void back();

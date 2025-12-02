@@ -281,22 +281,23 @@ void View::onInfoButtonClicked()
     }
 
     // Create dialog window when user clicks glossary button
-    QDialog dialog(this);
-    dialog.setWindowTitle("Texas Hold'em GLossary & Hand Rankings");
-    dialog.resize(600, 500);
+    QDialog* dialog = new QDialog(this);
+    dialog->setWindowTitle("Texas Hold'em GLossary & Hand Rankings");
+    dialog->resize(600, 500);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
 
-    QVBoxLayout *layout = new QVBoxLayout(&dialog);
+    QVBoxLayout *layout = new QVBoxLayout(&*dialog);
 
     // Create 2 tabs so user can switch between the Glossary and Hand Hierarchy
-    QTabWidget *tabs = new QTabWidget(&dialog);
+    QTabWidget *tabs = new QTabWidget(&*dialog);
 
     // Tab 1: Glosssary
-    QPlainTextEdit *glossaryBox = new QPlainTextEdit(&dialog);
+    QPlainTextEdit *glossaryBox = new QPlainTextEdit(&*dialog);
     glossaryBox->setReadOnly(true);
     glossaryBox->setPlainText(glossaryText);
 
     // Tab 2: Hand Hierarchy
-    QPlainTextEdit *hierarchyBox = new QPlainTextEdit(&dialog);
+    QPlainTextEdit *hierarchyBox = new QPlainTextEdit(&*dialog);
     hierarchyBox->setReadOnly(true);
     hierarchyBox->setPlainText(hierarchyText);
 
@@ -305,15 +306,15 @@ void View::onInfoButtonClicked()
     tabs->addTab(hierarchyBox, "Hand Rankings");
 
     layout->addWidget(tabs);
-    dialog.setLayout(layout);
+    dialog->setLayout(layout);
 
     // Show dialog box until user closes out
-    dialog.exec();
+    dialog->show();
 }
 
 void View::onLessonActionClicked(int action) {
     qDebug() << "Opening info box.";
-    Lesson lesson(QString(":/Lessons/1-Hand_Types_and_Position"));
-    InfoBox infobox = InfoBox(lesson, this);
-    infobox.exec();
+    Lesson* lesson = new Lesson(QString(":/Lessons/1-Hand_Types_and_Position"));
+    InfoBox* infobox = new InfoBox(lesson, this);
+    infobox->show();
 }
