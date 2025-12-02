@@ -1,0 +1,69 @@
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        POKER HAND RANKINGS
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Hands are ranked from strongest (#1) to weakest (#10).
+
+
+------------------------------------
+1.  ROYAL FLUSH (Strongest Hand)
+------------------------------------
+A♦ K♦ Q♦ J♦ 10♦ (all same suit)
+The highest possible straight flush.
+
+------------------------------------
+2.  STRAIGHT FLUSH
+------------------------------------
+Five consecutive cards all in the same suit.
+Example: 9♣ 8♣ 7♣ 6♣ 5♣
+
+------------------------------------
+3.  FOUR OF A KIND
+------------------------------------
+Four cards of the same rank.
+Example: Q♠ Q♥ Q♣ Q♦ + any fifth card
+
+------------------------------------
+4.  FULL HOUSE
+------------------------------------
+Three cards of one rank + two cards of another rank.
+Example: J♣ J♦ J♠ + 4♣ 4♠
+
+------------------------------------
+5.  FLUSH
+------------------------------------
+Five cards of the same suit, not in sequence.
+Example: A♥ 9♥ 7♥ 5♥ 2♥
+
+------------------------------------
+6.  STRAIGHT
+------------------------------------
+Five cards in sequence, mixed suits.
+Example: 10♠ 9♦ 8♥ 7♣ 6♣
+
+Special case:
+A-2-3-4-5 is the lowest straight (called the "wheel").
+
+------------------------------------
+7.  THREE OF A KIND
+------------------------------------
+Three cards of the same rank.
+Example: 7♦ 7♣ 7♠ + two unrelated cards
+
+------------------------------------
+8.  TWO PAIR
+------------------------------------
+Two different pairs + one extra card.
+Example: K♠ K♦ + 9♣ 9♠ + 3♥
+
+------------------------------------
+9.  ONE PAIR
+------------------------------------
+Two cards of the same rank + three other cards.
+Example: 5♣ 5♦ + 10♠ 8♣ 2♥
+
+------------------------------------
+10. HIGH CARD (Weakest Hand)
+------------------------------------
+No matching ranks, no straight, no flush.
+Best card determines the winner.
+Example: A♣ 10♦ 7♠ 4♥ 2♣ (Ace-high)

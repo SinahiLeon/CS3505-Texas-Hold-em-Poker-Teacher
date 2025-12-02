@@ -5,7 +5,7 @@
 
 -------------------------------
   BASIC GAME TERMS
-  -------------------------------
+-------------------------------
 
 Blinds: Forced bets that start each hand.
   • Small Blind: Half the minimum bet.
@@ -128,9 +128,15 @@ PLAYER TYPES & TENDENCIES
 -------------------------------
 
 Tight: Plays few hands, only with premium cards.
+
 Loose: Plays many hands, even with marginal cards.
+
 Aggressive: Frequently bets and raises.
+
 Passive: Frequently checks and calls.
+
 Maniac: Extremely aggressive, plays too many hands.
+
 Calling Station: Calls too many bets with weak hands.
+
 Nit: Extremely tight, only plays the very best hands.
