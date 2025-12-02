@@ -36,7 +36,6 @@ public slots:
     void onCallButtonClicked();
     void onCheckButtonClicked();
     void onFoldButtonClicked();
-    void onGlossaryButtonClicked();
     void onInfoButtonClicked();
     void freeplayClicked();
     void onLessonActionClicked(int action);
@@ -44,6 +43,5 @@ public slots:
 private:
     Ui::View *ui;
     Game& game;
-    bool infoShowing;
 };
 #endif // VIEW_H

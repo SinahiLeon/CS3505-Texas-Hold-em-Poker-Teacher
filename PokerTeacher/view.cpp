@@ -14,7 +14,6 @@ View::View(Game& game, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::View)
     , game(game)
-    , infoShowing(false)
 {
     ui->setupUi(this);
 
@@ -48,8 +47,6 @@ View::View(Game& game, QWidget *parent)
             this, &View::onFoldButtonClicked);
     connect(ui->infoButton, &QPushButton::clicked,
             this, &View::onInfoButtonClicked);
-    connect(ui->glossaryButton, &QPushButton::clicked,
-            this, &View::onGlossaryButtonClicked);
     connect(ui->actionLesson_1, &QAction::triggered,
             this, [this]() { this->onLessonActionClicked(1); });
     connect(ui->actionFreeplay, &QAction::triggered,
@@ -115,62 +112,6 @@ void View::onCheckButtonClicked() {
 void View::onFoldButtonClicked() {
     game.playerFolds();
 }
-
-void View::onGlossaryButtonClicked()
-{
-    // File holds the main poker glossary text.
-    QFile glossaryFile(":/texas_holdem_glossary.txt");
-    QString glossaryText;
-
-    if(glossaryFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        glossaryText = QString::fromUtf8(glossaryFile.readAll());
-        glossaryFile.close();
-    } else {
-        glossaryText = "Failed to load Texas Holdem Glossary";
-    }
-
-    // File holds the ranked list of poker hands
-    QFile hierarchyFile(":/hand_hierarchy.txt");
-    QString hierarchyText;
-
-    if(hierarchyFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        hierarchyText = QString::fromUtf8(hierarchyFile.readAll());
-        hierarchyFile.close();
-    } else {
-        hierarchyText = "Failed to load Hand Hierarchy";
-    }
-
-    // Create dialog window when user clicks glossary button
-    QDialog dialog(this);
-    dialog.setWindowTitle("Texas Hold'em GLossary & Hand Rankings");
-    dialog.resize(600, 500);
-
-    QVBoxLayout *layout = new QVBoxLayout(&dialog);
-
-    // Create 2 tabs so user can switch between the Glossary and Hand Hierarchy
-    QTabWidget *tabs = new QTabWidget(&dialog);
-
-    // Tab 1: Glosssary
-    QPlainTextEdit *glossaryBox = new QPlainTextEdit(&dialog);
-    glossaryBox->setReadOnly(true);
-    glossaryBox->setPlainText(glossaryText);
-
-    // Tab 2: Hand Hierarchy
-    QPlainTextEdit *hierarchyBox = new QPlainTextEdit(&dialog);
-    hierarchyBox->setReadOnly(true);
-    hierarchyBox->setPlainText(hierarchyText);
-
-    // Add both tabs to tab widget
-    tabs->addTab(glossaryBox, "Glossary");
-    tabs->addTab(hierarchyBox, "Hand Rankings");
-
-    layout->addWidget(tabs);
-    dialog.setLayout(layout);
-
-    // Show dialog box until user closes out
-    dialog.exec();
-}
-
 
 void View::communityUpdate() {
     //update displayed community cards to match backend
@@ -313,22 +254,61 @@ void View::freeplayClicked() {
     qDebug() << "Freeplay button clicked.";
 }
 
+void View::onInfoButtonClicked()
+{
+    // File holds the main poker glossary text.
+    QFile glossaryFile(":/texas_holdem_glossary.txt");
+    QString glossaryText;
 
-void View::onInfoButtonClicked() {
-    if (infoShowing) {
-        qDebug() << "Closing info box.";
-        // emit closeInfobox();
-        infoShowing = false;
-        return;
+    if (glossaryFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        glossaryText = QString::fromUtf8(glossaryFile.readAll());
+        glossaryFile.close();
+    } else {
+        glossaryText = "Failed to load Texas Holdem Glossary";
     }
 
-    qDebug() << "Opening info box.";
-    // New dialogs need to be declared on the heap instead of the stack. The deletion of this infobox is handled by a connect call in its constructor.
-    // InfoBox* infobox = new InfoBox(this);
-    // connect(this, &View::closeInfobox,
-            // infobox, &InfoBox::close);
-    infoShowing = true;
-    // infobox->show();
+    // File holds the ranked list of poker hands
+    QFile hierarchyFile(":/hand_hierarchy.txt");
+    QString hierarchyText;
+
+    if (hierarchyFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        hierarchyText = QString::fromUtf8(hierarchyFile.readAll());
+        hierarchyFile.close();
+    }
+
+    else {
+        hierarchyText = "Failed to load Hand Hierarchy";
+    }
+
+    // Create dialog window when user clicks glossary button
+    QDialog dialog(this);
+    dialog.setWindowTitle("Texas Hold'em GLossary & Hand Rankings");
+    dialog.resize(600, 500);
+
+    QVBoxLayout *layout = new QVBoxLayout(&dialog);
+
+    // Create 2 tabs so user can switch between the Glossary and Hand Hierarchy
+    QTabWidget *tabs = new QTabWidget(&dialog);
+
+    // Tab 1: Glosssary
+    QPlainTextEdit *glossaryBox = new QPlainTextEdit(&dialog);
+    glossaryBox->setReadOnly(true);
+    glossaryBox->setPlainText(glossaryText);
+
+    // Tab 2: Hand Hierarchy
+    QPlainTextEdit *hierarchyBox = new QPlainTextEdit(&dialog);
+    hierarchyBox->setReadOnly(true);
+    hierarchyBox->setPlainText(hierarchyText);
+
+    // Add both tabs to tab widget
+    tabs->addTab(glossaryBox, "Glossary");
+    tabs->addTab(hierarchyBox, "Hand Rankings");
+
+    layout->addWidget(tabs);
+    dialog.setLayout(layout);
+
+    // Show dialog box until user closes out
+    dialog.exec();
 }
 
 void View::onLessonActionClicked(int action) {
