@@ -48,6 +48,8 @@ View::View(Game& game, QWidget *parent)
             this, &View::onFoldButtonClicked);
     connect(ui->infoButton, &QPushButton::clicked,
             this, &View::onInfoButtonClicked);
+    connect(ui->glossaryButton, &QPushButton::clicked,
+            this, &View::onGlossaryButtonClicked);
     connect(ui->actionLesson_1, &QAction::triggered,
             this, [this]() { this->onLessonActionClicked(1); });
     connect(ui->actionFreeplay, &QAction::triggered,
@@ -114,7 +116,7 @@ void View::onFoldButtonClicked() {
     game.playerFolds();
 }
 
-void View::glossaryTest()
+void View::onGlossaryButtonClicked()
 {
     QFile file(":/texas_holdem_glossary.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -131,7 +133,7 @@ void View::glossaryTest()
 
     QVBoxLayout *layout = new QVBoxLayout(&dialog);
 
-    // Read-only text box that is scrollable
+    // Read-only text box --> is scrollable
     QPlainTextEdit *textEdit = new QPlainTextEdit(&dialog);
     textEdit->setReadOnly(true);
     textEdit->setPlainText(text);

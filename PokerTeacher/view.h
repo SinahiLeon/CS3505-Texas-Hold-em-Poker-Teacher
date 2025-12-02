@@ -36,9 +36,9 @@ public slots:
     void onCallButtonClicked();
     void onCheckButtonClicked();
     void onFoldButtonClicked();
+    void onGlossaryButtonClicked();
     void onInfoButtonClicked();
     void freeplayClicked();
-    void glossaryTest();
     void onLessonActionClicked(int action);
 
 private:
