@@ -1,7 +1,7 @@
 #include "infobox.h"
 #include "ui_infobox.h"
 
-InfoBox::InfoBox(Lesson *lesson, QWidget *parent)
+InfoBox::InfoBox(Lesson* lesson, QWidget* parent)
     : QDialog(parent)
     , ui(new Ui::InfoBox)
     , lesson(lesson)
