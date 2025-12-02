@@ -1547,7 +1547,7 @@ color: #8fff8f;
                 </font>
                </property>
                <property name="text">
-                <string>Bet/Raise</string>
+                <string>Raise</string>
                </property>
               </widget>
              </item>
