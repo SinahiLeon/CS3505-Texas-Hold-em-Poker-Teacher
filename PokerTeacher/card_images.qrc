@@ -61,5 +61,8 @@
         <file>Lessons/1-TestLesson/cpuActions.csv</file>
         <file>Lessons/1-TestLesson/1.html</file>
         <file>Lessons/1-TestLesson/0.html</file>
+        <file>Lessons/2-TestLesson/0.html</file>
+        <file>Lessons/2-TestLesson/1.html</file>
+        <file>Lessons/2-TestLesson/cpuActions.csv</file>
     </qresource>
 </RCC>
