@@ -267,12 +267,17 @@ void View::updateLastAction(int playerIndex, QString action) {
 }
 
 void View::dealerUpdate(int playerIndex) {
-    (playerIndex == 0) ? ui->playerName->setText(QString("You �"))
+    (playerIndex == 0) ? ui->playerName->setText(QString("You ♠"))
                        : ui->playerName->setText(QString("You"));
-    (playerIndex == 1) ? ui->opp1Name->setText(QString("Opponent 1 �"))
+    (playerIndex == 1) ? ui->opp1Name->setText(QString("Opponent 1 ♠"))
                        : ui->opp1Name->setText(QString("Opponent 1"));
-    (playerIndex == 2) ? ui->opp2Name->setText(QString("Opponent 2 �"))
+    (playerIndex == 2) ? ui->opp2Name->setText(QString("Opponent 2 ♠"))
                        : ui->opp2Name->setText(QString("Opponent 2"));
+    switch (playerIndex) {
+        case 0 : ui->dealerLabel->setText(QString("You are the Dealer this hand.")); break;
+        case 1 : ui->dealerLabel->setText(QString("Opponent 1 is the Dealer this hand.")); break;
+        case 2 : ui->dealerLabel->setText(QString("Opponent 2 is the Dealer this hand.")); break;
+    }
 }
 
 void View::freeplayClicked() {
