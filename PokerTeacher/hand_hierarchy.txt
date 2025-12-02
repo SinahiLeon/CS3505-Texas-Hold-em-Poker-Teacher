@@ -3,7 +3,6 @@
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 Hands are ranked from strongest (#1) to weakest (#10).
 
-
 ------------------------------------
 1.  ROYAL FLUSH (Strongest Hand)
 ------------------------------------
