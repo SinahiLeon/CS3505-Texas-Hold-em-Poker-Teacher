@@ -24,6 +24,7 @@ void LessonTests::getsAllPages() {
     vector<QString> pages { QString(":/Lessons/1-TestLesson/0.html"), QString(":/Lessons/1-TestLesson/1.html") };
     Lesson newLesson(QString(":/Lessons/1-TestLesson"));
     vector<QString> lessonPages = newLesson.getLessonPages();
+    QCOMPARE(pages, lessonPages);
 }
 
 void LessonTests::getsNextPage() {
