@@ -38,6 +38,7 @@ public slots:
     void onFoldButtonClicked();
     void onInfoButtonClicked();
     void glossaryTest();
+    void onLessonActionClicked(int action);
 
 private:
     Ui::View *ui;

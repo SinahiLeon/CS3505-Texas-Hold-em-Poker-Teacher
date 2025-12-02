@@ -59,5 +59,7 @@
         <file>texas_holdem_glossary.txt</file>
         <file>glossary.txt</file>
         <file>Lessons/1-TestLesson/cpuActions.csv</file>
+        <file>Lessons/1-TestLesson/1.html</file>
+        <file>Lessons/1-TestLesson/0.html</file>
     </qresource>
 </RCC>

@@ -48,6 +48,8 @@ View::View(Game& game, QWidget *parent)
             this, &View::onFoldButtonClicked);
     connect(ui->infoButton, &QPushButton::clicked,
             this, &View::onInfoButtonClicked);
+    connect(ui->actionLesson_1, &QAction::triggered,
+            this, [this]() { this->onLessonActionClicked(1); });
 }
 
 View::~View()
@@ -272,16 +274,24 @@ void View::dealerUpdate(int playerIndex) {
 void View::onInfoButtonClicked() {
     if (infoShowing) {
         qDebug() << "Closing info box.";
-        emit closeInfobox();
+        // emit closeInfobox();
         infoShowing = false;
         return;
     }
 
     qDebug() << "Opening info box.";
     // New dialogs need to be declared on the heap instead of the stack. The deletion of this infobox is handled by a connect call in its constructor.
-    InfoBox* infobox = new InfoBox(this);
-    connect(this, &View::closeInfobox,
-            infobox, &InfoBox::close);
+    // InfoBox* infobox = new InfoBox(this);
+    // connect(this, &View::closeInfobox,
+            // infobox, &InfoBox::close);
+    infoShowing = true;
+    // infobox->show();
+}
+
+void View::onLessonActionClicked(int action) {
+    qDebug() << "Opening info box.";
+    Lesson lesson(QString(":/Lesson/1-TestLesson"));
+    InfoBox* infobox = new InfoBox(lesson, this);
     infoShowing = true;
     infobox->show();
 }

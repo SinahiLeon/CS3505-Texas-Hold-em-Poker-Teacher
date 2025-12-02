@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <qmainwindow.h>
+#include "lesson.h"
 
 namespace Ui {
 class InfoBox;
@@ -13,11 +14,12 @@ class InfoBox : public QDialog
     Q_OBJECT
 
 public:
-    explicit InfoBox(QWidget *parent = nullptr);
+    explicit InfoBox(Lesson& lesson, QWidget *parent = nullptr);
     ~InfoBox();
 
 private:
     Ui::InfoBox *ui;
+    void setupLesson(Lesson& lesson);
 };
 
 #endif // INFOBOX_H
