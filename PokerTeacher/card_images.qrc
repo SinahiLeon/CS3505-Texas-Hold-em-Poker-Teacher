@@ -58,5 +58,6 @@
     <qresource prefix="/">
         <file>texas_holdem_glossary.txt</file>
         <file>glossary.txt</file>
+        <file>Lessons/1-Hand_Types_and_Position/0.html</file>
     </qresource>
 </RCC>

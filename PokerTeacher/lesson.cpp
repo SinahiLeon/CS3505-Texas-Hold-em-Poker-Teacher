@@ -1,5 +1,4 @@
 #include "lesson.h"
-#include <QRegularExpression>
 using std::bad_cast;
 using std::out_of_range;
 using std::nullopt;
@@ -7,7 +6,6 @@ using std::nullopt;
 Lesson::Lesson(QString folderPath, QObject *parent): folder(QDir(folderPath)) {
     readFolderName();
     findLessonFiles();
-    currentPage = lessonPages[0];
     pageIndex = 0;
 }
 
@@ -18,7 +16,6 @@ Lesson::Lesson(const Lesson& other)
     , cpus(other.cpus)
     , lessonNum(other.lessonNum)
 {
-    currentPage = lessonPages[0];
     pageIndex = 0;
 }
 
@@ -28,7 +25,6 @@ bool Lesson::nextPage() {
     }
 
     pageIndex++;
-    currentPage = lessonPages[pageIndex];
     return true;
 }
 
@@ -45,6 +41,10 @@ optional<Lesson> Lesson::getNextLesson() {
     }
 
     return nullopt;
+}
+
+QUrl Lesson::getCurrentUrl() {
+    return QUrl("qrc" + getCurrentPage());
 }
 
 void Lesson::readFolderName() {
@@ -64,7 +64,8 @@ void Lesson::readFolderName() {
     }
 
     lessonNum = num;
-    name = nameParts[1];
+    // Add spaces to name
+    name = nameParts[1].replace(underscores, " ");
 }
 
 void Lesson::findLessonFiles() {

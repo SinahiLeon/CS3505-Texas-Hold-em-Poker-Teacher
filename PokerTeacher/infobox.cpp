@@ -19,5 +19,5 @@ InfoBox::~InfoBox()
 }
 
 void InfoBox::setupLesson(Lesson& lesson) {
-    ui->lessonBrowser->setSource(lesson.getCurrentPage());
+    ui->lessonBrowser->setSource(lesson.getCurrentUrl());
 }

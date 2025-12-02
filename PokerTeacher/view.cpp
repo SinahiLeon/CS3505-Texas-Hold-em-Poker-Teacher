@@ -299,7 +299,7 @@ void View::onInfoButtonClicked() {
 
 void View::onLessonActionClicked(int action) {
     qDebug() << "Opening info box.";
-    Lesson lesson(QString(":/Lesson/1-TestLesson"));
+    Lesson lesson(QString(":/Lessons/1-Hand_Types_and_Position"));
     InfoBox* infobox = new InfoBox(lesson, this);
     infoShowing = true;
     infobox->show();
