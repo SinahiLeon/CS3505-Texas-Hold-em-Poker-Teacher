@@ -18,14 +18,17 @@ public:
     explicit Lesson(QString folderPath, QObject *parent = nullptr);
     explicit Lesson(const Lesson& other);
     QString getName() const { return name; };
-    QString getCurrentPage() const { return lessonPages[pageIndex]; };
+    QString getCurrentPage() const { return lessonPages[pageIndex]; }
+    QUrl getCurrentUrl() const { return QUrl("qrc" + lessonPages[pageIndex]); };
     vector<QString>& getLessonPages() { return lessonPages; };
     vector<ComputerPlayer>& getComputerPlayers() { return cpus; };
     int getLessonNum() const { return lessonNum; };
+    bool atStart() const { return pageIndex == 0; }
+    bool atEnd() const { return pageIndex == lessonPages.size() - 1; };
     bool hasComupterPlayers() const { return !cpus.empty(); };
+    bool back();
     bool nextPage();
     optional<Lesson> getNextLesson();
-    QUrl getCurrentUrl();
 private:
     const QDir folder;
     QString name;

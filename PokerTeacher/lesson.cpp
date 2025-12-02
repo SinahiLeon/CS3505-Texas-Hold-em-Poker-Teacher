@@ -19,6 +19,15 @@ Lesson::Lesson(const Lesson& other)
     pageIndex = 0;
 }
 
+bool Lesson::back() {
+    if (pageIndex < 0) {
+        return false;
+    }
+
+    pageIndex--;
+    return true;
+}
+
 bool Lesson::nextPage() {
     if (pageIndex >= lessonPages.size() - 1) {
         return false;
@@ -41,10 +50,6 @@ optional<Lesson> Lesson::getNextLesson() {
     }
 
     return nullopt;
-}
-
-QUrl Lesson::getCurrentUrl() {
-    return QUrl("qrc" + getCurrentPage());
 }
 
 void Lesson::readFolderName() {

@@ -14,17 +14,10 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="2">
-    <widget class="QPushButton" name="changeLessoButton">
-     <property name="text">
-      <string>Change Lesson</string>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0" colspan="3">
     <widget class="QTextBrowser" name="lessonBrowser"/>
    </item>
-   <item row="2" column="1">
+   <item row="2" column="2">
     <widget class="QPushButton" name="nextButton">
      <property name="enabled">
       <bool>true</bool>
@@ -42,6 +35,9 @@
    </item>
    <item row="2" column="0">
     <widget class="QPushButton" name="backButton">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="sizePolicy">
       <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
        <horstretch>0</horstretch>

@@ -19,7 +19,11 @@ public:
 
 private:
     Ui::InfoBox *ui;
-    void setupLesson(Lesson& lesson);
+    Lesson& lesson;
+
+private slots:
+    void back();
+    void next();
 };
 
 #endif // INFOBOX_H
