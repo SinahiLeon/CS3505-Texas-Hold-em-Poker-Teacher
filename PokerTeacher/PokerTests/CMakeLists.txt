@@ -16,6 +16,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(PokerTests tst_cardhandtests.cpp
     tst_lessontests.cpp
+    test_data.qrc
+
 
 )
 add_test(NAME PokerTests COMMAND PokerTests)

@@ -1,0 +1,110 @@
+Texas Hold'em Glossary
+
+-----------------------
+Basic Game Terms
+-----------------------
+
+Blinds:
+Forced bets that start the action. The small blind (half the big blind) and big blind (minimum bet) rotate around the table each hand.
+
+Button:
+The dealer position marker that rotates clockwise after each hand. The player on the button acts last post-flop.
+
+Hole Cards:
+The two private cards dealt face-down to each player.
+
+Community Cards:
+The five shared cards dealt face-up in the middle of the table.
+
+Flop:
+The first three community cards.
+
+Turn:
+The fourth community card.
+
+River:
+The fifth and final community card.
+
+Pot:
+The total amount of chips in the middle that players are competing to win.
+
+Showdown:
+When remaining players reveal their hole cards after the final betting round to determine the winner.
+
+
+-------------------------------
+Hand Strength & Board Types
+-------------------------------
+
+Wet Board:
+A flop with many possible draws and connections (e.g., 9♠ 8♠ 7♥). Many hands can improve.
+
+Dry Board:
+A flop with few possible draws (e.g., K♣ 2♦ 4♥). Safer for made hands.
+
+Connected Board:
+Cards close in rank, creating straight possibilities.
+
+Suited Board:
+Two or more cards of the same suit, enabling flush possibilities.
+
+Paired Board:
+Two cards of the same rank appear on the board.
+
+Made Hand:
+A hand that is already strong and doesn’t need to improve to win (e.g., top pair, straight, set).
+
+Drawing Hand:
+A hand that needs specific cards to improve to a strong hand (e.g., flush draw, straight draw).
+
+
+-------------------------
+Betting & Strategy Terms
+-------------------------
+
+Bluff:
+Betting or raising with a weak hand to make opponents fold better hands.
+
+Semi-Bluff:
+Betting a drawing hand that has the potential to become strong later.
+
+Value Bet:
+Betting with a strong hand to get called by worse hands.
+
+Continuation Bet (C-Bet):
+Betting on the flop after raising pre-flop.
+
+Check-Raise:
+Checking first, then raising after an opponent bets.
+
+Pot Odds:
+The ratio between the current pot and the amount needed to call.
+
+Implied Odds:
+Potential future winnings if a drawing hand hits.
+
+Fold Equity:
+The chance that your bet will cause an opponent to fold.
+
+Position:
+Where you act relative to the button. Early position acts first; late position acts last.
+
+
+-------------------
+Betting Actions
+-------------------
+
+Check:
+Passing the action to the next player without betting (only possible if no one has bet yet).
+
+Call:
+Matching the current bet amount.
+
+Raise:
+Increasing the current bet amount.
+
+Re-raise:
+Raising after someone has already raised.
+
+Fold:
+Discarding your hand and sitting out the rest of the hand.

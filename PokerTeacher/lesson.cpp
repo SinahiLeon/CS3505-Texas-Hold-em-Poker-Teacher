@@ -7,6 +7,8 @@ using std::nullopt;
 Lesson::Lesson(QString folderPath, QObject *parent): folder(QDir(folderPath)) {
     readFolderName();
     findLessonFiles();
+    currentPage = lessonPages[0];
+    pageIndex = 0;
 }
 
 Lesson::Lesson(const Lesson& other)
@@ -72,7 +74,7 @@ void Lesson::findLessonFiles() {
     // Using const here detaches allFiles.
     for (auto& file : allFiles) {
         if (isHtmlFile(file)) {
-            lessonPages.push_back(file);
+            lessonPages.push_back(folder.absoluteFilePath(file));
         }
     }
 }
@@ -88,11 +90,9 @@ bool Lesson::isHtmlFile(QString filename) {
 }
 
 optional<QString> Lesson::findNextLesson(QDir parentDir, int index) {
-    QRegularExpression previousPath(".*/");
     QStringList allFolders = parentDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
 
     for (auto& folderPath : allFolders) {
-        QString relativePath = folderPath.remove(previousPath);
         QStringList nameParts = folderPath.split("-");
 
         if (nameParts.size() > 0) {
@@ -100,7 +100,7 @@ optional<QString> Lesson::findNextLesson(QDir parentDir, int index) {
             int num = nameParts[0].toInt(&isNum);
 
             if (isNum && num == index) {
-                return folderPath;
+                return parentDir.absoluteFilePath(folderPath);
             }
         }
     }

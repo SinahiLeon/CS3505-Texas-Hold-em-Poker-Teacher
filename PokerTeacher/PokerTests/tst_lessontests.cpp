@@ -36,8 +36,12 @@ void LessonTests::getsNextPage() {
 void LessonTests::getsNextLesson() {
     Lesson newLesson(QString(":/Lessons/1-TestLesson"));
     optional<Lesson> nextLesson = newLesson.getNextLesson();
-    QVERIFY(nextLesson.has_value());
-    QCOMPARE(nextLesson->getCurrentPage(), QString(":/Lessons/2-TestLesson/1.html"));
+    bool lessonExists = nextLesson.has_value();
+    QVERIFY(lessonExists);
+
+    if (lessonExists) {
+        QCOMPARE(nextLesson->getCurrentPage(), QString(":/Lessons/2-TestLesson/0.html"));
+    }
 }
 
 // Move this line between test classes to run different classes.
