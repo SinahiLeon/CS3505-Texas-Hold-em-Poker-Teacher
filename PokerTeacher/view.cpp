@@ -118,29 +118,56 @@ void View::onFoldButtonClicked() {
 
 void View::onGlossaryButtonClicked()
 {
-    QFile file(":/texas_holdem_glossary.txt");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "Failed to open glossary resource.";
-        return;
+    // File holds the main poker glossary text.
+    QFile glossaryFile(":/texas_holdem_glossary.txt");
+    QString glossaryText;
+
+    if(glossaryFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        glossaryText = QString::fromUtf8(glossaryFile.readAll());
+        glossaryFile.close();
+    } else {
+        glossaryText = "Failed to load Texas Holdem Glossary";
     }
 
-    QString text = QString::fromUtf8(file.readAll());
-    file.close();
+    // File holds the ranked list of poker hands
+    QFile hierarchyFile(":/hand_hierarchy.txt");
+    QString hierarchyText;
 
+    if(hierarchyFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        hierarchyText = QString::fromUtf8(hierarchyFile.readAll());
+        hierarchyFile.close();
+    } else {
+        hierarchyText = "Failed to load Hand Hierarchy";
+    }
+
+    // Create dialog window when user clicks glossary button
     QDialog dialog(this);
-    dialog.setWindowTitle("Texas Hold'em Glossary");
-    dialog.resize(600, 400);  // default size
+    dialog.setWindowTitle("Texas Hold'em GLossary & Hand Rankings");
+    dialog.resize(600, 500);
 
     QVBoxLayout *layout = new QVBoxLayout(&dialog);
 
-    // Read-only text box --> is scrollable
-    QPlainTextEdit *textEdit = new QPlainTextEdit(&dialog);
-    textEdit->setReadOnly(true);
-    textEdit->setPlainText(text);
+    // Create 2 tabs so user can switch between the Glossary and Hand Hierarchy
+    QTabWidget *tabs = new QTabWidget(&dialog);
 
-    layout->addWidget(textEdit);
+    // Tab 1: Glosssary
+    QPlainTextEdit *glossaryBox = new QPlainTextEdit(&dialog);
+    glossaryBox->setReadOnly(true);
+    glossaryBox->setPlainText(glossaryText);
 
+    // Tab 2: Hand Hierarchy
+    QPlainTextEdit *hierarchyBox = new QPlainTextEdit(&dialog);
+    hierarchyBox->setReadOnly(true);
+    hierarchyBox->setPlainText(hierarchyText);
+
+    // Add both tabs to tab widget
+    tabs->addTab(glossaryBox, "Glossary");
+    tabs->addTab(hierarchyBox, "Hand Rankings");
+
+    layout->addWidget(tabs);
     dialog.setLayout(layout);
+
+    // Show dialog box until user closes out
     dialog.exec();
 }
 
