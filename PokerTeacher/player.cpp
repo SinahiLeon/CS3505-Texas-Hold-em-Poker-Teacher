@@ -9,7 +9,17 @@ Player::Player(bool isHuman) : isHuman(isHuman), fullhand(heldCards) {
 
 }
 
+Player::Player(queue<Action> decisions) : isHuman(false), fullhand(heldCards), decisions(decisions) {
+
+}
+
 Action Player::makeDecision() {
+
+    if (isHuman) {
+        //If the player is the human player, it needs to receive a signal of what button the user pressed
+    }
+
+
     if(!decisions.empty()) {
         Action decidedAction = decisions.front();
         decisions.pop();

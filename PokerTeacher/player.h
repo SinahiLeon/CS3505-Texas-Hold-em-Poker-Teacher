@@ -12,6 +12,7 @@ class Player {
 public:
     Player();
     Player(bool isHuman);
+    Player(queue<Action> decisions);
     bool const isHuman;
     bool canBet(int amount) { return chips >= amount; }
     int chips = 1000;

@@ -86,7 +86,7 @@ void Game::continueRound(int playerIndex) {
                 "and currentBet =" << getBetAmount();
             // Bot chooses action based on its held cards:
 
-            players[player].makeDecision();
+            //players[player].makeDecision();
             /* TEMPORARY RANDOMIZER */
             /* REPLACE QRandomGenerator WITH DECISION CODE */
             if (noBetsYet()) {
