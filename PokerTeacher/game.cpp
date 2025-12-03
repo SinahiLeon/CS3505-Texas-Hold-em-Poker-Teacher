@@ -40,20 +40,16 @@ void Game::startRound() {
     int playerIndex = getDealerIndex();
     playerIndex++;
 
-    makeBet(player, getSmallBlind(), false);
     if (playerIndex >= players.size()) {
         playerIndex = 0;
     }
 
-    makeBet(playerIndex, getSmallBlind());
+    makeBet(playerIndex, getSmallBlind(), false);
     smallBlindPaid = true;
-
-    emit updateLastAction(player, QString("paid the small blind of $%1.").arg(getSmallBlind()));
-    emit updateLastAction(playerIndex, QString("paid the small blind: $%1.").arg(getSmallBlind()));
+    emit updateLastAction(playerIndex, QString("paid the small blind of $%1.").arg(getSmallBlind()));
     playerIndex++;
-    makeBet(player, getLargeBlind(), false);
 
-    makeBet(playerIndex, getLargeBlind());
+    makeBet(playerIndex, getLargeBlind(), false);
     largeBlindPaid = true;
     qDebug() << "Player" << playerIndex << "paid the large blind of" << getLargeBlind();
     emit updateLastAction(playerIndex, QString("paid the large blind: $%1.").arg(getLargeBlind()));
@@ -91,22 +87,27 @@ void Game::continueRound(int playerIndex) {
         // Check if game should end
         int activePlayers = 0;
         int lastPlayer = -1;
+
         for (int i = 0; i < players.size(); i++) {
-            if (!players[i].folded) {
+            if (!players[i].getFolded()) {
                 activePlayers++;
                 lastPlayer = i;
             }
         }
+
         if (activePlayers <= 1) {
             emit handEnded(lastPlayer);
             return;
-
-        if (players[playerIndex].getFolded()) {
-            qDebug() << "Player" << playerIndex << "is folded. Skipping...";
         }
-        if (players[player].folded) {
-            qDebug() << "Player" << player << "is folded. Skipping...";
-            continue;
+
+        playerIndex++;
+
+        if (playerIndex >= players.size()) {
+            playerIndex = 0;
+        }
+
+        if (playerIndex == 0) {
+            break;
         }
 
         qDebug() << "Player" << playerIndex <<
@@ -117,25 +118,32 @@ void Game::continueRound(int playerIndex) {
 
         switch (decision.index()) {
             case (0) : {
+                qDebug() << "Player" << playerIndex << "is having their turn skipped.";
                 break;
             }
+
             case (1) : {
                 check(playerIndex);
+                delayedContinue(playerIndex);
                 break;
             }
+
             case (2) : {
                call(playerIndex);
-               delayedContinue(player);
-               return;
+               delayedContinue(playerIndex);
+               break;
             }
+
             case (3): {
                 Raise raiseAction = get<Raise>(decision);
                 raise(playerIndex, raiseAction.raiseAmount);
+                delayedContinue(playerIndex);
                 break;
             }
 
             case (4): {
                 fold(playerIndex);
+                delayedContinue(playerIndex);
                 break;
             }
         }
@@ -227,7 +235,10 @@ void Game::check(int playerIndex) {
 }
 
 void Game::makeBet(int playerIndex, int chipAmount, bool isCall) {
-    if (!validPlayer(playerIndex)) return;
+    if (!validPlayer(playerIndex)) {
+        return;
+    }
+
     qDebug() << "Player" << playerIndex << "made a bet of" << chipAmount;
 
     Player& player = players[playerIndex];
@@ -272,14 +283,14 @@ void Game::call(int playerIndex) {
     }
 
     if (callAmount < 0) {
-        makeBet(playerIndex, player.getChips());
+        makeBet(playerIndex, player.getChips(), true);
     }
 
     emit updateLastAction(playerIndex, QString("called. Total bet: %1.").arg(player.getBet()));
     numPlayersCalled++;
     int activePlayers = 0;
     for (int i = 0; i < players.size(); i++) {
-        if (!players[i].folded) {
+        if (!players[i].getFolded()) {
             activePlayers++;
         }
     }

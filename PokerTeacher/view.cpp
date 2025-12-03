@@ -144,7 +144,7 @@ void View::disableActionButtons() {
 void View::onContinueClicked() {
     qDebug() << "UI: Continue button clicked.";
     ui->continueButton->setVisible(false);
-    ui->betAmount->setValue((game.getLargeBlind() < game.players[0].chips) ? game.getLargeBlind() : game.players[0].chips);
+    ui->betAmount->setValue((game.getLargeBlind() < game.players[0].getChips()) ? game.getLargeBlind() : game.players[0].getChips());
     emit continueToNewGame();
 }
 

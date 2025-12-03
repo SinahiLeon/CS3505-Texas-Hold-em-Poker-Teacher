@@ -42,7 +42,7 @@ Player Player::operator=(const Player& p) {
 }
 
 Action Player::makeDecision(int currentBet, Action playerAction) {
-    if (allIn()) {
+    if (allIn() || folded) {
         return None();
     }
 
@@ -80,11 +80,15 @@ Action Player::makeDecision(int currentBet, Action playerAction) {
             bet = currentBet + amount;
             return Raise(10);
         }
-        case (2) : { return Fold(); }
-        default : { return Fold(); }
+        case (2) : {
+            folded = true;
+            return Fold();
+        }
+        default : {
+            folded = true;
+            return Fold();
+        }
     }
-
-    return Fold();
 }
 
 int Player::getRaiseAmount() {
