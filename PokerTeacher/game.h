@@ -32,7 +32,7 @@ public:
     const vector<shared_ptr<Card>>& getCommunityCards() const { return communityCards; }
 
     void check(int playerIndex);
-    void makeBet(int playerIndex, int chipAmount);
+    void makeBet(int playerIndex, int chipAmount, bool isCall);
     void call(int playerIndex);
     void raise(int playerIndex, int chipAmount);
     void fold(int playerIndex);

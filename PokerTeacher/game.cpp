@@ -35,15 +35,15 @@ void Game::startRound() {
     int player = getDealerIndex();
     player++;
     if (player >= players.size()) player = 0; // Loop back to user
-    makeBet(player, getSmallBlind());
+    makeBet(player, getSmallBlind(), false);
     smallBlindPaid = true;
     qDebug() << "Player" << player << "paid the small blind of" << getSmallBlind();
-    emit updateLastAction(player, QString("paid the small blind: $%1.").arg(getSmallBlind()));
+    emit updateLastAction(player, QString("paid the small blind of $%1.").arg(getSmallBlind()));
     player++;
-    makeBet(player, getLargeBlind());
+    makeBet(player, getLargeBlind(), false);
     largeBlindPaid = true;
     qDebug() << "Player" << player << "paid the large blind of" << getLargeBlind();
-    emit updateLastAction(player, QString("paid the large blind: $%1.").arg(getLargeBlind()));
+    emit updateLastAction(player, QString("paid the large blind of $%1.").arg(getLargeBlind()));
     noBetsYetThisPhase = true;
     continueRound(player);
 }
@@ -91,14 +91,14 @@ void Game::continueRound(int playerIndex) {
             /* REPLACE QRandomGenerator WITH DECISION CODE */
             if (noBetsYet()) {
                 if (players[player].canBet(getBetAmount())) {
-                    switch (int choice = QRandomGenerator::global()->bounded(0, 3)) {
+                    switch (int choice = QRandomGenerator::global()->bounded(3)) {
                         case (0) : { check(player); continue; }
-                        case (1) : { makeBet(player, getBetAmount()); continue; }
+                        case (1) : { makeBet(player, getBetAmount(), false); continue; }
                         case (2) : { fold(player); continue; }
                     }
                 }
                 else { // No bets yet but player can't bet
-                    switch (int choice = QRandomGenerator::global()->bounded(0, 2)) {
+                    switch (int choice = QRandomGenerator::global()->bounded(2)) {
                         case (0) : { check(player); continue; }
                         case (1) : { fold(player); continue; }
                     }
@@ -106,14 +106,14 @@ void Game::continueRound(int playerIndex) {
             }
             else { // There has been a bet
                 if (players[player].canBet(getRaiseAmount())) { // Can raise
-                    switch (int choice = QRandomGenerator::global()->bounded(0, 3)) {
+                    switch (int choice = QRandomGenerator::global()->bounded(3)) {
                         case (0) : { call(player); continue; }
                         case (1) : { raise(player, getLargeBlind()); continue; }
                         case (2) : { fold(player); continue; }
                     }
                 }
                 if (players[player].canBet(getBetAmount())) { // Can call
-                    switch (int choice = QRandomGenerator::global()->bounded(0, 2)) {
+                    switch (int choice = QRandomGenerator::global()->bounded(2)) {
                     case (0) : { call(player); continue; }
                     case (1) : { fold(player); continue; }
                     }
@@ -206,7 +206,7 @@ void Game::check(int playerIndex) {
     }
 }
 
-void Game::makeBet(int playerIndex, int chipAmount) {
+void Game::makeBet(int playerIndex, int chipAmount, bool isCall) {
     if (!validPlayer(playerIndex)) return;
     qDebug() << "Player" << playerIndex << "made a bet of" << chipAmount;
 
@@ -218,7 +218,7 @@ void Game::makeBet(int playerIndex, int chipAmount) {
     pot += actualBet;
 
     numPlayersChecked = 0;
-    numPlayersCalled = 0;
+    if (!isCall) numPlayersCalled = 0;
     noBetsYetThisPhase = false;
     emit chipsUpdated(playerIndex, player.chips, player.currentBet);
     emit potUpdated(pot);
@@ -233,7 +233,7 @@ void Game::raise(int playerIndex, int chipAmount) {
     int totalBet = currentBet + chipAmount;
     int raiseAmount = totalBet - player.currentBet;
     if (totalBet > currentBet) {
-        makeBet(playerIndex, raiseAmount);
+        makeBet(playerIndex, raiseAmount, false);
         currentBet = totalBet;
         emit currentBetUpdated(currentBet);
     }
@@ -247,7 +247,7 @@ void Game::call(int playerIndex) {
     Player& player = players[playerIndex];
     int callAmount = currentBet - player.currentBet;
     if (callAmount > 0) {
-        makeBet(playerIndex, callAmount);
+        makeBet(playerIndex, callAmount, true);
     }
     emit updateLastAction(playerIndex, QString("called. Total bet: %1.").arg(player.currentBet));
     numPlayersCalled++;
@@ -354,7 +354,7 @@ void Game::nextPhase() {
 }
 
 void Game::playerMakesBet(int amount) {
-    (noBetsYet()) ? makeBet(0, amount)
+    (noBetsYet()) ? makeBet(0, amount, false)
                   : raise(0, amount);
     continueRound(0);
 }
