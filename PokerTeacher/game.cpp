@@ -91,14 +91,14 @@ void Game::continueRound(int playerIndex) {
             /* REPLACE QRandomGenerator WITH DECISION CODE */
             if (noBetsYet()) {
                 if (players[player].canBet(getBetAmount())) {
-                    switch (int choice = QRandomGenerator::global()->bounded(0, 2)) {
+                    switch (int choice = QRandomGenerator::global()->bounded(0, 3)) {
                         case (0) : { check(player); continue; }
                         case (1) : { makeBet(player, getBetAmount()); continue; }
                         case (2) : { fold(player); continue; }
                     }
                 }
                 else { // No bets yet but player can't bet
-                    switch (int choice = QRandomGenerator::global()->bounded(0, 1)) {
+                    switch (int choice = QRandomGenerator::global()->bounded(0, 2)) {
                         case (0) : { check(player); continue; }
                         case (1) : { fold(player); continue; }
                     }
@@ -106,14 +106,14 @@ void Game::continueRound(int playerIndex) {
             }
             else { // There has been a bet
                 if (players[player].canBet(getRaiseAmount())) { // Can raise
-                    switch (int choice = QRandomGenerator::global()->bounded(0, 2)) {
+                    switch (int choice = QRandomGenerator::global()->bounded(0, 3)) {
                         case (0) : { call(player); continue; }
                         case (1) : { raise(player, getLargeBlind()); continue; }
                         case (2) : { fold(player); continue; }
                     }
                 }
                 if (players[player].canBet(getBetAmount())) { // Can call
-                    switch (int choice = QRandomGenerator::global()->bounded(0, 1)) {
+                    switch (int choice = QRandomGenerator::global()->bounded(0, 2)) {
                     case (0) : { call(player); continue; }
                     case (1) : { fold(player); continue; }
                     }
