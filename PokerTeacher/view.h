@@ -21,6 +21,7 @@ public:
 signals:
     void viewInitialized();
     void closeInfobox();
+    void continueToNewGame();
 
 public slots:
     void chipsUpdate(int playerIndex, int chips, int bet);
@@ -32,11 +33,14 @@ public slots:
     void phaseUpdate(Phase currPhase);
     void updateLastAction(int playerIndex, QString action);
     void updateAvailableActions();
+    void handEnded(int winner);
     void onBetButtonClicked();
     void onCallButtonClicked();
     void onCheckButtonClicked();
     void onFoldButtonClicked();
     void onInfoButtonClicked();
+    void disableActionButtons();
+    void onContinueClicked();
     void freeplayClicked();
     void onLessonActionClicked(int action);
 

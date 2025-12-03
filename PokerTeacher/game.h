@@ -32,7 +32,7 @@ public:
     const vector<shared_ptr<Card>>& getCommunityCards() const { return communityCards; }
 
     void check(int playerIndex);
-    void makeBet(int playerIndex, int chipAmount);
+    void makeBet(int playerIndex, int chipAmount, bool isCall);
     void call(int playerIndex);
     void raise(int playerIndex, int chipAmount);
     void fold(int playerIndex);
@@ -53,6 +53,7 @@ signals:    // Since a value changed, signal to update UI
     void currentBetUpdated(int newBet);
     void updateLastAction(int playerIndex, QString action);
     void updateAvailableActions();
+    void handEnded(int winner);
 
 public slots:
     void onViewInitialized();
@@ -81,6 +82,7 @@ private:
     void startRound();
     void continueRound(int playerIndex);
     void nextPhase();
+    void delayedContinue(int nextPlayer);
 
     /// @brief Resets and shuffles the deck with all cards
     void shuffleDeck();

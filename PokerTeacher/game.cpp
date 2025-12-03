@@ -5,6 +5,7 @@
 #include <random>
 #include <algorithm>
 #include <QRandomGenerator>
+#include <QTimer>
 using std::make_shared;
 using std::random_device;
 using std::default_random_engine;
@@ -39,7 +40,7 @@ void Game::startRound() {
     int playerIndex = getDealerIndex();
     playerIndex++;
 
-    // Loop back to user
+    makeBet(player, getSmallBlind(), false);
     if (playerIndex >= players.size()) {
         playerIndex = 0;
     }
@@ -47,9 +48,10 @@ void Game::startRound() {
     makeBet(playerIndex, getSmallBlind());
     smallBlindPaid = true;
 
-    qDebug() << "Player" << playerIndex << "paid the small blind of" << getSmallBlind();
+    emit updateLastAction(player, QString("paid the small blind of $%1.").arg(getSmallBlind()));
     emit updateLastAction(playerIndex, QString("paid the small blind: $%1.").arg(getSmallBlind()));
     playerIndex++;
+    makeBet(player, getLargeBlind(), false);
 
     makeBet(playerIndex, getLargeBlind());
     largeBlindPaid = true;
@@ -86,18 +88,24 @@ void Game::continueRound(int playerIndex) {
     qDebug() << "Continuing round after player" << playerIndex;
 
     while (true) { // Loop until it's the player's turn
-        playerIndex++;
-
-        if (playerIndex >= players.size()) {
-            playerIndex = 0;
+        // Check if game should end
+        int activePlayers = 0;
+        int lastPlayer = -1;
+        for (int i = 0; i < players.size(); i++) {
+            if (!players[i].folded) {
+                activePlayers++;
+                lastPlayer = i;
+            }
         }
-
-        if (playerIndex == 0) {
-            break;
-        }
+        if (activePlayers <= 1) {
+            emit handEnded(lastPlayer);
+            return;
 
         if (players[playerIndex].getFolded()) {
             qDebug() << "Player" << playerIndex << "is folded. Skipping...";
+        }
+        if (players[player].folded) {
+            qDebug() << "Player" << player << "is folded. Skipping...";
             continue;
         }
 
@@ -111,17 +119,15 @@ void Game::continueRound(int playerIndex) {
             case (0) : {
                 break;
             }
-
             case (1) : {
                 check(playerIndex);
                 break;
             }
-
             case (2) : {
-                call(playerIndex);
-                break;
+               call(playerIndex);
+               delayedContinue(player);
+               return;
             }
-
             case (3): {
                 Raise raiseAction = get<Raise>(decision);
                 raise(playerIndex, raiseAction.raiseAmount);
@@ -145,6 +151,14 @@ void Game::continueRound(int playerIndex) {
     emit potUpdated(pot);
     emit currentBetUpdated(currentBet);
     emit updateAvailableActions();
+}
+
+void Game::delayedContinue(int nextPlayer) {
+    QTimer::singleShot(1000,     // delaying next opponents turn
+                       this,
+                       [this, nextPlayer]() {   // captures outside variables to use in lambda expression
+                           continueRound(nextPlayer);
+                       } );
 }
 
 void Game::shuffleDeck() {
@@ -212,7 +226,7 @@ void Game::check(int playerIndex) {
     }
 }
 
-void Game::makeBet(int playerIndex, int chipAmount) {
+void Game::makeBet(int playerIndex, int chipAmount, bool isCall) {
     if (!validPlayer(playerIndex)) return;
     qDebug() << "Player" << playerIndex << "made a bet of" << chipAmount;
 
@@ -224,7 +238,7 @@ void Game::makeBet(int playerIndex, int chipAmount) {
     pot += actualBet;
 
     numPlayersChecked = 0;
-    numPlayersCalled = 0;
+    if (!isCall) numPlayersCalled = 0;
     noBetsYetThisPhase = false;
     emit chipsUpdated(playerIndex, player.getChips(), player.getBet());
     emit potUpdated(pot);
@@ -239,7 +253,7 @@ void Game::raise(int playerIndex, int chipAmount) {
     int totalBet = currentBet + chipAmount;
     int raiseAmount = totalBet - player.getBet();
     if (totalBet > currentBet) {
-        makeBet(playerIndex, raiseAmount);
+        makeBet(playerIndex, raiseAmount, false);
         currentBet = totalBet;
         emit currentBetUpdated(currentBet);
     }
@@ -254,7 +268,7 @@ void Game::call(int playerIndex) {
     int callAmount = currentBet - player.getBet();
 
     if (callAmount > 0) {
-        makeBet(playerIndex, callAmount);
+        makeBet(playerIndex, callAmount, true);
     }
 
     if (callAmount < 0) {
@@ -263,8 +277,14 @@ void Game::call(int playerIndex) {
 
     emit updateLastAction(playerIndex, QString("called. Total bet: %1.").arg(player.getBet()));
     numPlayersCalled++;
-    if (numPlayersCalled == players.size()) {
-        qDebug() << "All players have called back-to-back. Advancing phase...";
+    int activePlayers = 0;
+    for (int i = 0; i < players.size(); i++) {
+        if (!players[i].folded) {
+            activePlayers++;
+        }
+    }
+    if (numPlayersCalled == activePlayers) {
+        qDebug() << "All active players have called back-to-back. Advancing phase...";
         nextPhase();
     }
 }
@@ -288,8 +308,6 @@ void Game::fold(int playerIndex) {
 
     if (activePlayers == 1) {
         awardPotToPlayer(lastActivePlayer);
-        while (phase != Phase::Showdown)
-            nextPhase(); // Move to showdown
     }
     emit updateLastAction(playerIndex, QString("folded."));
 }
@@ -325,6 +343,7 @@ void Game::awardPotToPlayer(int playerIndex) {
 
     pot = 0;
     emit potUpdated(pot);
+    emit handEnded(playerIndex);
 }
 
 void Game::nextPhase() {
@@ -354,7 +373,8 @@ void Game::nextPhase() {
                 int winner = determineIndexOfWinner();
                 if (winner != -1) {
                     awardPotToPlayer(winner);
-                    emit updateLastAction(winner, QString(" was awarded the pot."));
+                    emit updateLastAction(winner, QString("was awarded the pot."));
+                    emit handEnded(winner);
                 }
             }
             break;
@@ -366,24 +386,24 @@ void Game::nextPhase() {
 }
 
 void Game::playerMakesBet(int amount) {
-    (noBetsYet()) ? makeBet(0, amount)
+    (noBetsYet()) ? makeBet(0, amount, false)
                   : raise(0, amount);
-    continueRound(0);
+    delayedContinue(0);
 }
 
 void Game::playerCalls() {
     call(0);
-    continueRound(0);
+    delayedContinue(0);
 }
 
 void Game::playerChecks() {
     check(0);
-    continueRound(0);
+    delayedContinue(0);
 }
 
 void Game::playerFolds() {
     fold(0);
-    continueRound(0);
+    delayedContinue(0);
 }
 
 void Game::onViewInitialized() {
