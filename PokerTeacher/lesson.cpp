@@ -7,6 +7,7 @@ Lesson::Lesson(QString folderPath, QObject *parent): folder(QDir(folderPath)) {
     readFolderName();
     findLessonFiles();
     pageIndex = 0;
+    //loadDecisionForPage(pageIndex);
 }
 
 Lesson::Lesson(const Lesson& other)
@@ -25,6 +26,8 @@ bool Lesson::back() {
     }
 
     pageIndex--;
+    //loadDecisionForPage(pageIndex); // Load decision for previous page (may not be necessary)
+    emit pageChanged();
     return true;
 }
 
@@ -34,7 +37,40 @@ bool Lesson::nextPage() {
     }
 
     pageIndex++;
+    //loadDecisionForPage(pageIndex); // Load decision for new page
+    emit pageChanged();
     return true;
+}
+
+QString Lesson::getDecisionPrompt() const {
+    if (currentDecision.has_value()) {
+        return currentDecision->prompt;
+    }
+    return "";
+}
+
+QStringList Lesson::getDecisionChoices() const {
+    if (currentDecision.has_value()) {
+        return currentDecision->choices;
+    }
+    return QStringList();
+}
+
+void Lesson::makeChoice(int choiceIndex) {
+    if (!currentDecision.has_value()) {
+        return;
+    }
+
+    const Decision& decision = currentDecision.value();
+
+    if (choiceIndex < 0 || choiceIndex >= decision.choices.size()) {
+        return;
+    }
+
+    bool correct = (choiceIndex == decision.correctChoice);
+    QString feedback = correct ? decision.correctFeedback : decision.incorrectFeedback;
+
+    emit choiceResult(correct, feedback);
 }
 
 optional<Lesson> Lesson::getNextLesson() {
