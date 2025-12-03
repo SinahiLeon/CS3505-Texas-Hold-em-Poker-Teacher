@@ -16,6 +16,7 @@ View::View(Game& game, QWidget *parent)
     , game(game)
 {
     ui->setupUi(this);
+    ui->continueButton->setVisible(false);
 
     connect(&game, &Game::chipsUpdated,
             this, &View::chipsUpdate);
@@ -35,8 +36,12 @@ View::View(Game& game, QWidget *parent)
             this, &View::updateLastAction);
     connect(&game, &Game::updateAvailableActions,
             this, &View::updateAvailableActions);
+    connect(&game, &Game::handEnded,
+            this, &View::handEnded);
     connect(this, &View::viewInitialized,
             &game, &Game::onViewInitialized);
+    connect(this, &View::continueToNewGame,
+            &game, &Game::startNewGame);
     connect(ui->checkButton, &QPushButton::clicked,
             this, &View::onCheckButtonClicked);
     connect(ui->betButton, &QPushButton::clicked,
@@ -47,6 +52,8 @@ View::View(Game& game, QWidget *parent)
             this, &View::onFoldButtonClicked);
     connect(ui->infoButton, &QPushButton::clicked,
             this, &View::onInfoButtonClicked);
+    connect(ui->continueButton, &QPushButton::clicked,
+            this, &View::onContinueClicked);
     connect(ui->actionLesson_1, &QAction::triggered,
             this, [this]() { this->onLessonActionClicked(1); });
     connect(ui->actionFreeplay, &QAction::triggered,
@@ -62,13 +69,24 @@ View::~View()
 
 void View::updateAvailableActions() {
     bool canCheck = game.noBetsYetThisPhase && !(game.getPhase() == Phase::Showdown);
-    ui->checkButton->setDisabled(!canCheck);
+    ui->checkButton->setEnabled(canCheck);
     bool canBet = game.players[0].canBet(game.getBetAmount()) && !(game.getPhase() == Phase::Showdown);
-    ui->betButton->setDisabled(!canBet);
+    ui->betButton->setEnabled(canBet);
+    ui->betAmount->setEnabled(canBet);
     ui->betAmount->setMaximum(game.players[0].chips);
     bool canCall = game.players[0].canBet(game.getBetAmount()) && !(game.getPhase() == Phase::Showdown);
-    ui->callButton->setDisabled(!canCall);
+    ui->callButton->setEnabled(canCall);
+    ui->foldButton->setEnabled(game.getPhase() != Phase::Showdown);
     qDebug() << "UI: Available actions: Check =" << canCheck << "Bet =" << canBet << "Call =" << canCall << "Fold = true";
+}
+
+void View::handEnded(int winner) {
+    if (winner == 0)
+        ui->continueButton->setText(QString("Pot has been awarded to you. Click here to continue."));
+    else
+        ui->continueButton->setText(QString("Pot has been awarded to Opponent %1. Click here to continue.").arg(winner));
+    ui->continueButton->setVisible(true);
+    disableActionButtons();
 }
 
 void View::chipsUpdate(int playerIndex, int chips, int bet) {
@@ -111,6 +129,23 @@ void View::onCheckButtonClicked() {
 
 void View::onFoldButtonClicked() {
     game.playerFolds();
+    disableActionButtons();
+}
+
+void View::disableActionButtons() {
+    qDebug() << "Action buttons disabled.";
+    ui->checkButton->setEnabled(false);
+    ui->betButton->setEnabled(false);
+    ui->betAmount->setEnabled(false);
+    ui->callButton->setEnabled(false);
+    ui->foldButton->setEnabled(false);
+}
+
+void View::onContinueClicked() {
+    qDebug() << "UI: Continue button clicked.";
+    ui->continueButton->setVisible(false);
+    ui->betAmount->setValue((game.getLargeBlind() < game.players[0].chips) ? game.getLargeBlind() : game.players[0].chips);
+    emit continueToNewGame();
 }
 
 void View::communityUpdate() {
@@ -220,8 +255,10 @@ void View::phaseUpdate(Phase currPhase) {
         break;
     case Phase::Showdown:
         ui->phaseLabel->setText("Current Phase: Showdown");
+        ui->foldButton->setDisabled(true);
         break;
     }
+    handsUpdate();
 }
 
 void View::updateLastAction(int playerIndex, QString action) {

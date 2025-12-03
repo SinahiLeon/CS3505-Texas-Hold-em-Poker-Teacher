@@ -74,13 +74,26 @@ void Game::continueRound(int playerIndex) {
     qDebug() << "Continuing round after player" << playerIndex;
     int player = playerIndex;
     while (true) { // Loop until it's the player's turn
+        // Check if game should end
+        int activePlayers = 0;
+        int lastPlayer = -1;
+        for (int i = 0; i < players.size(); i++) {
+            if (!players[i].folded) {
+                activePlayers++;
+                lastPlayer = i;
+            }
+        }
+        if (activePlayers <= 1) {
+            emit handEnded(lastPlayer);
+            return;
+        }
         player++;
         if (player >= players.size()) player = 0; // Loop back to user
+        if (players[player].folded) {
+            qDebug() << "Player" << player << "is folded. Skipping...";
+            continue;
+        }
         if (player != 0) {
-            if (players[player].folded) {
-                qDebug() << "Player" << player << "is folded. Skipping...";
-                continue;
-            }
             qDebug() << "Opponent" << player <<
                 "is deciding what to do... noBetsYet =" << noBetsYet() <<
                 "and currentBet =" << getBetAmount();
@@ -251,8 +264,14 @@ void Game::call(int playerIndex) {
     }
     emit updateLastAction(playerIndex, QString("called. Total bet: %1.").arg(player.currentBet));
     numPlayersCalled++;
-    if (numPlayersCalled == players.size()) {
-        qDebug() << "All players have called back-to-back. Advancing phase...";
+    int activePlayers = 0;
+    for (int i = 0; i < players.size(); i++) {
+        if (!players[i].folded) {
+            activePlayers++;
+        }
+    }
+    if (numPlayersCalled == activePlayers) {
+        qDebug() << "All active players have called back-to-back. Advancing phase...";
         nextPhase();
     }
 }
@@ -276,8 +295,6 @@ void Game::fold(int playerIndex) {
 
     if (activePlayers == 1) {
         awardPotToPlayer(lastActivePlayer);
-        while (phase != Phase::Showdown)
-            nextPhase(); // Move to showdown
     }
     emit updateLastAction(playerIndex, QString("folded."));
 }
@@ -313,6 +330,7 @@ void Game::awardPotToPlayer(int playerIndex) {
 
     pot = 0;
     emit potUpdated(pot);
+    emit handEnded(playerIndex);
 }
 
 void Game::nextPhase() {
@@ -342,7 +360,8 @@ void Game::nextPhase() {
                 int winner = determineIndexOfWinner();
                 if (winner != -1) {
                     awardPotToPlayer(winner);
-                    emit updateLastAction(winner, QString(" was awarded the pot."));
+                    emit updateLastAction(winner, QString("was awarded the pot."));
+                    emit handEnded(winner);
                 }
             }
             break;

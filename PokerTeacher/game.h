@@ -53,6 +53,7 @@ signals:    // Since a value changed, signal to update UI
     void currentBetUpdated(int newBet);
     void updateLastAction(int playerIndex, QString action);
     void updateAvailableActions();
+    void handEnded(int winner);
 
 public slots:
     void onViewInitialized();
