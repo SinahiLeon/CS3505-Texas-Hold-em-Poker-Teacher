@@ -4,13 +4,15 @@
 #include <variant>
 using std::variant;
 
+struct None {};
 struct Check {};
+struct Call {};
 struct Raise {
     int raiseAmount;
 };
-struct Call {};
 struct Fold {};
 
-using Action = variant<Check, Raise, Call, Fold>;
+// monostate is null for variants.s
+using Action = variant<None, Check, Call, Raise, Fold>;
 
 #endif // ACTION_H

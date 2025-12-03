@@ -1,7 +1,7 @@
 #include "player.h"
 #include "QRandomGenerator"
 
-Player::Player() : isHuman(false), fullHand(heldCards) {
+Player::Player() :isHuman(false), fullHand(heldCards) {
 
 }
 
@@ -16,7 +16,7 @@ Player::Player(queue<Action> decisions) : isHuman(false), fullHand(heldCards), d
 Player::Player(const Player& p)
     : isHuman(p.isHuman)
     , chips(p.chips)
-    , currentBet(p.currentBet)
+    , bet(p.bet)
     , folded(p.folded)
     , handVisible(p.handVisible)
     , heldCards(p.heldCards)
@@ -32,7 +32,7 @@ Player Player::operator=(const Player& p) {
     }
     isHuman = p.isHuman;
     chips = p.chips;
-    currentBet = p.currentBet;
+    bet = p.bet;
     folded = p.folded;
     handVisible = p.handVisible;
     heldCards = p.heldCards;
@@ -41,7 +41,10 @@ Player Player::operator=(const Player& p) {
     return *this;
 }
 
-Action Player::makeDecision() {
+Action Player::makeDecision(int currentBet, Action playerAction) {
+    if (allIn()) {
+        return None();
+    }
 
     if (isHuman) {
         //If the player is the human player, it needs to receive a signal of what button the user pressed.
@@ -49,19 +52,51 @@ Action Player::makeDecision() {
 
     }
 
-
-    if(!decisions.empty()) {
+    if (!decisions.empty()) {
         Action decidedAction = decisions.front();
         decisions.pop();
         return decidedAction;
     }
 
-    switch (int choice = QRandomGenerator::global()->bounded(0, 2)) {
-        case (0) : { return Check(); }
-        case (1) : { return Raise(10); }
+    if (currentBet > chips) {
+        switch (int choice = QRandomGenerator::global()->bounded(0, 2)) {
+            case (0) : { maintainBet(currentBet); }
+            // I don't think there should be a distinction between betting and raising in the code.
+            case (1) : { return Fold(); }
+        default : { return Fold(); }
+        }
+    }
+
+    switch (int choice = QRandomGenerator::global()->bounded(0, 3)) {
+        case (0) : { maintainBet(currentBet); }
+        // I don't think there should be a distinction between betting and raising in the code.
+        case (1) : {
+            int amount = getRaiseAmount();
+
+            if (amount > chips) {
+                maintainBet(currentBet);
+            }
+
+            bet = currentBet + amount;
+            return Raise(10);
+        }
         case (2) : { return Fold(); }
         default : { return Fold(); }
     }
 
     return Fold();
+}
+
+int Player::getRaiseAmount() {
+    // At some point there will be fancy AI logic here
+    return 10;
+}
+
+Action Player::maintainBet(int currentBet) {
+    if (currentBet == bet) {
+        return Check();
+    }
+
+    bet = currentBet;
+    return Call();
 }

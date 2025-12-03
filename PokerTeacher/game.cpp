@@ -8,6 +8,8 @@
 using std::make_shared;
 using std::random_device;
 using std::default_random_engine;
+using std::variant;
+using std::get;
 
 Game::Game(QObject *parent) : QObject(parent) {}
 
@@ -34,26 +36,28 @@ void Game::startRound() {
     emit dealerUpdate(getDealerIndex());
 
     // Force small and large blinds if they haven't been paid yet
-    int player = getDealerIndex();
-    player++;
+    int playerIndex = getDealerIndex();
+    playerIndex++;
 
     // Loop back to user
-    if (player >= players.size()) {
-        player = 0;
+    if (playerIndex >= players.size()) {
+        playerIndex = 0;
     }
 
-    makeBet(player, getSmallBlind());
+    makeBet(playerIndex, getSmallBlind());
     smallBlindPaid = true;
 
-    qDebug() << "Player" << player << "paid the small blind of" << getSmallBlind();
-    emit updateLastAction(player, QString("paid the small blind: $%1.").arg(getSmallBlind()));
-    player++;
-    makeBet(player, getLargeBlind());
+    qDebug() << "Player" << playerIndex << "paid the small blind of" << getSmallBlind();
+    emit updateLastAction(playerIndex, QString("paid the small blind: $%1.").arg(getSmallBlind()));
+    playerIndex++;
+
+    makeBet(playerIndex, getLargeBlind());
     largeBlindPaid = true;
-    qDebug() << "Player" << player << "paid the large blind of" << getLargeBlind();
-    emit updateLastAction(player, QString("paid the large blind: $%1.").arg(getLargeBlind()));
+    qDebug() << "Player" << playerIndex << "paid the large blind of" << getLargeBlind();
+    emit updateLastAction(playerIndex, QString("paid the large blind: $%1.").arg(getLargeBlind()));
+
     noBetsYetThisPhase = true;
-    continueRound(player);
+    continueRound(playerIndex);
 }
 
 void Game::newHand() {
@@ -80,67 +84,64 @@ void Game::newHand() {
 
 void Game::continueRound(int playerIndex) {
     qDebug() << "Continuing round after player" << playerIndex;
-    int player = playerIndex;
-    while (true) { // Loop until it's the player's turn
-        player++;
-        if (player >= players.size()) player = 0; // Loop back to user
-        if (player != 0) {
-            if (players[player].getFolded()) {
-                qDebug() << "Player" << player << "is folded. Skipping...";
-                continue;
-            }
-            qDebug() << "Opponent" << player <<
-                "is deciding what to do... noBetsYet =" << noBetsYet() <<
-                "and currentBet =" << getBetAmount();
-            // Bot chooses action based on its held cards:
 
-            //players[player].makeDecision();
-            /* TEMPORARY RANDOMIZER */
-            /* REPLACE QRandomGenerator WITH DECISION CODE */
-            if (noBetsYet()) {
-                if (players[player].canBet(getBetAmount())) {
-                    switch (int choice = QRandomGenerator::global()->bounded(0, 3)) {
-                        case (0) : { check(player); continue; }
-                        case (1) : { makeBet(player, getBetAmount()); continue; }
-                        case (2) : { fold(player); continue; }
-                    }
-                }
-                else { // No bets yet but player can't bet
-                    switch (int choice = QRandomGenerator::global()->bounded(0, 2)) {
-                        case (0) : { check(player); continue; }
-                        case (1) : { fold(player); continue; }
-                    }
-                }
-            }
-            else { // There has been a bet
-                if (players[player].canBet(getRaiseAmount())) { // Can raise
-                    switch (int choice = QRandomGenerator::global()->bounded(0, 3)) {
-                        case (0) : { call(player); continue; }
-                        case (1) : { raise(player, getLargeBlind()); continue; }
-                        case (2) : { fold(player); continue; }
-                    }
-                }
-                if (players[player].canBet(getBetAmount())) { // Can call
-                    switch (int choice = QRandomGenerator::global()->bounded(0, 2)) {
-                    case (0) : { call(player); continue; }
-                    case (1) : { fold(player); continue; }
-                    }
-                }
-                else { // Can't check, call, or raise
-                    fold(player);
-                    continue;
-                }
-            }
-            /* END OF TEMPORARY RANDOMIZER */
+    while (true) { // Loop until it's the player's turn
+        playerIndex++;
+
+        if (playerIndex >= players.size()) {
+            playerIndex = 0;
         }
-        else break;
+
+        if (playerIndex == 0) {
+            break;
+        }
+
+        if (players[playerIndex].getFolded()) {
+            qDebug() << "Player" << playerIndex << "is folded. Skipping...";
+            continue;
+        }
+
+        qDebug() << "Player" << playerIndex <<
+            "is deciding what to do... noBetsYet =" << noBetsYet() <<
+            "and currentBet =" << getBetAmount();
+
+        Action decision = players[playerIndex].makeDecision(currentBet);
+
+        switch (decision.index()) {
+            case (0) : {
+                break;
+            }
+
+            case (1) : {
+                check(playerIndex);
+                break;
+            }
+
+            case (2) : {
+                call(playerIndex);
+                break;
+            }
+
+            case (3): {
+                Raise raiseAction = get<Raise>(decision);
+                raise(playerIndex, raiseAction.raiseAmount);
+                break;
+            }
+
+            case (4): {
+                fold(playerIndex);
+                break;
+            }
+        }
     }
+
     qDebug() << "It's the player's turn...";
 
     // Update UI
     for (int i = 0; i < players.size(); i++) {
-        emit chipsUpdated(i, players[i].getChips(), players[i].getCurrentBet());
+        emit chipsUpdated(i, players[i].getChips(), players[i].getBet());
     }
+
     emit potUpdated(pot);
     emit currentBetUpdated(currentBet);
     emit updateAvailableActions();
@@ -178,17 +179,9 @@ void Game::dealCards(int cardAmount, vector<shared_ptr<Card>>& target) {
     for(int i = 0; i < cardAmount; i++) {
         if (!deck.empty()) {
             target.push_back(deck.top()); // This copies shared_ptr
-            qDebug() << "Dealt" << deck.top()->name << "to player" << playerIndex(target) << "with" << deck.top()->image;
             deck.pop();
         }
     }
-}
-
-int Game::playerIndex(vector<shared_ptr<Card>>& target) {
-    for (int i = 0; i < players.size(); i++)
-        if (&target == &players.at(i).heldCards)
-            return i;
-    return -1;
 }
 
 bool Game::validPlayer(int playerIndex) {
@@ -227,13 +220,13 @@ void Game::makeBet(int playerIndex, int chipAmount) {
     int actualBet = std::min(chipAmount, player.getChips());
 
     player.subtractChips(actualBet);
-    player.addToCurrentBet(actualBet);
+    player.addToBet(actualBet);
     pot += actualBet;
 
     numPlayersChecked = 0;
     numPlayersCalled = 0;
     noBetsYetThisPhase = false;
-    emit chipsUpdated(playerIndex, player.getChips(), player.getCurrentBet());
+    emit chipsUpdated(playerIndex, player.getChips(), player.getBet());
     emit potUpdated(pot);
     emit updateLastAction(playerIndex, QString("bet %1.").arg(actualBet));
 }
@@ -244,7 +237,7 @@ void Game::raise(int playerIndex, int chipAmount) {
 
     Player& player = players[playerIndex];
     int totalBet = currentBet + chipAmount;
-    int raiseAmount = totalBet - player.getCurrentBet();
+    int raiseAmount = totalBet - player.getBet();
     if (totalBet > currentBet) {
         makeBet(playerIndex, raiseAmount);
         currentBet = totalBet;
@@ -258,11 +251,17 @@ void Game::call(int playerIndex) {
     qDebug() << "Player" << playerIndex << "called at" << currentBet;
 
     Player& player = players[playerIndex];
-    int callAmount = currentBet - player.getCurrentBet();
+    int callAmount = currentBet - player.getBet();
+
     if (callAmount > 0) {
         makeBet(playerIndex, callAmount);
     }
-    emit updateLastAction(playerIndex, QString("called. Total bet: %1.").arg(player.getCurrentBet()));
+
+    if (callAmount < 0) {
+        makeBet(playerIndex, player.getChips());
+    }
+
+    emit updateLastAction(playerIndex, QString("called. Total bet: %1.").arg(player.getBet()));
     numPlayersCalled++;
     if (numPlayersCalled == players.size()) {
         qDebug() << "All players have called back-to-back. Advancing phase...";
@@ -322,7 +321,7 @@ void Game::awardPotToPlayer(int playerIndex) {
     qDebug() << "Awarding pot of" << pot << "to Player" << playerIndex;
     Player& player = players[playerIndex];
     player.addChips(pot);
-    emit chipsUpdated(playerIndex, player.getChips(), player.getCurrentBet());
+    emit chipsUpdated(playerIndex, player.getChips(), player.getBet());
 
     pot = 0;
     emit potUpdated(pot);

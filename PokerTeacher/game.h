@@ -92,8 +92,6 @@ private:
     void dealCards(int cardAmount, vector<shared_ptr<Card>>& target);
     /// @brief
     void dealHoleCards();
-    /// @brief Helper method to get player number for printing debug messages.
-    int playerIndex(vector<shared_ptr<Card>>& target);
     /// @brief Helper method to check if a player index is valid.
     bool validPlayer(int playerIndex);
     /// @brief Helper method that quickly checks if anyone has bid yet this hand.
