@@ -29,6 +29,17 @@ public:
     bool back();
     bool nextPage();
     optional<Lesson> getNextLesson();
+
+    bool hasDecision() const { return currentDecision.has_value(); }
+    QString getDecisionPrompt() const;
+    QStringList getDecisionChoices() const;
+
+    Q_INVOKABLE void makeChoice(int choiceIndex);
+
+signals:
+    void pageChanged();
+    void choiceResult(bool correct, QString feedback);
+
 private:
     const QDir folder;
     QString name;
@@ -38,6 +49,17 @@ private:
     int pageIndex;
     const QRegularExpression underscores = QRegularExpression("_");
     const QRegularExpression precedingPath = QRegularExpression("^.*[/]");
+
+    struct Decision {
+        QString prompt;
+        QStringList choices;
+        int correctChoice; // Index of correct answer
+        QString correctFeedback;
+        QString incorrectFeedback;
+    };
+
+    std::optional<Decision> currentDecision;
+    void loadDecisionForPage(int pageIndex);
 
     void readFolderName();
     void findLessonFiles();
