@@ -16,6 +16,7 @@ void Game::newGame() {
     qDebug() << "Setting up new game...";
     pot = 0;
     players.clear();
+
     for (int i = 0; i < 3; i++) {
         Player player = Player(i == 0);
         players.push_back(player);
@@ -31,12 +32,19 @@ void Game::newGame() {
 void Game::startRound() {
     qDebug() << "Starting round with player" << getDealerIndex() << "as dealer.";
     emit dealerUpdate(getDealerIndex());
+
     // Force small and large blinds if they haven't been paid yet
     int player = getDealerIndex();
     player++;
-    if (player >= players.size()) player = 0; // Loop back to user
+
+    // Loop back to user
+    if (player >= players.size()) {
+        player = 0;
+    }
+
     makeBet(player, getSmallBlind());
     smallBlindPaid = true;
+
     qDebug() << "Player" << player << "paid the small blind of" << getSmallBlind();
     emit updateLastAction(player, QString("paid the small blind: $%1.").arg(getSmallBlind()));
     player++;
@@ -77,7 +85,7 @@ void Game::continueRound(int playerIndex) {
         player++;
         if (player >= players.size()) player = 0; // Loop back to user
         if (player != 0) {
-            if (players[player].folded) {
+            if (players[player].getFolded()) {
                 qDebug() << "Player" << player << "is folded. Skipping...";
                 continue;
             }
@@ -131,7 +139,7 @@ void Game::continueRound(int playerIndex) {
 
     // Update UI
     for (int i = 0; i < players.size(); i++) {
-        emit chipsUpdated(i, players[i].chips, players[i].currentBet);
+        emit chipsUpdated(i, players[i].getChips(), players[i].getCurrentBet());
     }
     emit potUpdated(pot);
     emit currentBetUpdated(currentBet);
@@ -196,9 +204,14 @@ void Game::dealHoleCards() {
 }
 
 void Game::check(int playerIndex) {
-    if (!validPlayer(playerIndex)) return;
+    if (!validPlayer(playerIndex))  {
+        return;
+    }
+
     qDebug() << "Player" << playerIndex << "checked.";
+
     emit updateLastAction(playerIndex, QString("checked."));
+
     numPlayersChecked++;
     if (numPlayersChecked == players.size()) {
         qDebug() << "All players have checked back-to-back. Advancing phase...";
@@ -211,16 +224,16 @@ void Game::makeBet(int playerIndex, int chipAmount) {
     qDebug() << "Player" << playerIndex << "made a bet of" << chipAmount;
 
     Player& player = players[playerIndex];
-    int actualBet = std::min(chipAmount, player.chips);
+    int actualBet = std::min(chipAmount, player.getChips());
 
-    player.chips -= actualBet;
-    player.currentBet += actualBet;
+    player.subtractChips(actualBet);
+    player.addToCurrentBet(actualBet);
     pot += actualBet;
 
     numPlayersChecked = 0;
     numPlayersCalled = 0;
     noBetsYetThisPhase = false;
-    emit chipsUpdated(playerIndex, player.chips, player.currentBet);
+    emit chipsUpdated(playerIndex, player.getChips(), player.getCurrentBet());
     emit potUpdated(pot);
     emit updateLastAction(playerIndex, QString("bet %1.").arg(actualBet));
 }
@@ -231,7 +244,7 @@ void Game::raise(int playerIndex, int chipAmount) {
 
     Player& player = players[playerIndex];
     int totalBet = currentBet + chipAmount;
-    int raiseAmount = totalBet - player.currentBet;
+    int raiseAmount = totalBet - player.getCurrentBet();
     if (totalBet > currentBet) {
         makeBet(playerIndex, raiseAmount);
         currentBet = totalBet;
@@ -245,11 +258,11 @@ void Game::call(int playerIndex) {
     qDebug() << "Player" << playerIndex << "called at" << currentBet;
 
     Player& player = players[playerIndex];
-    int callAmount = currentBet - player.currentBet;
+    int callAmount = currentBet - player.getCurrentBet();
     if (callAmount > 0) {
         makeBet(playerIndex, callAmount);
     }
-    emit updateLastAction(playerIndex, QString("called. Total bet: %1.").arg(player.currentBet));
+    emit updateLastAction(playerIndex, QString("called. Total bet: %1.").arg(player.getCurrentBet()));
     numPlayersCalled++;
     if (numPlayersCalled == players.size()) {
         qDebug() << "All players have called back-to-back. Advancing phase...";
@@ -261,14 +274,14 @@ void Game::fold(int playerIndex) {
     if (!validPlayer(playerIndex)) return;
     qDebug() << "Player" << playerIndex << "folded.";
 
-    players[playerIndex].folded = true;
+    players[playerIndex].fold();
     emit playerFolded(playerIndex);
 
     // Check if game should end
     int activePlayers = 0;
     int lastActivePlayer = -1;
     for (int i = 0; i < players.size(); i++) {
-        if (!players[i].folded) {
+        if (!players[i].getFolded()) {
             activePlayers++;
             lastActivePlayer = i;
         }
@@ -285,7 +298,7 @@ void Game::fold(int playerIndex) {
 int Game::determineIndexOfWinner(){
     int indexOfWinner = -1;
     for (int i = 0; i < players.size(); i++){
-        if (!players[i].folded) {
+        if (!players[i].getFolded()) {
             CardHand currentHand(players[i].heldCards);
             currentHand.calculateBestHand(communityCards);
 
@@ -308,8 +321,8 @@ void Game::awardPotToPlayer(int playerIndex) {
     if (!validPlayer(playerIndex)) return;
     qDebug() << "Awarding pot of" << pot << "to Player" << playerIndex;
     Player& player = players[playerIndex];
-    player.chips += pot;
-    emit chipsUpdated(playerIndex, player.chips, player.currentBet);
+    player.addChips(pot);
+    emit chipsUpdated(playerIndex, player.getChips(), player.getCurrentBet());
 
     pot = 0;
     emit potUpdated(pot);
@@ -322,7 +335,7 @@ void Game::nextPhase() {
     noBetsYetThisPhase = false;
     if (phaseIndex < 4) {
         phaseIndex++;
-        phase = phaseIndices[phaseIndex];
+        phase = static_cast<Phase>(phaseIndex);
 
         // Deal community cards based on phase
         switch (phase) {

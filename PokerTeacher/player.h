@@ -16,23 +16,28 @@ public:
     Player(queue<Action> decisions);
     Player(const Player& other);
     Player operator=(const Player& other);
-    bool isHuman;
-    bool canBet(int amount) { return chips >= amount; }
+    bool canBet(int amount) { return chips >= amount; };
+    int getChips() { return chips; };
+    void addChips(int amount) { chips += amount; };
+    void subtractChips(int amount) { chips -= amount; };
+    int getCurrentBet() { return currentBet; };
+    void addToCurrentBet(int amount) { currentBet += amount; };
+    bool getFolded() { return folded; };
+    void fold() { folded = true; };
+    vector<shared_ptr<Card>> heldCards;
+    Action makeDecision();
+    void resetPlayer();
+
+private:
     int chips = 1000;
+    bool isHuman;
     int currentBet = 0;
     bool folded = false;
-    bool handVisible = false;
-    vector<shared_ptr<Card>> heldCards;
     queue<Action> decisions;
-
     // Combined community and personal hand - will reference shared_ptrs
     CardHand fullHand;
-
-    Action makeDecision();
-
-public slots:
-
-
+    // Shouldn't this be in a view class?
+    bool handVisible = false;
 };
 
 #endif // PLAYER_H

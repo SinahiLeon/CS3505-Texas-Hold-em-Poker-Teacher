@@ -76,13 +76,6 @@ private:
     int numPlayersChecked = 0;
     int numPlayersCalled = 0;
 
-    QMap<int, Phase> phaseIndices{
-        {0, Phase::Preflop},
-        {1, Phase::Flop},
-        {2, Phase::Turn},
-        {3, Phase::River},
-        {4, Phase::Showdown}};
-
     void newGame();
     void newHand();
     void startRound();

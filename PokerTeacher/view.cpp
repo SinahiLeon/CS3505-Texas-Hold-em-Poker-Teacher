@@ -65,7 +65,7 @@ void View::updateAvailableActions() {
     ui->checkButton->setDisabled(!canCheck);
     bool canBet = game.players[0].canBet(game.getBetAmount()) && !(game.getPhase() == Phase::Showdown);
     ui->betButton->setDisabled(!canBet);
-    ui->betAmount->setMaximum(game.players[0].chips);
+    ui->betAmount->setMaximum(game.players[0].getChips());
     bool canCall = game.players[0].canBet(game.getBetAmount()) && !(game.getPhase() == Phase::Showdown);
     ui->callButton->setDisabled(!canCall);
     qDebug() << "UI: Available actions: Check =" << canCheck << "Bet =" << canBet << "Call =" << canCall << "Fold = true";
