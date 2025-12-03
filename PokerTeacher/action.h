@@ -2,6 +2,7 @@
 #define ACTION_H
 
 #include <variant>
+using std::variant;
 
 struct Check {};
 struct Raise {
@@ -10,6 +11,6 @@ struct Raise {
 struct Call {};
 struct Fold {};
 
-using Action = std::variant<Check, Raise, Call, Fold>;
+using Action = variant<Check, Raise, Call, Fold>;
 
 #endif // ACTION_H
