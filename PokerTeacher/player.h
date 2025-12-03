@@ -3,17 +3,20 @@
 
 #include "cardhand.h"
 #include "action.h"
+#include <qobject.h>
 #include <queue>
 
 using std::queue;
 
 /// @brief A player that containts their information on chips, currentBet, folded, and hand data.
-class Player {
+class Player : public QObject {
 public:
     Player();
     Player(bool isHuman);
     Player(queue<Action> decisions);
-    bool const isHuman;
+    Player(Player& p);
+    Player operator=(Player& p);
+    bool isHuman;
     bool canBet(int amount) { return chips >= amount; }
     int chips = 1000;
     int currentBet = 0;
@@ -26,6 +29,9 @@ public:
     CardHand fullhand;
 
     Action makeDecision();
+
+public slots:
+
 
 };
 

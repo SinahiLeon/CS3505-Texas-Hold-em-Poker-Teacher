@@ -17,7 +17,7 @@ void Game::newGame() {
     pot = 0;
     players.clear();
     for (int i = 0; i < 3; i++) {
-        Player player;
+        Player player(i == 0);
         players.push_back(player);
     }
 

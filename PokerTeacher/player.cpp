@@ -13,10 +13,26 @@ Player::Player(queue<Action> decisions) : isHuman(false), fullhand(heldCards), d
 
 }
 
+Player::Player(Player& p) : isHuman(p.isHuman), fullhand(p.fullhand), decisions(p.decisions) {
+
+}
+
+Player Player::operator=(Player& p) {
+    if (this == &p){
+        return *this;
+    }
+    isHuman = p.isHuman;
+    fullhand = p.fullhand;
+    decisions = p.decisions;
+    return *this;
+}
+
 Action Player::makeDecision() {
 
     if (isHuman) {
-        //If the player is the human player, it needs to receive a signal of what button the user pressed
+        //If the player is the human player, it needs to receive a signal of what button the user pressed.
+        //it will be assumed that the player's buttons are already disabled so the user can't make any illegal moves.
+
     }
 
 
