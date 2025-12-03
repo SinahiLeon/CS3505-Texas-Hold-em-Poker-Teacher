@@ -89,6 +89,7 @@ private:
     void startRound();
     void continueRound(int playerIndex);
     void nextPhase();
+    void delayedContinue(int nextPlayer);
 
     /// @brief Resets and shuffles the deck with all cards
     void shuffleDeck();

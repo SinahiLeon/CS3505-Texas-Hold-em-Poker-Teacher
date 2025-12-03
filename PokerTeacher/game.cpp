@@ -5,6 +5,7 @@
 #include <random>
 #include <algorithm>
 #include <QRandomGenerator>
+#include <QTimer>
 using std::make_shared;
 using std::random_device;
 using std::default_random_engine;
@@ -105,35 +106,66 @@ void Game::continueRound(int playerIndex) {
             if (noBetsYet()) {
                 if (players[player].canBet(getBetAmount())) {
                     switch (int choice = QRandomGenerator::global()->bounded(3)) {
-                        case (0) : { check(player); continue; }
-                        case (1) : { makeBet(player, getBetAmount(), false); continue; }
-                        case (2) : { fold(player); continue; }
+                        case (0) : { check(player);
+                            delayedContinue(player);
+                            return;
+                        }
+                        case (1) : { makeBet(player, getBetAmount(), false);
+                            delayedContinue(player);
+                            return;
+                        }
+                        case (2) : { fold(player);
+                            delayedContinue(player);
+                            return;
+                        }
                     }
                 }
                 else { // No bets yet but player can't bet
                     switch (int choice = QRandomGenerator::global()->bounded(2)) {
-                        case (0) : { check(player); continue; }
-                        case (1) : { fold(player); continue; }
+                        case (0) : { check(player);
+                            delayedContinue(player);
+                            return;
+                        }
+                        case (1) : { fold(player);
+                            delayedContinue(player);
+                            return;
+                        }
                     }
                 }
             }
             else { // There has been a bet
                 if (players[player].canBet(getRaiseAmount())) { // Can raise
                     switch (int choice = QRandomGenerator::global()->bounded(3)) {
-                        case (0) : { call(player); continue; }
-                        case (1) : { raise(player, getLargeBlind()); continue; }
-                        case (2) : { fold(player); continue; }
+                        case (0) : { call(player);
+                            delayedContinue(player);
+                            return;
+                        }
+                        case (1) : { raise(player, getLargeBlind());
+                            delayedContinue(player);
+                            return;
+                        }
+                        case (2) : { fold(player);
+                            delayedContinue(player);
+                            return;
+                        }
                     }
                 }
                 if (players[player].canBet(getBetAmount())) { // Can call
                     switch (int choice = QRandomGenerator::global()->bounded(2)) {
-                    case (0) : { call(player); continue; }
-                    case (1) : { fold(player); continue; }
+                    case (0) : { call(player);
+                        delayedContinue(player);
+                        return;
+                    }
+                    case (1) : { fold(player);
+                        delayedContinue(player);
+                        return;
+                    }
                     }
                 }
                 else { // Can't check, call, or raise
                     fold(player);
-                    continue;
+                    delayedContinue(player);
+                    return;
                 }
             }
             /* END OF TEMPORARY RANDOMIZER */
@@ -149,6 +181,14 @@ void Game::continueRound(int playerIndex) {
     emit potUpdated(pot);
     emit currentBetUpdated(currentBet);
     emit updateAvailableActions();
+}
+
+void Game::delayedContinue(int nextPlayer) {
+    QTimer::singleShot(1000,     // delaying next opponents turn
+                       this,
+                       [this, nextPlayer]() {   // captures outside variables to use in lambda expression
+                           continueRound(nextPlayer);
+                       } );
 }
 
 void Game::shuffleDeck() {
@@ -375,22 +415,22 @@ void Game::nextPhase() {
 void Game::playerMakesBet(int amount) {
     (noBetsYet()) ? makeBet(0, amount, false)
                   : raise(0, amount);
-    continueRound(0);
+    delayedContinue(0);
 }
 
 void Game::playerCalls() {
     call(0);
-    continueRound(0);
+    delayedContinue(0);
 }
 
 void Game::playerChecks() {
     check(0);
-    continueRound(0);
+    delayedContinue(0);
 }
 
 void Game::playerFolds() {
     fold(0);
-    continueRound(0);
+    delayedContinue(0);
 }
 
 void Game::onViewInitialized() {
