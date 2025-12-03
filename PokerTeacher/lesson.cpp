@@ -74,8 +74,7 @@ void Lesson::readFolderName() {
 }
 
 void Lesson::findLessonFiles() {
-    // Gets files and sorts them by name.
-    QStringList allFiles = folder.entryList(QDir::Files, QDir::Name);
+    QStringList allFiles = folder.entryList(QDir::Files);
 
     // Using const here detaches allFiles.
     for (auto& file : allFiles) {
@@ -83,6 +82,9 @@ void Lesson::findLessonFiles() {
             lessonPages.push_back(folder.absoluteFilePath(file));
         }
     }
+
+    // Sorts retrieved files numerically.
+    pigeonHoleSort();
 }
 
 bool Lesson::isHtmlFile(QString filename) {
@@ -112,4 +114,24 @@ optional<QString> Lesson::findNextLesson(QDir parentDir, int index) {
     }
 
     return nullopt;
+}
+
+void Lesson::pigeonHoleSort() {
+    vector<QString> pigeonHole(lessonPages.size(), "");
+
+    for (auto& page : lessonPages) {
+        // page.replace() works in place.
+        QString filename = page;
+        filename.replace(precedingPath, "");
+        QString indexStr = filename.split(".")[0];
+
+        bool isNum;
+        int index = indexStr.toInt(&isNum);
+
+        if (isNum) {
+            pigeonHole[index] = page;
+        }
+    }
+
+    lessonPages = std::move(pigeonHole);
 }

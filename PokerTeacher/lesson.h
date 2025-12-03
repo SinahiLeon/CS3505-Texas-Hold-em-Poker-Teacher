@@ -37,11 +37,12 @@ private:
     int lessonNum;
     int pageIndex;
     const QRegularExpression underscores = QRegularExpression("_");
-    const QRegularExpression pathStart = QRegularExpression(":/");
+    const QRegularExpression precedingPath = QRegularExpression("^.*[/]");
 
     void readFolderName();
     void findLessonFiles();
     static bool isHtmlFile(QString filename);
     static optional<QString> findNextLesson(QDir parentDir, int index);
+    void pigeonHoleSort();
 };
 #endif // LESSON_H
