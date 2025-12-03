@@ -1,28 +1,42 @@
 #include "player.h"
 #include "QRandomGenerator"
 
-Player::Player() : isHuman(false), fullhand(heldCards) {
+Player::Player() : isHuman(false), fullHand(heldCards) {
 
 }
 
-Player::Player(bool isHuman) : isHuman(isHuman), fullhand(heldCards) {
+Player::Player(bool isHuman) : isHuman(isHuman), fullHand(heldCards) {
 
 }
 
-Player::Player(queue<Action> decisions) : isHuman(false), fullhand(heldCards), decisions(decisions) {
+Player::Player(queue<Action> decisions) : isHuman(false), fullHand(heldCards), decisions(decisions) {
 
 }
 
-Player::Player(Player& p) : isHuman(p.isHuman), fullhand(p.fullhand), decisions(p.decisions) {
+Player::Player(const Player& p)
+    : isHuman(p.isHuman)
+    , chips(p.chips)
+    , currentBet(p.currentBet)
+    , folded(p.folded)
+    , handVisible(p.handVisible)
+    , heldCards(p.heldCards)
+    , fullHand(p.fullHand)
+    , decisions(p.decisions)
+{
 
 }
 
-Player Player::operator=(Player& p) {
+Player Player::operator=(const Player& p) {
     if (this == &p){
         return *this;
     }
     isHuman = p.isHuman;
-    fullhand = p.fullhand;
+    chips = p.chips;
+    currentBet = p.currentBet;
+    folded = p.folded;
+    handVisible = p.handVisible;
+    heldCards = p.heldCards;
+    fullHand = p.fullHand;
     decisions = p.decisions;
     return *this;
 }

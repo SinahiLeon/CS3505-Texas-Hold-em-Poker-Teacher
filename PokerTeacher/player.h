@@ -14,8 +14,8 @@ public:
     Player();
     Player(bool isHuman);
     Player(queue<Action> decisions);
-    Player(Player& p);
-    Player operator=(Player& p);
+    Player(const Player& other);
+    Player operator=(const Player& other);
     bool isHuman;
     bool canBet(int amount) { return chips >= amount; }
     int chips = 1000;
@@ -26,7 +26,7 @@ public:
     queue<Action> decisions;
 
     // Combined community and personal hand - will reference shared_ptrs
-    CardHand fullhand;
+    CardHand fullHand;
 
     Action makeDecision();
 
