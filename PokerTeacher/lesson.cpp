@@ -15,9 +15,6 @@ using std::bad_cast;
 using std::out_of_range;
 using std::nullopt;
 
-const QString Lesson::precedingPath = "";
-const QChar Lesson::underscores = '_';
-
 Lesson::Lesson(QString folderPath, QObject *parent): QObject(parent), folder(QDir(folderPath)) {
     readFolderName();
     findLessonFiles();
@@ -101,6 +98,7 @@ void Lesson::loadDecisionForPage(int pageIndex) {
     decision.incorrectFeedback = obj["incorrectFeedback"].toString();
 
     QJsonArray choicesArray = obj["choices"].toArray();
+
     for (const QJsonValue& choice : choicesArray) {
         decision.choices.append(choice.toString());
     }
@@ -199,7 +197,7 @@ void Lesson::applyBotActionsToGame(Game* game) {
                   return a.player < b.player;
               });
 
-    for (const BotAction& action : currentBotActions) {
+    for (BotAction& action : currentBotActions) {
         if (action.player == 0) {
             qDebug() << "Human action scheduled:" << action.action << "amount:" << action.amount;
             continue;
@@ -261,6 +259,7 @@ QString Lesson::getCurrentPage() const {
     if (pageIndex >= 0 && pageIndex < lessonPages.size()) {
         return lessonPages[pageIndex];
     }
+
     return "";
 }
 
@@ -350,7 +349,7 @@ void Lesson::pigeonHoleSort() {
         int index = indexStr.toInt(&isNum);
 
         if (isNum) {
-            if (index >= 0 && index < static_cast<int>(pigeonHole.size())) {
+            if (index >= 0 && index < pigeonHole.size()) {
                 pigeonHole[index] = page;
             }
         }

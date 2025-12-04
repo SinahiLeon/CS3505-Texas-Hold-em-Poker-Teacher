@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QDir>
 #include <QString>
+#include <qregularexpression.h>
 #include <vector>
 #include <optional>
 #include <QMap>
@@ -59,7 +60,6 @@ public:
     QUrl getCurrentUrl() const {
         qDebug() << QUrl("qrc" + lessonPages[pageIndex]);
         return QUrl("qrc" + lessonPages[pageIndex]);
-
     };
 
 
@@ -86,8 +86,8 @@ private:
     int pageIndex;
 
     // Constants
-    static const QString precedingPath;
-    static const QChar underscores;
+    const QRegularExpression precedingPath = QRegularExpression("^.*[/]");
+    const QChar underscores = '_';
 
     void readFolderName();
     void findLessonFiles();
