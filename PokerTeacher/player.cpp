@@ -1,6 +1,8 @@
 #include "player.h"
 #include "QRandomGenerator"
 
+using std::min;
+
 Player::Player() :isHuman(false), fullHand(heldCards) {
 
 }
@@ -44,6 +46,13 @@ void Player::resetPlayer() {
     folded = false;
 }
 
+int Player::makeBet(int amount) {
+    int possibleBet = min(amount, chips);
+    bet += possibleBet;
+    chips -= possibleBet;
+    return possibleBet;
+}
+
 Action Player::makeDecision(int currentBet, Action playerAction) {
     if (allIn() || folded) {
         return Action::None;
@@ -52,7 +61,6 @@ Action Player::makeDecision(int currentBet, Action playerAction) {
     if (isHuman) {
         //If the player is the human player, it needs to receive a signal of what button the user pressed.
         //it will be assumed that the player's buttons are already disabled so the user can't make any illegal moves.
-
     }
 
     if (!decisions.empty()) {
@@ -64,9 +72,14 @@ Action Player::makeDecision(int currentBet, Action playerAction) {
     if (currentBet > chips) {
         switch (int choice = QRandomGenerator::global()->bounded(2)) {
             case (0) : { maintainBet(currentBet); }
-            // I don't think there should be a distinction between betting and raising in the code.
-            case (1) : { return Action::Fold; }
-        default : { return Action::Fold; }
+            case (1) : {
+                folded = true;
+                return Action::Fold;
+            }
+            default : {
+                folded = true;
+                return Action::Fold;
+            }
         }
     }
 

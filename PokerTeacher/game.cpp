@@ -254,20 +254,23 @@ void Game::makeBet(int playerIndex, int chipAmount, bool isCall) {
         return;
     }
 
+    if (players[playerIndex].getFolded()) {
+        return;
+    }
+
     qDebug() << "Player" << playerIndex << "made a bet of" << chipAmount;
 
     Player& player = players[playerIndex];
-    int actualBet = std::min(chipAmount, player.getChips());
 
-    player.subtractChips(actualBet);
-    player.addToBet(actualBet);
-    pot += actualBet;
+    int playerBet = player.makeBet(chipAmount);
+    pot += playerBet;
 
     numPlayersChecked = 0;
     if (!isCall) numPlayersCalled = 0;
     noBetsYetThisPhase = false;
     emit chipsUpdated(playerIndex, player.getChips(), player.getBet());
     emit potUpdated(pot);
+    emit updateLastAction(playerIndex, QString("bet %1.").arg(playerBet));
 }
 
 void Game::raise(int playerIndex, int chipAmount) {
@@ -277,11 +280,10 @@ void Game::raise(int playerIndex, int chipAmount) {
     Player& player = players[playerIndex];
     int totalBet = currentBet + chipAmount;
     int raiseAmount = totalBet - player.getBet();
-    if (totalBet > currentBet) {
-        makeBet(playerIndex, raiseAmount, false);
-        currentBet = totalBet;
-        emit currentBetUpdated(currentBet);
-    }
+    makeBet(playerIndex, raiseAmount, false);
+
+    currentBet = totalBet;
+    emit currentBetUpdated(currentBet);
     emit updateLastAction(playerIndex, QString("raised %1. Total bet: %2").arg(chipAmount).arg(totalBet));
 }
 

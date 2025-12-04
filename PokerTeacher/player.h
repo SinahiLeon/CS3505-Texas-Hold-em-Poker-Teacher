@@ -20,7 +20,10 @@ public:
     bool canBet(int amount) { return chips >= amount; };
     int getChips() { return chips; };
     void addChips(int amount) { chips += amount; };
-    void subtractChips(int amount) { chips -= amount; };
+    /// @brief subracts the chips from player, and adds them to their bet, the bet amount is then return.
+    /// If the bet is too large, it returns the largest amount the player could be without going into the negative.
+    /// @param amount the amount the player would bet.
+    int makeBet(int amount);
     int getBet() { return bet; };
     void addToBet(int amount) { bet += amount; };
     bool getFolded() { return folded; };
