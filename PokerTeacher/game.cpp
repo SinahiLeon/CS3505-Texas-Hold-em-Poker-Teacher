@@ -115,7 +115,7 @@ void Game::continueRound(int playerIndex) {
             playerIndex = 0;
         }
 
-        if (playerIndex == 0) {
+        if (playerIndex == 0 && !players[playerIndex].getFolded()) {
             break;
         }
 
