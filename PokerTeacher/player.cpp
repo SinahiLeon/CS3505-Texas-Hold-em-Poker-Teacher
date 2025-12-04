@@ -74,7 +74,7 @@ Action Player::makeDecision(int currentBet, Action playerAction) {
         case (0) : { return maintainBet(currentBet); }
         // I don't think there should be a distinction between betting and raising in the code.
         case (1) : {
-            int amount = getRaiseAmount();
+            int amount = 10;
 
             if (amount > chips) {
                 maintainBet(currentBet);
