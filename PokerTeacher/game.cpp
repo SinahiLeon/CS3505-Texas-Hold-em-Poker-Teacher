@@ -439,6 +439,10 @@ void Game::onViewInitialized() {
     newGame();
 }
 
+void Game::startFreeplay() {
+    newGame();
+}
+
 void Game::startNextHand() {
     // Set up start of next hand
     newHand();

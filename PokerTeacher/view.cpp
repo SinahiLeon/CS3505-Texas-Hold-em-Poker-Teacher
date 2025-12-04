@@ -61,7 +61,7 @@ View::View(Game& game, QWidget *parent)
     connect(ui->actionFreeplay, &QAction::triggered,
             this, &View::freeplayClicked);
     connect(ui->actionFreeplay, &QAction::triggered,
-            &game, &Game::startNextHand);
+            &game, &Game::startFreeplay);
 }
 
 View::~View()

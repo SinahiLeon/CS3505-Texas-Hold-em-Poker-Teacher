@@ -63,6 +63,7 @@ public slots:
     void playerChecks();
     void playerFolds();
     void startNextHand();
+    void startFreeplay();
 
 private:
     stack<shared_ptr<Card>> deck;
