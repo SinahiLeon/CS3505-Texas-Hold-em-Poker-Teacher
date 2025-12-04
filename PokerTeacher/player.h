@@ -38,8 +38,6 @@ private:
     queue<Action> decisions;
     // Combined community and personal hand - will reference shared_ptrs
     CardHand fullHand;
-    // Shouldn't this be in a view class?
-    bool handVisible = false;
 
     Action maintainBet(int currentBet);
     bool allIn() { return chips == 0 && bet > 0; };

@@ -38,10 +38,12 @@ View::View(Game& game, QWidget *parent)
             this, &View::updateAvailableActions);
     connect(&game, &Game::handEnded,
             this, &View::handEnded);
+    connect(&game, &Game::playersTurnEnded,
+            this, &View::playersTurnEnded);
     connect(this, &View::viewInitialized,
             &game, &Game::onViewInitialized);
-    connect(this, &View::continueToNewGame,
-            &game, &Game::startNewGame);
+    connect(this, &View::continueToNextHand,
+            &game, &Game::startNextHand);
     connect(ui->checkButton, &QPushButton::clicked,
             this, &View::onCheckButtonClicked);
     connect(ui->betButton, &QPushButton::clicked,
@@ -59,7 +61,7 @@ View::View(Game& game, QWidget *parent)
     connect(ui->actionFreeplay, &QAction::triggered,
             this, &View::freeplayClicked);
     connect(ui->actionFreeplay, &QAction::triggered,
-            &game, &Game::startNewGame);
+            &game, &Game::startNextHand);
 }
 
 View::~View()
@@ -86,6 +88,10 @@ void View::handEnded(int winner) {
     else
         ui->continueButton->setText(QString("Pot has been awarded to Opponent %1. Click here to continue.").arg(winner));
     ui->continueButton->setVisible(true);
+    disableActionButtons();
+}
+
+void View::playersTurnEnded() {
     disableActionButtons();
 }
 
@@ -145,7 +151,7 @@ void View::onContinueClicked() {
     qDebug() << "UI: Continue button clicked.";
     ui->continueButton->setVisible(false);
     ui->betAmount->setValue((game.getLargeBlind() < game.players[0].getChips()) ? game.getLargeBlind() : game.players[0].getChips());
-    emit continueToNewGame();
+    emit continueToNextHand();
 }
 
 void View::communityUpdate() {
@@ -262,6 +268,7 @@ void View::phaseUpdate(Phase currPhase) {
 }
 
 void View::updateLastAction(int playerIndex, QString action) {
+    qDebug() << "UI: Updating last action label of player" << playerIndex << "|" << action;
     if (playerIndex == 0) {
         ui->playerLastAction->setText(QString("You ").append(action));
     }

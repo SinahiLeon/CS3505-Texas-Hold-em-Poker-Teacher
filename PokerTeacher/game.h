@@ -54,6 +54,7 @@ signals:    // Since a value changed, signal to update UI
     void updateLastAction(int playerIndex, QString action);
     void updateAvailableActions();
     void handEnded(int winner);
+    void playersTurnEnded();
 
 public slots:
     void onViewInitialized();
@@ -61,7 +62,7 @@ public slots:
     void playerCalls();
     void playerChecks();
     void playerFolds();
-    void startNewGame();
+    void startNextHand();
 
 private:
     stack<shared_ptr<Card>> deck;
@@ -82,7 +83,7 @@ private:
     void startRound();
     void continueRound(int playerIndex);
     void nextPhase();
-    void delayedContinue(int nextPlayer);
+    void thinkingDelay(int playerIndex);
 
     /// @brief Resets and shuffles the deck with all cards
     void shuffleDeck();

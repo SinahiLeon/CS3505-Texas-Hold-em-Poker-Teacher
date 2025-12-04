@@ -18,7 +18,6 @@ Player::Player(const Player& p)
     , chips(p.chips)
     , bet(p.bet)
     , folded(p.folded)
-    , handVisible(p.handVisible)
     , heldCards(p.heldCards)
     , fullHand(p.fullHand)
     , decisions(p.decisions)
@@ -34,11 +33,15 @@ Player Player::operator=(const Player& p) {
     chips = p.chips;
     bet = p.bet;
     folded = p.folded;
-    handVisible = p.handVisible;
     heldCards = p.heldCards;
     fullHand = p.fullHand;
     decisions = p.decisions;
     return *this;
+}
+
+void Player::resetPlayer() {
+    bet = 0;
+    folded = false;
 }
 
 Action Player::makeDecision(int currentBet, Action playerAction) {

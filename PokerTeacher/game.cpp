@@ -1,7 +1,9 @@
 #include "game.h"
 #include "cardlibrary.h"
+#include <qdatetime.h>
 #include <qdebug.h>
 #include <QString>
+#include <qthread.h>
 #include <random>
 #include <algorithm>
 #include <QRandomGenerator>
@@ -48,6 +50,9 @@ void Game::startRound() {
     smallBlindPaid = true;
     emit updateLastAction(playerIndex, QString("paid the small blind of $%1.").arg(getSmallBlind()));
     playerIndex++;
+    if (playerIndex >= players.size()) {
+        playerIndex = 0;
+    }
 
     makeBet(playerIndex, getLargeBlind(), false);
     largeBlindPaid = true;
@@ -62,6 +67,10 @@ void Game::newHand() {
     qDebug() << "Setting up new hand...";
     currentBet = 0;
     phaseIndex = 0;
+
+    for (int i = 0; i < players.size(); i++) {
+        players[i].resetPlayer();
+    }
 
     currentBet = bigBlind;
     emit currentBetUpdated(currentBet);
@@ -123,27 +132,27 @@ void Game::continueRound(int playerIndex) {
             }
 
             case (1) : { // Check
+                thinkingDelay(playerIndex);
                 check(playerIndex);
-                delayedContinue(playerIndex);
                 break;
             }
 
             case (2) : { // Call
+                thinkingDelay(playerIndex);
                 call(playerIndex);
-                delayedContinue(playerIndex);
                 break;
             }
 
             case (3): { // Raise
+                thinkingDelay(playerIndex);
                 Raise raiseAction = get<Raise>(decision);
                 raise(playerIndex, raiseAction.raiseAmount);
-                delayedContinue(playerIndex);
                 break;
             }
 
             case (4): { // Fold
+                thinkingDelay(playerIndex);
                 fold(playerIndex);
-                delayedContinue(playerIndex);
                 break;
             }
         }
@@ -155,18 +164,9 @@ void Game::continueRound(int playerIndex) {
     for (int i = 0; i < players.size(); i++) {
         emit chipsUpdated(i, players[i].getChips(), players[i].getBet());
     }
-
     emit potUpdated(pot);
     emit currentBetUpdated(currentBet);
     emit updateAvailableActions();
-}
-
-void Game::delayedContinue(int nextPlayer) {
-    QTimer::singleShot(1000,     // delaying next opponents turn
-                       this,
-                       [this, nextPlayer]() {   // captures outside variables to use in lambda expression
-                           continueRound(nextPlayer);
-                       } );
 }
 
 void Game::shuffleDeck() {
@@ -188,6 +188,15 @@ void Game::shuffleDeck() {
     clearDeck();
     for (auto& card : shufflingCards) {
         deck.push(std::move(card));
+    }
+}
+
+void Game::thinkingDelay(int playerIndex) {
+    emit updateLastAction(playerIndex, QString("is thinking..."));
+    qDebug() << "Starting sleep delay for player" << playerIndex << "thinking...";
+    QTime delayTime = QTime::currentTime().addMSecs(1000);
+    while (QTime::currentTime() < delayTime) {
+        QThread::msleep(50);
     }
 }
 
@@ -260,7 +269,6 @@ void Game::makeBet(int playerIndex, int chipAmount, bool isCall) {
     noBetsYetThisPhase = false;
     emit chipsUpdated(playerIndex, player.getChips(), player.getBet());
     emit potUpdated(pot);
-    emit updateLastAction(playerIndex, QString("bet %1.").arg(actualBet));
 }
 
 void Game::raise(int playerIndex, int chipAmount) {
@@ -406,28 +414,39 @@ void Game::nextPhase() {
 void Game::playerMakesBet(int amount) {
     (noBetsYet()) ? makeBet(0, amount, false)
                   : raise(0, amount);
-    delayedContinue(0);
+    emit playersTurnEnded();
+    continueRound(0);
 }
 
 void Game::playerCalls() {
     call(0);
-    delayedContinue(0);
+    emit playersTurnEnded();
+    continueRound(0);
 }
 
 void Game::playerChecks() {
     check(0);
-    delayedContinue(0);
+    emit playersTurnEnded();
+    continueRound(0);
 }
 
 void Game::playerFolds() {
     fold(0);
-    delayedContinue(0);
+    emit playersTurnEnded();
+    continueRound(0);
 }
 
 void Game::onViewInitialized() {
     newGame();
 }
 
-void Game::startNewGame() {
-    newGame();
+void Game::startNextHand() {
+    // Set up start of next hand
+    newHand();
+    // Start the game loop with next dealer
+    dealerIndex++;
+    if (dealerIndex >= players.size()) {
+        dealerIndex = 0;
+    }
+    startRound();
 }

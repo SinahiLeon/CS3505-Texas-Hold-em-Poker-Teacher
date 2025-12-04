@@ -21,7 +21,7 @@ public:
 signals:
     void viewInitialized();
     void closeInfobox();
-    void continueToNewGame();
+    void continueToNextHand();
 
 public slots:
     void chipsUpdate(int playerIndex, int chips, int bet);
@@ -34,6 +34,7 @@ public slots:
     void updateLastAction(int playerIndex, QString action);
     void updateAvailableActions();
     void handEnded(int winner);
+    void playersTurnEnded();
     void onBetButtonClicked();
     void onCallButtonClicked();
     void onCheckButtonClicked();
