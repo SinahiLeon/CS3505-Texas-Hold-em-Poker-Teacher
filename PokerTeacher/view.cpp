@@ -271,11 +271,20 @@ void View::updateLastAction(int playerIndex, QString action) {
     qDebug() << "UI: Updating last action label of player" << playerIndex << "|" << action;
     if (playerIndex == 0) {
         ui->playerLastAction->setText(QString("You ").append(action));
+        ui->playerLastAction->repaint();
     }
     else {
         switch (playerIndex) {
-            case (1) : { ui->opp1LastAction->setText(QString("Opponent 1 ").append(action)); break; }
-            case (2) : { ui->opp2LastAction->setText(QString("Opponent 2 ").append(action)); break; }
+            case (1) : {
+                ui->opp1LastAction->setText(QString("Opponent 1 ").append(action));
+                ui->opp1LastAction->repaint();
+                break;
+            }
+            case (2) : {
+                ui->opp2LastAction->setText(QString("Opponent 2 ").append(action));
+                ui->opp2LastAction->repaint();
+                break;
+            }
         }
     }
 }
