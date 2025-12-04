@@ -46,7 +46,7 @@ void Player::resetPlayer() {
 
 Action Player::makeDecision(int currentBet, Action playerAction) {
     if (allIn() || folded) {
-        return None();
+        return Action::None;
     }
 
     if (isHuman) {
@@ -65,13 +65,13 @@ Action Player::makeDecision(int currentBet, Action playerAction) {
         switch (int choice = QRandomGenerator::global()->bounded(2)) {
             case (0) : { maintainBet(currentBet); }
             // I don't think there should be a distinction between betting and raising in the code.
-            case (1) : { return Fold(); }
-        default : { return Fold(); }
+            case (1) : { return Action::Fold; }
+        default : { return Action::Fold; }
         }
     }
 
     switch (int choice = QRandomGenerator::global()->bounded(3)) {
-        case (0) : { maintainBet(currentBet); }
+        case (0) : { return maintainBet(currentBet); }
         // I don't think there should be a distinction between betting and raising in the code.
         case (1) : {
             int amount = getRaiseAmount();
@@ -80,15 +80,15 @@ Action Player::makeDecision(int currentBet, Action playerAction) {
                 maintainBet(currentBet);
             }
 
-            return Raise(10);
+            return Action::Raise;
         }
         case (2) : {
             folded = true;
-            return Fold();
+            return Action::Fold;
         }
         default : {
             folded = true;
-            return Fold();
+            return Action::Fold;
         }
     }
 }
@@ -100,9 +100,9 @@ int Player::getRaiseAmount() {
 
 Action Player::maintainBet(int currentBet) {
     if (currentBet == bet) {
-        return Check();
+        return Action::Check;
     }
 
     bet = currentBet;
-    return Call();
+    return Action::Call;
 }

@@ -26,7 +26,7 @@ public:
     bool getFolded() { return folded; };
     void fold() { folded = true; };
     vector<shared_ptr<Card>> heldCards;
-    Action makeDecision(int currentBet, Action playerAction = None());
+    Action makeDecision(int currentBet, Action playerAction = Action::None);
     void resetPlayer();
     int getRaiseAmount();
 
