@@ -8,6 +8,7 @@ InfoBox::InfoBox(Lesson* lesson, QWidget* parent)
 {
     ui->setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
+    qDebug() << "ui setup";
 
     connect(this, &QDialog::finished,
             this, &QObject::deleteLater);
@@ -15,8 +16,9 @@ InfoBox::InfoBox(Lesson* lesson, QWidget* parent)
             this, &InfoBox::back);
     connect(ui->nextButton, &QPushButton::clicked,
             this, &InfoBox::next);
-
+    qDebug() << "All connects";
     ui->lessonBrowser->setSource(lesson->getCurrentUrl());
+    qDebug() << "Lesson src found";
 }
 
 InfoBox::~InfoBox()

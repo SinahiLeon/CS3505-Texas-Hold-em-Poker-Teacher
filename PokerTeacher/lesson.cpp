@@ -31,7 +31,7 @@ Lesson::Lesson(QString folderPath, QObject *parent): QObject(parent), folder(QDi
 Lesson::Lesson(const Lesson& other)
     : folder(other.folder)
     , name(other.name)
-    , getLessonPages(other.getLessonPages)
+    , lessonPages(other.lessonPages)
     , allBotActions(other.allBotActions)
     , currentBotActions(other.currentBotActions)
     , lessonNum(other.lessonNum)
@@ -54,7 +54,7 @@ bool Lesson::back() {
 }
 
 bool Lesson::nextPage() {
-    if (pageIndex >= getLessonPages.size() - 1) {
+    if (pageIndex >= lessonPages.size() - 1) {
         return false;
     }
 
@@ -69,7 +69,7 @@ void Lesson::loadDecisionForPage(int pageIndex) {
     currentDecision = std::nullopt;
 
     // Look for a JSON decision file matching the HTML file
-    QString htmlPath = getLessonPages[pageIndex];
+    QString htmlPath = lessonPages[pageIndex];
     QString baseName = QFileInfo(htmlPath).completeBaseName();
     QString jsonPath = folder.absoluteFilePath(baseName + ".json");
 
@@ -258,8 +258,8 @@ void Lesson::makeChoice(int choiceIndex) {
 }
 
 QString Lesson::getCurrentPage() const {
-    if (pageIndex >= 0 && pageIndex < getLessonPages.size()) {
-        return getLessonPages[pageIndex];
+    if (pageIndex >= 0 && pageIndex < lessonPages.size()) {
+        return lessonPages[pageIndex];
     }
     return "";
 }
@@ -302,7 +302,7 @@ void Lesson::findLessonFiles() {
 
     for (auto& file : allFiles) {
         if (isHtmlFile(file)) {
-            getLessonPages.push_back(folder.absoluteFilePath(file));
+            lessonPages.push_back(folder.absoluteFilePath(file));
         }
     }
 
@@ -339,9 +339,9 @@ std::optional<QString> Lesson::findNextLesson(QDir parentDir, int index) {
 }
 
 void Lesson::pigeonHoleSort() {
-    std::vector<QString> pigeonHole(getLessonPages.size(), "");
+    std::vector<QString> pigeonHole(lessonPages.size(), "");
 
-    for (auto& page : getLessonPages) {
+    for (auto& page : lessonPages) {
         QString filename = page;
         filename.replace(precedingPath, "");
         QString indexStr = filename.split(".")[0];
@@ -356,5 +356,5 @@ void Lesson::pigeonHoleSort() {
         }
     }
 
-    getLessonPages = std::move(pigeonHole);
+    lessonPages = std::move(pigeonHole);
 }

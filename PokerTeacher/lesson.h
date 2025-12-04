@@ -52,11 +52,15 @@ public:
     QString getCurrentPage() const;
     QString getName() const { return name; }
     int getLessonNum() const { return lessonNum; }
-    std::vector<QString> getLessonPages;
+    std::vector<QString> lessonPages;
 
     bool atStart() const { return pageIndex == 0; }
-    bool atEnd() const { return pageIndex >= getLessonPages.size() - 1; }
-    QUrl getCurrentUrl() const { return QUrl("qrc" + lessonPages[pageIndex]); };
+    bool atEnd() const { return pageIndex >= lessonPages.size() - 1; }
+    QUrl getCurrentUrl() const {
+        qDebug() << QUrl("qrc" + lessonPages[pageIndex]);
+        return QUrl("qrc" + lessonPages[pageIndex]);
+
+    };
 
 
 signals:
@@ -75,7 +79,6 @@ private:
 
     QDir folder;
     QString name;
-    std::vector<QString> lessonPages;
     std::optional<Decision> currentDecision;
     QList<BotAction> currentBotActions;
     QMap<int, QList<BotAction>> allBotActions;
