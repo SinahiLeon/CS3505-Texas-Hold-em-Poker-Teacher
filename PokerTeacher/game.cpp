@@ -191,6 +191,13 @@ void Game::shuffleDeck() {
     }
 }
 
+void Game::rigDeck(vector<shared_ptr<Card>> cardOrder){
+    clearDeck();
+    for (auto& card : cardOrder) {
+        deck.push(std::move(card));
+    }
+}
+
 void Game::clearDeck() {
     while (!deck.empty()) {
         deck.pop();

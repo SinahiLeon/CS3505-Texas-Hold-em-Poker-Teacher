@@ -21,9 +21,9 @@ void LessonTests::constructs() {
 }
 
 void LessonTests::getsAllPages() {
-    vector<QString> pages { QString(":/Lessons/1-TestLesson/0.html"), QString(":/Lessons/1-TestLesson/1.html") };
+    std::vector<QString> pages { QString(":/Lessons/1-TestLesson/0.html"), QString(":/Lessons/1-TestLesson/1.html") };
     Lesson newLesson(QString(":/Lessons/1-TestLesson"));
-    vector<QString> lessonPages = newLesson.getLessonPages();
+    std::vector<QString> lessonPages = newLesson.getLessonPages;
     QCOMPARE(pages, lessonPages);
 }
 
@@ -35,7 +35,7 @@ void LessonTests::getsNextPage() {
 
 void LessonTests::getsNextLesson() {
     Lesson newLesson(QString(":/Lessons/1-TestLesson"));
-    optional<Lesson> nextLesson = newLesson.getNextLesson();
+    std::optional<Lesson> nextLesson = newLesson.getNextLesson();
     bool lessonExists = nextLesson.has_value();
     QVERIFY(lessonExists);
 

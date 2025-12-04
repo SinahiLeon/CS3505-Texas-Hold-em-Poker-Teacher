@@ -1,45 +1,229 @@
 #include "lesson.h"
+#include "game.h"
+#include <QFile>
+#include <QTextStream>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QStringList>
+#include <QFileInfo>
+#include <algorithm>
+#include <stdexcept>
+#include <QDebug>
+
 using std::bad_cast;
 using std::out_of_range;
 using std::nullopt;
 
-Lesson::Lesson(QString folderPath, QObject *parent): folder(QDir(folderPath)) {
+const QString Lesson::precedingPath = "";
+const QChar Lesson::underscores = '_';
+
+Lesson::Lesson(QString folderPath, QObject *parent): QObject(parent), folder(QDir(folderPath)) {
     readFolderName();
     findLessonFiles();
     pageIndex = 0;
-    //loadDecisionForPage(pageIndex);
+    currentDecision = std::nullopt;
+    loadDecisionForPage(pageIndex);
+    loadBotActionsFromCSV();
+    updateCurrentBotActions();
 }
 
 Lesson::Lesson(const Lesson& other)
     : folder(other.folder)
     , name(other.name)
-    , lessonPages(other.lessonPages)
-    , cpus(other.cpus)
+    , getLessonPages(other.getLessonPages)
+    , allBotActions(other.allBotActions)
+    , currentBotActions(other.currentBotActions)
     , lessonNum(other.lessonNum)
 {
     pageIndex = 0;
+    loadDecisionForPage(pageIndex);
+    updateCurrentBotActions();
 }
 
 bool Lesson::back() {
-    if (pageIndex < 0) {
+    if (pageIndex <= 0) {
         return false;
     }
 
     pageIndex--;
-    //loadDecisionForPage(pageIndex); // Load decision for previous page (may not be necessary)
+    loadDecisionForPage(pageIndex);
+    updateCurrentBotActions();
     emit pageChanged();
     return true;
 }
 
 bool Lesson::nextPage() {
-    if (pageIndex >= lessonPages.size() - 1) {
+    if (pageIndex >= getLessonPages.size() - 1) {
         return false;
     }
 
     pageIndex++;
-    //loadDecisionForPage(pageIndex); // Load decision for new page
+    loadDecisionForPage(pageIndex);
+    updateCurrentBotActions();
     emit pageChanged();
     return true;
+}
+
+void Lesson::loadDecisionForPage(int pageIndex) {
+    currentDecision = std::nullopt;
+
+    // Look for a JSON decision file matching the HTML file
+    QString htmlPath = getLessonPages[pageIndex];
+    QString baseName = QFileInfo(htmlPath).completeBaseName();
+    QString jsonPath = folder.absoluteFilePath(baseName + ".json");
+
+    QFile jsonFile(jsonPath);
+    if (!jsonFile.exists()) {
+        return;
+    }
+
+    if (!jsonFile.open(QIODevice::ReadOnly)) {
+        qWarning() << "Could not open decision file:" << jsonPath;
+        return;
+    }
+
+    QByteArray jsonData = jsonFile.readAll();
+    jsonFile.close();
+
+    QJsonDocument doc = QJsonDocument::fromJson(jsonData);
+    if (!doc.isObject()) {
+        qWarning() << "Invalid JSON in decision file:" << jsonPath;
+        return;
+    }
+
+    QJsonObject obj = doc.object();
+    Decision decision;
+
+    decision.prompt = obj["prompt"].toString();
+    decision.correctChoice = obj["correct"].toInt();
+    decision.correctFeedback = obj["correctFeedback"].toString();
+    decision.incorrectFeedback = obj["incorrectFeedback"].toString();
+
+    QJsonArray choicesArray = obj["choices"].toArray();
+    for (const QJsonValue& choice : choicesArray) {
+        decision.choices.append(choice.toString());
+    }
+
+    if (decision.choices.isEmpty() ||
+        decision.correctChoice < 0 ||
+        decision.correctChoice >= decision.choices.size()) {
+        qWarning() << "Invalid decision data in:" << jsonPath;
+        return;
+    }
+
+    currentDecision = decision;
+}
+
+void Lesson::loadBotActionsFromCSV() {
+    QString csvPath = folder.absoluteFilePath("actions.csv");
+    QFile csvFile(csvPath);
+
+    if (!csvFile.exists()) {
+        return;
+    }
+
+    if (!csvFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << "Could not open actions CSV:" << csvPath;
+        return;
+    }
+
+    QTextStream in(&csvFile);
+
+    if (!in.atEnd()) {
+        in.readLine();
+    }
+
+    while (!in.atEnd()) {
+        QString line = in.readLine().trimmed();
+        if (line.isEmpty()) continue;
+
+        QStringList parts = line.split(",");
+        if (parts.size() != 4) {
+            qWarning() << "Invalid CSV line, expected 4 parts:" << line;
+            continue;
+        }
+
+        BotAction action;
+        bool ok;
+
+        int csvPage = parts[0].toInt(&ok);
+        if (!ok) {
+            qWarning() << "Invalid page number:" << parts[0];
+            continue;
+        }
+        action.page = csvPage - 1;
+
+        action.player = parts[1].toInt(&ok);
+        if (!ok || action.player < 0 || action.player > 2) {
+            qWarning() << "Invalid player number:" << parts[1];
+            continue;
+        }
+
+        action.action = parts[2].trimmed().toLower();
+        if (action.action != "fold" && action.action != "call" &&
+            action.action != "raise" && action.action != "check") {
+            qWarning() << "Invalid action:" << parts[2];
+            continue;
+        }
+
+        action.amount = parts[3].toInt(&ok);
+        if (!ok || action.amount < 0) {
+            qWarning() << "Invalid amount:" << parts[3];
+            continue;
+        }
+
+        allBotActions[action.page].append(action);
+    }
+
+    csvFile.close();
+    qDebug() << "Loaded" << allBotActions.size() << "pages of bot actions";
+}
+
+void Lesson::updateCurrentBotActions() {
+    currentBotActions.clear();
+
+    if (allBotActions.contains(pageIndex)) {
+        currentBotActions = allBotActions[pageIndex];
+        qDebug() << "Page" << (pageIndex + 1) << "has" << currentBotActions.size() << "bot actions";
+    }
+}
+
+void Lesson::applyBotActionsToGame(Game* game) {
+    if (!game || currentBotActions.isEmpty()) {
+        return;
+    }
+
+    std::sort(currentBotActions.begin(), currentBotActions.end(),
+              [](const BotAction& a, const BotAction& b) {
+                  return a.player < b.player;
+              });
+
+    for (const BotAction& action : currentBotActions) {
+        if (action.player == 0) {
+            qDebug() << "Human action scheduled:" << action.action << "amount:" << action.amount;
+            continue;
+        }
+
+        int botIndex = action.player;
+
+        if (action.action == "fold") {
+            // game->foldPlayer(botIndex);
+            qDebug() << "Bot" << botIndex << "folds";
+        }
+        else if (action.action == "call") {
+            // game->makeBet(botIndex, action.amount);
+            qDebug() << "Bot" << botIndex << "calls" << action.amount;
+        }
+        else if (action.action == "raise") {
+            // game->makeBet(botIndex, action.amount);
+            qDebug() << "Bot" << botIndex << "raises to" << action.amount;
+        }
+        else if (action.action == "check") {
+            // game->checkPlayer(botIndex);
+            qDebug() << "Bot" << botIndex << "checks";
+        }
+    }
 }
 
 QString Lesson::getDecisionPrompt() const {
@@ -73,16 +257,22 @@ void Lesson::makeChoice(int choiceIndex) {
     emit choiceResult(correct, feedback);
 }
 
-optional<Lesson> Lesson::getNextLesson() {
+QString Lesson::getCurrentPage() const {
+    if (pageIndex >= 0 && pageIndex < getLessonPages.size()) {
+        return getLessonPages[pageIndex];
+    }
+    return "";
+}
+
+std::optional<Lesson> Lesson::getNextLesson() {
     int nextIndex = lessonNum + 1;
     QDir parent = folder;
-    // This cannot return false in this context as this method is always run in a subfolder of Lessons.
     parent.cdUp();
 
-    optional<QString> nextPath = findNextLesson(parent, nextIndex);
+    std::optional<QString> nextPath = findNextLesson(parent, nextIndex);
 
     if (nextPath.has_value()) {
-        return optional<Lesson>(Lesson(*nextPath));
+        return std::optional<Lesson>(Lesson(*nextPath));
     }
 
     return nullopt;
@@ -100,26 +290,22 @@ void Lesson::readFolderName() {
     int num = nameParts[0].toInt(&isNum);
 
     if (!isNum) {
-        // bad_cast exceptions do not include messages.
         throw bad_cast();
     }
 
     lessonNum = num;
-    // Add spaces to name
     name = nameParts[1].replace(underscores, " ");
 }
 
 void Lesson::findLessonFiles() {
     QStringList allFiles = folder.entryList(QDir::Files);
 
-    // Using const here detaches allFiles.
     for (auto& file : allFiles) {
         if (isHtmlFile(file)) {
-            lessonPages.push_back(folder.absoluteFilePath(file));
+            getLessonPages.push_back(folder.absoluteFilePath(file));
         }
     }
 
-    // Sorts retrieved files numerically.
     pigeonHoleSort();
 }
 
@@ -133,7 +319,7 @@ bool Lesson::isHtmlFile(QString filename) {
     return false;
 }
 
-optional<QString> Lesson::findNextLesson(QDir parentDir, int index) {
+std::optional<QString> Lesson::findNextLesson(QDir parentDir, int index) {
     QStringList allFolders = parentDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
 
     for (auto& folderPath : allFolders) {
@@ -153,10 +339,9 @@ optional<QString> Lesson::findNextLesson(QDir parentDir, int index) {
 }
 
 void Lesson::pigeonHoleSort() {
-    vector<QString> pigeonHole(lessonPages.size(), "");
+    std::vector<QString> pigeonHole(getLessonPages.size(), "");
 
-    for (auto& page : lessonPages) {
-        // page.replace() works in place.
+    for (auto& page : getLessonPages) {
         QString filename = page;
         filename.replace(precedingPath, "");
         QString indexStr = filename.split(".")[0];
@@ -165,9 +350,11 @@ void Lesson::pigeonHoleSort() {
         int index = indexStr.toInt(&isNum);
 
         if (isNum) {
-            pigeonHole[index] = page;
+            if (index >= 0 && index < static_cast<int>(pigeonHole.size())) {
+                pigeonHole[index] = page;
+            }
         }
     }
 
-    lessonPages = std::move(pigeonHole);
+    getLessonPages = std::move(pigeonHole);
 }

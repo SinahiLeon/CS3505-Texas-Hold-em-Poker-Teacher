@@ -86,6 +86,8 @@ private:
 
     /// @brief Resets and shuffles the deck with all cards
     void shuffleDeck();
+    /// @brief Stacks the deck for the purpose of lessons
+    void rigDeck(vector<shared_ptr<Card>> cardOrder);
     /// @brief Helper method to empty the deck stack
     void clearDeck();
     /// @brief Gives pot to the winner (used inside fold or showdown)

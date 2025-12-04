@@ -3,68 +3,96 @@
 
 #include <QObject>
 #include <QDir>
-#include <QRegularExpression>
+#include <QString>
+#include <vector>
+#include <optional>
+#include <QMap>
+#include <QList>
 #include <QUrl>
-#include "computerplayer.h"
-using std::vector;
-using std::optional;
 
-/// @brief The model for the infobox and an encapsulation of a game lesson.
+class Game;
+
+struct BotAction {
+    int page;
+    int player;
+    QString action;
+    int amount;
+};
+
 class Lesson : public QObject
 {
     Q_OBJECT
 
+
 public:
-    explicit Lesson(QString folderPath, QObject *parent = nullptr);
-    explicit Lesson(const Lesson& other);
-    QString getName() const { return name; };
-    QString getCurrentPage() const { return lessonPages[pageIndex]; }
-    QUrl getCurrentUrl() const { return QUrl("qrc" + lessonPages[pageIndex]); };
-    vector<QString>& getLessonPages() { return lessonPages; };
-    vector<ComputerPlayer>& getComputerPlayers() { return cpus; };
-    int getLessonNum() const { return lessonNum; };
-    bool atStart() const { return pageIndex == 0; }
-    bool atEnd() const { return pageIndex == lessonPages.size() - 1; };
-    bool hasComupterPlayers() const { return !cpus.empty(); };
+    Lesson(QString folderPath, QObject *parent = nullptr);
+    Lesson(const Lesson& other);
+
     bool back();
     bool nextPage();
-    optional<Lesson> getNextLesson();
+    std::optional<Lesson> getNextLesson();
 
+    // Decision handling
     bool hasDecision() const { return currentDecision.has_value(); }
     QString getDecisionPrompt() const;
     QStringList getDecisionChoices() const;
 
+    // Bot actions handling
+    bool hasBotActions() const { return !currentBotActions.isEmpty(); }
+    QList<BotAction> getCurrentBotActions() const { return currentBotActions; }
+
+    // Call this when user makes a choice
     Q_INVOKABLE void makeChoice(int choiceIndex);
+
+    // Apply bot actions to game
+    void applyBotActionsToGame(Game* game);
+
+    // Getters
+    int getCurrentPageIndex() const { return pageIndex + 1; }
+    QString getCurrentPage() const;
+    QString getName() const { return name; }
+    int getLessonNum() const { return lessonNum; }
+    std::vector<QString> getLessonPages;
+
+    bool atStart() const { return pageIndex == 0; }
+    bool atEnd() const { return pageIndex >= getLessonPages.size() - 1; }
+    QUrl getCurrentUrl() const { return QUrl("qrc" + lessonPages[pageIndex]); };
+
 
 signals:
     void pageChanged();
     void choiceResult(bool correct, QString feedback);
+    void botActionsReady();
 
 private:
-    const QDir folder;
-    QString name;
-    vector<QString> lessonPages;
-    vector<ComputerPlayer> cpus;
-    int lessonNum;
-    int pageIndex;
-    const QRegularExpression underscores = QRegularExpression("_");
-    const QRegularExpression precedingPath = QRegularExpression("^.*[/]");
-
     struct Decision {
         QString prompt;
         QStringList choices;
-        int correctChoice; // Index of correct answer
+        int correctChoice;
         QString correctFeedback;
         QString incorrectFeedback;
     };
 
+    QDir folder;
+    QString name;
+    std::vector<QString> lessonPages;
     std::optional<Decision> currentDecision;
-    void loadDecisionForPage(int pageIndex);
+    QList<BotAction> currentBotActions;
+    QMap<int, QList<BotAction>> allBotActions;
+    int lessonNum;
+    int pageIndex;
+
+    // Constants
+    static const QString precedingPath;
+    static const QChar underscores;
 
     void readFolderName();
     void findLessonFiles();
-    static bool isHtmlFile(QString filename);
-    static optional<QString> findNextLesson(QDir parentDir, int index);
+    void loadDecisionForPage(int pageIndex);
+    void loadBotActionsFromCSV();
+    void updateCurrentBotActions();
+    bool isHtmlFile(QString filename);
     void pigeonHoleSort();
+    std::optional<QString> findNextLesson(QDir parentDir, int index);
 };
 #endif // LESSON_H
