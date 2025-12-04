@@ -41,7 +41,7 @@ add_library(PokerCore STATIC
     lesson.h lesson.cpp
 
     action.h
-    computerplayer.h computerplayer.cpp
+
     player.cpp
 
 )

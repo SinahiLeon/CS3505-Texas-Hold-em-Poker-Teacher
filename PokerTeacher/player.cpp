@@ -93,11 +93,6 @@ Action Player::makeDecision(int currentBet, Action playerAction) {
     }
 }
 
-int Player::getRaiseAmount() {
-    // At some point there will be fancy AI logic here
-    return 10;
-}
-
 Action Player::maintainBet(int currentBet) {
     if (currentBet == bet) {
         return Action::Check;
