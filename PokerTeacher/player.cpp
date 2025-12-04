@@ -59,7 +59,7 @@ Action Player::makeDecision(int currentBet, Action playerAction) {
     }
 
     if (currentBet > chips) {
-        switch (int choice = QRandomGenerator::global()->bounded(0, 2)) {
+        switch (int choice = QRandomGenerator::global()->bounded(2)) {
             case (0) : { maintainBet(currentBet); }
             // I don't think there should be a distinction between betting and raising in the code.
             case (1) : { return Fold(); }
@@ -67,7 +67,7 @@ Action Player::makeDecision(int currentBet, Action playerAction) {
         }
     }
 
-    switch (int choice = QRandomGenerator::global()->bounded(0, 3)) {
+    switch (int choice = QRandomGenerator::global()->bounded(3)) {
         case (0) : { maintainBet(currentBet); }
         // I don't think there should be a distinction between betting and raising in the code.
         case (1) : {
@@ -77,7 +77,6 @@ Action Player::makeDecision(int currentBet, Action playerAction) {
                 maintainBet(currentBet);
             }
 
-            bet = currentBet + amount;
             return Raise(10);
         }
         case (2) : {

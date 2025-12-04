@@ -117,31 +117,31 @@ void Game::continueRound(int playerIndex) {
         Action decision = players[playerIndex].makeDecision(currentBet);
 
         switch (decision.index()) {
-            case (0) : {
+            case (0) : { // None
                 qDebug() << "Player" << playerIndex << "is having their turn skipped.";
                 break;
             }
 
-            case (1) : {
+            case (1) : { // Check
                 check(playerIndex);
                 delayedContinue(playerIndex);
                 break;
             }
 
-            case (2) : {
-               call(playerIndex);
-               delayedContinue(playerIndex);
-               break;
+            case (2) : { // Call
+                call(playerIndex);
+                delayedContinue(playerIndex);
+                break;
             }
 
-            case (3): {
+            case (3): { // Raise
                 Raise raiseAction = get<Raise>(decision);
                 raise(playerIndex, raiseAction.raiseAmount);
                 delayedContinue(playerIndex);
                 break;
             }
 
-            case (4): {
+            case (4): { // Fold
                 fold(playerIndex);
                 delayedContinue(playerIndex);
                 break;
