@@ -28,6 +28,7 @@ class Lesson : public QObject
 public:
     Lesson(QString folderPath, QObject *parent = nullptr);
     Lesson(const Lesson& other);
+    Lesson operator=(const Lesson& other);
 
     bool back();
     bool nextPage();
@@ -53,7 +54,7 @@ public:
     QString getCurrentPage() const;
     QString getName() const { return name; }
     int getLessonNum() const { return lessonNum; }
-    std::vector<QString> lessonPages;
+    std::vector<QString> getLessonPages() const { return lessonPages; }
 
     bool atStart() const { return pageIndex == 0; }
     bool atEnd() const { return pageIndex >= lessonPages.size() - 1; }
@@ -82,6 +83,7 @@ private:
     std::optional<Decision> currentDecision;
     QList<BotAction> currentBotActions;
     QMap<int, QList<BotAction>> allBotActions;
+    std::vector<QString> lessonPages;
     int lessonNum;
     int pageIndex;
 

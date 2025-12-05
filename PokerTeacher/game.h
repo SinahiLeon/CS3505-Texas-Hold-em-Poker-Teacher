@@ -8,6 +8,7 @@
 #include <QMap>
 #include "phase.h"
 #include "player.h"
+#include "lesson.h"
 
 using std::stack;
 
@@ -23,6 +24,7 @@ public:
     Player& getPlayer(int index) { return players[index]; }
     vector<shared_ptr<Card>> communityCards;
     vector<Player> players;
+    Lesson& getCurrentLesson() { return lesson; }
     int getDealerIndex() { return dealerIndex; }
     int getPot() const { return pot; }
     int getBetAmount() const { return currentBet; }
@@ -36,6 +38,7 @@ public:
     void call(int playerIndex);
     void raise(int playerIndex, int chipAmount);
     void fold(int playerIndex);
+    void chooseLesson(int index);
     /// @brief Compares players best hands to determine winner.
     /// @return int of the player who will be awarded the pot.
     int determineIndexOfWinner();
@@ -77,6 +80,7 @@ private:
     bool largeBlindPaid = false;
     int numPlayersChecked = 0;
     int numPlayersCalled = 0;
+    Lesson lesson;
 
     void newGame();
     void newHand();

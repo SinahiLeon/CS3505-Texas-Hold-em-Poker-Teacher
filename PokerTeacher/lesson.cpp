@@ -38,6 +38,25 @@ Lesson::Lesson(const Lesson& other)
     updateCurrentBotActions();
 }
 
+Lesson Lesson::operator=(const Lesson& other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    folder = other.folder;
+    name = other.name;
+    lessonPages = other.lessonPages;
+    allBotActions = other.allBotActions;
+    currentBotActions = other.currentBotActions;
+    lessonNum = other.lessonNum;
+
+    pageIndex = 0;
+    loadDecisionForPage(pageIndex);
+    updateCurrentBotActions();
+
+    return *this;
+}
+
 bool Lesson::back() {
     if (pageIndex <= 0) {
         return false;

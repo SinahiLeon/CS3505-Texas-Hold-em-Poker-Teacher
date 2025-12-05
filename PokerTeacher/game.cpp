@@ -14,7 +14,10 @@ using std::default_random_engine;
 using std::variant;
 using std::get;
 
-Game::Game(QObject *parent) : QObject(parent) {}
+// TODO: Make this rewritten Lesson 0
+Game::Game(QObject *parent) : QObject(parent), lesson(Lesson(QString(":/Lessons/1-Hand_Types_and_Position"))) {
+
+}
 
 void Game::newGame() {
     // Set up start of game
@@ -450,4 +453,22 @@ void Game::startNextHand() {
         dealerIndex = 0;
     }
     startRound();
+}
+
+void Game::chooseLesson(int index) {
+    switch (index) {
+        case 1: {
+            lesson = Lesson(QString(":/Lessons/1-Hand_Types_and_Position"));
+            break;
+        }
+        case 2: {
+            lesson = Lesson(QString(":/Lessons/2-Hand_and_Board_Harmony"));
+            break;
+        }
+        case 3: {
+            lesson = Lesson(QString(":/Lessons/2-Hand_and_Board_Harmony"));
+            break;
+        }
+        default: { lesson = Lesson(QString(":/Lessons/1-Hand_Types_and_Position")); }
+    }
 }

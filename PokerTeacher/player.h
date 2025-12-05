@@ -10,7 +10,7 @@ using std::queue;
 using std::monostate;
 
 /// @brief A player that containts their information on chips, currentBet, folded, and hand data.
-class Player : public QObject {
+class Player {
 public:
     Player();
     Player(bool isHuman);

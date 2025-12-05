@@ -60,6 +60,8 @@ View::View(Game& game, QWidget *parent)
             this, [this]() { this->onLessonActionClicked(1); });
     connect(ui->actionLesson_2, &QAction::triggered,
             this, [this]() { this->onLessonActionClicked(2); });
+    connect(ui->actionLesson_3, &QAction::triggered,
+            this, [this]() { this->onLessonActionClicked(3); });
     connect(ui->actionFreeplay, &QAction::triggered,
             this, &View::freeplayClicked);
     connect(ui->actionFreeplay, &QAction::triggered,
@@ -370,21 +372,13 @@ void View::onInfoButtonClicked()
 void View::onLessonActionClicked(int action) {
     qDebug() << "Opening info box.";
 
-    Lesson* lesson;
+    game.chooseLesson(action);
 
-    switch (action) {
-        case 1: {
-            lesson = new Lesson(QString(":/Lessons/1-Hand_Types_and_Position"));
-            break;
-        }
-        case 2: {
-            lesson = new Lesson(QString(":/Lessons/2-Hand_and_Board_Harmony"));
-            break;
-        }
-        default: { lesson = new Lesson(QString(":/Lessons/1-Hand_Types_and_Position")); }
-    }
+    emit closeInfobox();
 
-    qDebug() << "Lesson initialized.";
-    InfoBox* infobox = new InfoBox(lesson, this);
+    InfoBox* infobox = new InfoBox(game.getCurrentLesson(), this);
+    connect(this, &View::closeInfobox,
+            infobox, &QDialog::close);
+
     infobox->show();
 }
