@@ -1752,6 +1752,7 @@ color: #fa5e8a;
     <property name="title">
      <string>Lessons</string>
     </property>
+    <addaction name="actionLesson_0"/>
     <addaction name="actionLesson_1"/>
     <addaction name="actionLesson_2"/>
     <addaction name="actionLesson_3"/>
@@ -1801,6 +1802,11 @@ color: #fa5e8a;
   <action name="actionLesson_6">
    <property name="text">
     <string>Lesson 6</string>
+   </property>
+  </action>
+  <action name="actionLesson_0">
+   <property name="text">
+    <string>Lesson 0</string>
    </property>
   </action>
  </widget>
