@@ -58,7 +58,6 @@ signals:    // Since a value changed, signal to update UI
     void updateAvailableActions();
     void handEnded(int winner);
     void playersTurnEnded();
-    void startNewGame();
 
 public slots:
     void onViewInitialized();

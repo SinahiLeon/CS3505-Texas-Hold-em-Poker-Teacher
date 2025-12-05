@@ -67,8 +67,7 @@
         <file>Lessons/1-Hand_Types_and_Position/4.html</file>
         <file>Lessons/1-Hand_Types_and_Position/5.html</file>
         <file>Lessons/1-Hand_Types_and_Position/6.html</file>
-        <file>Lessons/1-Hand_Types_and_Position/gameMoves.csv</file>
-        <file>Lessons/1-Hand_Types_and_Position/gameResets.txt</file>
+        <file>Lessons/1-Hand_Types_and_Position/actions.csv</file>
         <file>Lessons/1-Hand_Types_and_Position/7.html</file>
         <file>Lessons/1-Hand_Types_and_Position/8.html</file>
         <file>Lessons/1-Hand_Types_and_Position/10.html</file>
@@ -156,5 +155,7 @@
         <file>Lessons/4-The_Chase_Calculator/21.html</file>
         <file>Lessons/4-The_Chase_Calculator/22.html</file>
         <file>Lessons/0-The_Board/0.html</file>
+        <file>Lessons/1-Hand_Types_and_Position/deckStart.txt</file>
+        <file>Lessons/2-Hand_and_Board_Harmony/deckStart.txt</file>
     </qresource>
 </RCC>

@@ -10,7 +10,7 @@
 #include <QMap>
 #include <QList>
 #include <QUrl>
-#include <BotAction.h>
+#include <botaction.h>
 #include <queue>
 
 using std::queue;
@@ -60,6 +60,7 @@ signals:
     void pageChanged();
     void choiceResult(bool correct, QString feedback);
     void newActions();
+    void resetGame();
 
 private:
     struct Decision {

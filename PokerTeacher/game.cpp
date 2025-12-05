@@ -15,7 +15,7 @@ using std::default_random_engine;
 Game::Game(QObject *parent) : QObject(parent), lesson(Lesson(QString(":/Lessons/0-The_Board"))) {
     connect(&lesson, &Lesson::newActions,
             this, &Game::getNewActions);
-    connect(this, &Game::startNewGame,
+    connect(&lesson, &Lesson::resetGame,
             this, &Game::startNextHand);
 }
 
@@ -53,15 +53,16 @@ void Game::startRound() {
     makeBet(playerIndex, getSmallBlind(), false);
     smallBlindPaid = true;
     emit updateLastAction(playerIndex, QString("paid the small blind of $%1.").arg(getSmallBlind()));
-    playerIndex++;
-    if (playerIndex >= players.size()) {
-        playerIndex = 0;
-    }
 
+    thinkingDelay(playerIndex);
+
+    playerIndex++;
     makeBet(playerIndex, getLargeBlind(), false);
     largeBlindPaid = true;
     qDebug() << "Player" << playerIndex << "paid the large blind of" << getLargeBlind();
     emit updateLastAction(playerIndex, QString("paid the large blind: $%1.").arg(getLargeBlind()));
+
+    thinkingDelay(playerIndex);
 
     noBetsYetThisPhase = true;
     continueRound(playerIndex);
@@ -472,10 +473,6 @@ void Game::chooseLesson(int index) {
         }
         default: { lesson = Lesson(QString(":/Lessons/1-Hand_Types_and_Position")); }
     }
-
-    // A signal is used here so the new game can run in the background.
-    // Signals and slots are genuinely a really good way to do concurrency, I don't know why they aren't used outside of Qt
-    emit startNewGame();
 }
 
 void Game::getNewActions() {
