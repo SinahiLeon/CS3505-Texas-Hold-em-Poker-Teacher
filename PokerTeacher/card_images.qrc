@@ -154,8 +154,79 @@
         <file>Lessons/4-The_Chase_Calculator/20.html</file>
         <file>Lessons/4-The_Chase_Calculator/21.html</file>
         <file>Lessons/4-The_Chase_Calculator/22.html</file>
-        <file>Lessons/0-The_Board/0.html</file>
         <file>Lessons/1-Hand_Types_and_Position/deckStart.txt</file>
         <file>Lessons/2-Hand_and_Board_Harmony/deckStart.txt</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/0.html</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/1.html</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/2.html</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/3.html</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/4.html</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/5.html</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/6.html</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/7.html</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/8.html</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/9.html</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/10.html</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/11.html</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/12.html</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/13.html</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/14.html</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/15.html</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/16.html</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/17.html</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/18.html</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/19.html</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/d0.txt</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/decision1</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/gameMoves.csv</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/gameResets.txt</file>
+        <file>Lessons/6-Reading_Minds/0.html</file>
+        <file>Lessons/6-Reading_Minds/1.html</file>
+        <file>Lessons/6-Reading_Minds/2.html</file>
+        <file>Lessons/6-Reading_Minds/3.html</file>
+        <file>Lessons/6-Reading_Minds/4.html</file>
+        <file>Lessons/6-Reading_Minds/5.html</file>
+        <file>Lessons/6-Reading_Minds/6.html</file>
+        <file>Lessons/6-Reading_Minds/7.html</file>
+        <file>Lessons/6-Reading_Minds/8.html</file>
+        <file>Lessons/6-Reading_Minds/9.html</file>
+        <file>Lessons/6-Reading_Minds/10.html</file>
+        <file>Lessons/6-Reading_Minds/11.html</file>
+        <file>Lessons/6-Reading_Minds/12.html</file>
+        <file>Lessons/6-Reading_Minds/13.html</file>
+        <file>Lessons/6-Reading_Minds/14.html</file>
+        <file>Lessons/6-Reading_Minds/15.html</file>
+        <file>Lessons/6-Reading_Minds/16.html</file>
+        <file>Lessons/6-Reading_Minds/17.html</file>
+        <file>Lessons/6-Reading_Minds/18.html</file>
+        <file>Lessons/6-Reading_Minds/19.html</file>
+        <file>Lessons/6-Reading_Minds/20.html</file>
+        <file>Lessons/6-Reading_Minds/21.html</file>
+        <file>Lessons/6-Reading_Minds/22.html</file>
+        <file>Lessons/6-Reading_Minds/23.html</file>
+        <file>Lessons/6-Reading_Minds/24.html</file>
+        <file>Lessons/6-Reading_Minds/25.html</file>
+        <file>Lessons/6-Reading_Minds/d0.txt</file>
+        <file>Lessons/6-Reading_Minds/decision1</file>
+        <file>Lessons/6-Reading_Minds/gameMoves.csv</file>
+        <file>Lessons/6-Reading_Minds/gameResets.txt</file>
+        <file>Lessons/0-The_Board/0.html</file>
+        <file>Lessons/0-The_Board/1.html</file>
+        <file>Lessons/0-The_Board/2.html</file>
+        <file>Lessons/0-The_Board/3.html</file>
+        <file>Lessons/0-The_Board/4.html</file>
+        <file>Lessons/0-The_Board/5.html</file>
+        <file>Lessons/0-The_Board/6.html</file>
+        <file>Lessons/0-The_Board/7.html</file>
+        <file>Lessons/0-The_Board/d0.txt</file>
+        <file>Lessons/0-The_Board/decision1</file>
+        <file>Lessons/0-The_Board/gameMoves.csv</file>
+        <file>Lessons/0-The_Board/gameResets.txt</file>
+        <file>Lessons/0-The_Board/blinds.png</file>
+        <file>Lessons/0-The_Board/button.png</file>
+        <file>Lessons/0-The_Board/communityCards.png</file>
+        <file>Lessons/0-The_Board/glossary.png</file>
+        <file>Lessons/0-The_Board/holeCards.png</file>
+        <file>Lessons/0-The_Board/pot.png</file>
     </qresource>
 </RCC>

@@ -56,6 +56,8 @@ View::View(Game& game, QWidget *parent)
             this, &View::onInfoButtonClicked);
     connect(ui->continueButton, &QPushButton::clicked,
             this, &View::onContinueClicked);
+    connect(ui->actionLesson_0, &QAction::triggered,
+            this, [this]() { this->onLessonActionClicked(0); });
     connect(ui->actionLesson_1, &QAction::triggered,
             this, [this]() { this->onLessonActionClicked(1); });
     connect(ui->actionLesson_2, &QAction::triggered,
@@ -64,6 +66,10 @@ View::View(Game& game, QWidget *parent)
             this, [this]() { this->onLessonActionClicked(3); });
     connect(ui->actionLesson_4, &QAction::triggered,
             this, [this]() { this->onLessonActionClicked(4); });
+    connect(ui->actionLesson_5, &QAction::triggered,
+            this, [this]() { this->onLessonActionClicked(5); });
+    connect(ui->actionLesson_6, &QAction::triggered,
+            this, [this]() { this->onLessonActionClicked(6); });
     connect(ui->actionFreeplay, &QAction::triggered,
             this, &View::freeplayClicked);
     connect(ui->actionFreeplay, &QAction::triggered,

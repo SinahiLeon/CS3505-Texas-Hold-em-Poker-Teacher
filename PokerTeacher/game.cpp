@@ -212,6 +212,11 @@ void Game::rigDeck(vector<shared_ptr<Card>> cardOrder){
     }
 }
 
+vector<shared_ptr<Card>> Game::getLessonDeck() {
+    vector<shared_ptr<Card>> lessonDeck;
+    return lessonDeck;
+}
+
 void Game::clearDeck() {
     while (!deck.empty()) {
         deck.pop();

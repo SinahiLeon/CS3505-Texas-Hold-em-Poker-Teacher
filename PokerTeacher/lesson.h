@@ -1,6 +1,8 @@
 #ifndef LESSON_H
 #define LESSON_H
 
+#include "cardhand.h"
+#include "card.h"
 #include <QObject>
 #include <QDir>
 #include <QString>
@@ -55,6 +57,8 @@ public:
     bool atEnd() const { return pageIndex >= lessonPages.size() - 1; }
     QUrl getCurrentUrl() const;
     queue<Action> getPlayerBotActions(int playerIndex) const;
+
+    vector<shared_ptr<Card>> getDeck();
 
 public slots:
     void allowNext(bool allowed);

@@ -45,6 +45,7 @@ public:
     /// @returns Boolean indicating whether or not cards were equal.
     bool operator==(const Card& other) const;
     bool exactEqual(const Card& other) const;
+    static QString toString(int suit, int value);
 
 private:
     /// @brief Gets the name of the card.

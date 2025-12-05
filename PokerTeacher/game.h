@@ -92,6 +92,9 @@ private:
 
     /// @brief Resets and shuffles the deck with all cards
     void shuffleDeck();
+    /// @brief Gets the order of cards for the selected lesson.
+    /// @return A vector of cards that is in the order needed for the lesson.
+    vector<shared_ptr<Card>> getLessonDeck();
     /// @brief Stacks the deck for the purpose of lessons
     void rigDeck(vector<shared_ptr<Card>> cardOrder);
     /// @brief Helper method to empty the deck stack
