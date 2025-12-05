@@ -123,7 +123,6 @@ void View::potUpdate(int newAmount) {
 
 void View::currentBetUpdate(int currentBet) {
     ui->currentBetLabel->setText(QString("Current bet: $%1").arg(std::to_string(game.getBetAmount())));
-    ui->betAmount->setMinimum(game.getBetAmount());
 }
 
 void View::onBetButtonClicked() {

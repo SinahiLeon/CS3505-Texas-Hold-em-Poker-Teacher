@@ -1647,7 +1647,7 @@ color: #8fff8f;
                 <number>5</number>
                </property>
                <property name="maximum">
-                <number>95</number>
+                <number>1000</number>
                </property>
                <property name="singleStep">
                 <number>5</number>
