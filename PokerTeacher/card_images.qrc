@@ -209,5 +209,18 @@
         <file>Lessons/6-Reading_Minds/decision1</file>
         <file>Lessons/6-Reading_Minds/gameMoves.csv</file>
         <file>Lessons/6-Reading_Minds/gameResets.txt</file>
+        <file>Lessons/0-The_Board/0.html</file>
+        <file>Lessons/0-The_Board/1.html</file>
+        <file>Lessons/0-The_Board/2.html</file>
+        <file>Lessons/0-The_Board/3.html</file>
+        <file>Lessons/0-The_Board/4.html</file>
+        <file>Lessons/0-The_Board/5.html</file>
+        <file>Lessons/0-The_Board/6.html</file>
+        <file>Lessons/0-The_Board/7.html</file>
+        <file>Lessons/0-The_Board/8.html</file>
+        <file>Lessons/0-The_Board/d0.txt</file>
+        <file>Lessons/0-The_Board/decision1</file>
+        <file>Lessons/0-The_Board/gameMoves.csv</file>
+        <file>Lessons/0-The_Board/gameResets.txt</file>
     </qresource>
 </RCC>
