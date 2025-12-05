@@ -125,3 +125,42 @@ QString Card::toFilePath(Suit cardSuit, CardValue cardValue) const {
 
     return basePath.arg(name);
 }
+
+QString Card::toString(int suit, int value) {
+    QString valueString;
+    QString of = " of ";
+    QString suitString;
+    switch(value) {
+    case 14:
+        valueString = "Ace";
+        break;
+    case 11:
+        valueString = "Jack";
+        break;
+    case 12:
+        valueString = "Queen";
+        break;
+    case 13:
+        valueString = "King";
+        break;
+    default:
+        valueString = QString::number(value);
+    }
+    switch(suit) {
+    case 1:
+        suitString = "Clubs";
+        break;
+    case 2:
+        suitString = "Diamonds";
+        break;
+    case 3:
+        suitString = "Hearts";
+        break;
+    case 4:
+        suitString = "Spades";
+        break;
+    default:
+        suitString = "ERROR";
+    }
+    return valueString+of+suitString;
+}

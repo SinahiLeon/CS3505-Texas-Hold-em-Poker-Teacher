@@ -209,5 +209,6 @@
         <file>Lessons/6-Reading_Minds/decision1</file>
         <file>Lessons/6-Reading_Minds/gameMoves.csv</file>
         <file>Lessons/6-Reading_Minds/gameResets.txt</file>
+        <file>Lessons/1-Hand_Types_and_Position/deck.txt</file>
     </qresource>
 </RCC>
