@@ -1755,6 +1755,7 @@ color: #fa5e8a;
     <addaction name="actionLesson_1"/>
     <addaction name="actionLesson_2"/>
     <addaction name="actionLesson_3"/>
+    <addaction name="actionLesson_4"/>
    </widget>
    <widget class="QMenu" name="menuFreeplay">
     <property name="title">
@@ -1783,6 +1784,11 @@ color: #fa5e8a;
   <action name="actionLesson_3">
    <property name="text">
     <string>Lesson 3</string>
+   </property>
+  </action>
+  <action name="actionLesson_4">
+   <property name="text">
+    <string>Lesson 4</string>
    </property>
   </action>
  </widget>
