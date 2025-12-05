@@ -221,5 +221,11 @@
         <file>Lessons/0-The_Board/decision1</file>
         <file>Lessons/0-The_Board/gameMoves.csv</file>
         <file>Lessons/0-The_Board/gameResets.txt</file>
+        <file>Lessons/0-The_Board/blinds.png</file>
+        <file>Lessons/0-The_Board/button.png</file>
+        <file>Lessons/0-The_Board/communityCards.png</file>
+        <file>Lessons/0-The_Board/glossary.png</file>
+        <file>Lessons/0-The_Board/holeCards.png</file>
+        <file>Lessons/0-The_Board/pot.png</file>
     </qresource>
 </RCC>
