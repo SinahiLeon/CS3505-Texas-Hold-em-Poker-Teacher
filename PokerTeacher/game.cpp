@@ -465,6 +465,10 @@ void Game::startNextHand() {
 
 void Game::chooseLesson(int index) {
     switch (index) {
+        case 0: {
+            lesson = Lesson(QString(":/Lessons/0-The_Board"));
+            break;
+        }
         case 1: {
             lesson = Lesson(QString(":/Lessons/1-Hand_Types_and_Position"));
             break;
@@ -479,6 +483,14 @@ void Game::chooseLesson(int index) {
         }
         case 4: {
             lesson = Lesson(QString(":/Lessons/4-The_Chase_Calculator"));
+            break;
+        }
+        case 5: {
+            lesson = Lesson(QString(":/Lessons/5-The_Bluffing_Blueprint"));
+            break;
+        }
+        case 6: {
+            lesson = Lesson(QString(":/Lessons/6-Reading_Minds"));
             break;
         }
         default: { lesson = Lesson(QString(":/Lessons/0-The_Board")); }

@@ -211,8 +211,6 @@ void Lesson::updateCurrentBotActions() {
     }
 }
 
-}
-
 vector<shared_ptr<Card>> Lesson::getDeck() {
     vector<shared_ptr<Card>> deck;
     QFile inputFile = QFile(folder.filesystemAbsolutePath().append("deck.txt"));
@@ -228,6 +226,7 @@ vector<shared_ptr<Card>> Lesson::getDeck() {
         inputFile.close();
     }
     return deck;
+}
 
 QString Lesson::getDecisionPrompt() const {
     if (currentDecision.has_value()) {
