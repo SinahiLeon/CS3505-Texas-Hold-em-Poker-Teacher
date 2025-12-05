@@ -54,7 +54,7 @@ int Player::makeBet(int amount) {
 }
 
 Action Player::makeDecision(int currentBet, Action playerAction) {
-    if (allIn() || folded) {
+    if (allIn() || folded || busted()) {
         return Action::None;
     }
 
