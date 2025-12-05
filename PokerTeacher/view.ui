@@ -1745,7 +1745,7 @@ color: #fa5e8a;
      <x>0</x>
      <y>0</y>
      <width>950</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuLessons">
@@ -1756,6 +1756,8 @@ color: #fa5e8a;
     <addaction name="actionLesson_2"/>
     <addaction name="actionLesson_3"/>
     <addaction name="actionLesson_4"/>
+    <addaction name="actionLesson_5"/>
+    <addaction name="actionLesson_6"/>
    </widget>
    <widget class="QMenu" name="menuFreeplay">
     <property name="title">
@@ -1789,6 +1791,16 @@ color: #fa5e8a;
   <action name="actionLesson_4">
    <property name="text">
     <string>Lesson 4</string>
+   </property>
+  </action>
+  <action name="actionLesson_5">
+   <property name="text">
+    <string>Lesson 5</string>
+   </property>
+  </action>
+  <action name="actionLesson_6">
+   <property name="text">
+    <string>Lesson 6</string>
    </property>
   </action>
  </widget>

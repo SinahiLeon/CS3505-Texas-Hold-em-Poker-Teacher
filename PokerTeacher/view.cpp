@@ -64,6 +64,10 @@ View::View(Game& game, QWidget *parent)
             this, [this]() { this->onLessonActionClicked(3); });
     connect(ui->actionLesson_4, &QAction::triggered,
             this, [this]() { this->onLessonActionClicked(4); });
+    connect(ui->actionLesson_5, &QAction::triggered,
+            this, [this]() { this->onLessonActionClicked(5); });
+    connect(ui->actionLesson_6, &QAction::triggered,
+            this, [this]() { this->onLessonActionClicked(6); });
     connect(ui->actionFreeplay, &QAction::triggered,
             this, &View::freeplayClicked);
     connect(ui->actionFreeplay, &QAction::triggered,
