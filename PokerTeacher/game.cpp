@@ -120,7 +120,8 @@ void Game::continueRound(int playerIndex) {
             playerIndex = 0;
         }
 
-        if (playerIndex == 0 && !players[playerIndex].getFolded()) {
+        if (playerIndex == 0 && !players[playerIndex].getFolded())
+        {
             break;
         }
 
@@ -468,10 +469,14 @@ void Game::chooseLesson(int index) {
             break;
         }
         case 3: {
-            lesson = Lesson(QString(":/Lessons/2-Hand_and_Board_Harmony"));
+            lesson = Lesson(QString(":/Lessons/3-Push_or_Protect"));
             break;
         }
-        default: { lesson = Lesson(QString(":/Lessons/1-Hand_Types_and_Position")); }
+        case 4: {
+            lesson = Lesson(QString(":/Lessons/4-The_Chase_Calculator"));
+            break;
+        }
+        default: { lesson = Lesson(QString(":/Lessons/0-The_Board")); }
     }
 }
 
@@ -479,4 +484,13 @@ void Game::getNewActions() {
     for (int i = 0; i < players.size(); i++) {
         players[i].giveNewActions(lesson.getPlayerBotActions(i));
     }
+}
+
+void Game::recieveDecision(bool correct, QString feedback, Action action) {
+    if (!correct) {
+        emit displayFeedback(feedback);
+        return;
+    }
+
+    // TODO: Implement decision dialogs
 }

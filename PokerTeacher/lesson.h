@@ -12,6 +12,7 @@
 #include <QUrl>
 #include <botaction.h>
 #include <queue>
+#include "decision.h"
 
 using std::queue;
 using std::vector;
@@ -41,7 +42,7 @@ public:
     vector<BotAction> getCurrentBotActions() const { return currentBotActions; }
 
     // Call this when user makes a choice
-    Q_INVOKABLE void makeChoice(int choiceIndex);
+    void makeChoice(int choiceIndex);
 
     // Getters
     int getCurrentPageIndex() const { return pageIndex + 1; }
@@ -55,22 +56,17 @@ public:
     QUrl getCurrentUrl() const;
     queue<Action> getPlayerBotActions(int playerIndex) const;
 
+public slots:
+    void allowNext(bool allowed);
 
 signals:
     void pageChanged();
-    void choiceResult(bool correct, QString feedback);
+    void choiceResult(bool correct, QString feedback, Action action);
     void newActions();
     void resetGame();
+    void updateNext(bool allowed);
 
 private:
-    struct Decision {
-        QString prompt;
-        QStringList choices;
-        int correctChoice;
-        QString correctFeedback;
-        QString incorrectFeedback;
-    };
-
     QDir folder;
     QString name;
     std::optional<Decision> currentDecision;

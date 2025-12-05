@@ -14,6 +14,8 @@ InfoBox::InfoBox(Lesson& _lesson, QWidget* parent)
             this, &InfoBox::back);
     connect(ui->nextButton, &QPushButton::clicked,
             this, &InfoBox::next);
+    connect(&lesson, &Lesson::updateNext,
+            ui->nextButton, &QPushButton::setEnabled);
 
     qDebug() << "All connects";
     ui->lessonBrowser->setSource(lesson.getCurrentUrl());

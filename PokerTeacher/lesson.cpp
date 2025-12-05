@@ -117,6 +117,7 @@ void Lesson::loadDecisionForPage(int pageIndex) {
     decision.correctChoice = obj["correct"].toInt();
     decision.correctFeedback = obj["correctFeedback"].toString();
     decision.incorrectFeedback = obj["incorrectFeedback"].toString();
+    decision.correctAction = stringToAction(obj["correctAction"].toString());
 
     QJsonArray choicesArray = obj["choices"].toArray();
 
@@ -212,13 +213,15 @@ QString Lesson::getDecisionPrompt() const {
     if (currentDecision.has_value()) {
         return currentDecision->prompt;
     }
-    return "";
+
+    return "Decision could not be found!";
 }
 
 QStringList Lesson::getDecisionChoices() const {
     if (currentDecision.has_value()) {
         return currentDecision->choices;
     }
+
     return QStringList();
 }
 
@@ -236,7 +239,7 @@ void Lesson::makeChoice(int choiceIndex) {
     bool correct = (choiceIndex == decision.correctChoice);
     QString feedback = correct ? decision.correctFeedback : decision.incorrectFeedback;
 
-    emit choiceResult(correct, feedback);
+    emit choiceResult(correct, feedback, decision.correctAction);
 }
 
 QString Lesson::getCurrentPage() const {
@@ -372,4 +375,8 @@ queue<Action> Lesson::getPlayerBotActions(int playerIndex) const {
     }
 
     return playerActions;
+}
+
+void Lesson::allowNext(bool allowed) {
+    emit updateNext(allowed);
 }

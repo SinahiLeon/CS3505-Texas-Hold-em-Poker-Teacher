@@ -39,6 +39,7 @@ add_library(PokerCore STATIC
     action.h
     player.cpp
     botaction.h
+    decision.h
 )
 
 target_include_directories(PokerCore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

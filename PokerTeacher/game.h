@@ -45,7 +45,7 @@ public:
     Phase getPhase() const { return phase; }
     bool noBetsYetThisPhase;
 
-signals:    // Since a value changed, signal to update UI
+signals:
     void chipsUpdated(int playerIndex, int chips, int bet);
     void dealerUpdate(int playerIndex);
     void potUpdated(int newAmount);
@@ -58,6 +58,7 @@ signals:    // Since a value changed, signal to update UI
     void updateAvailableActions();
     void handEnded(int winner);
     void playersTurnEnded();
+    void displayFeedback(QString feedback);
 
 public slots:
     void onViewInitialized();
@@ -66,7 +67,6 @@ public slots:
     void playerChecks();
     void playerFolds();
     void startNextHand();
-    void getNewActions();
 
 private:
     stack<shared_ptr<Card>> deck;
@@ -106,6 +106,10 @@ private:
     bool validPlayer(int playerIndex);
     /// @brief Helper method that quickly checks if anyone has bid yet this hand.
     bool noBetsYet() { return noBetsYetThisPhase; }
+
+private slots:
+    void getNewActions();
+    void recieveDecision(bool correct, QString feedback, Action action);
 };
 
 #endif // GAME_H
