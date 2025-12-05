@@ -101,7 +101,7 @@ void Game::continueRound(int playerIndex) {
         int lastPlayer = -1;
 
         for (int i = 0; i < players.size(); i++) {
-            if (!players[i].getFolded()) {
+            if (players[i].canWinPot()) {
                 activePlayers++;
                 lastPlayer = i;
             }
@@ -309,7 +309,7 @@ void Game::call(int playerIndex) {
     numPlayersCalled++;
     int activePlayers = 0;
     for (int i = 0; i < players.size(); i++) {
-        if (!players[i].getFolded()) {
+        if (players[i].canWinPot()) {
             activePlayers++;
         }
     }
@@ -330,7 +330,7 @@ void Game::fold(int playerIndex) {
     int activePlayers = 0;
     int lastActivePlayer = -1;
     for (int i = 0; i < players.size(); i++) {
-        if (!players[i].getFolded()) {
+        if (players[i].canWinPot()) {
             activePlayers++;
             lastActivePlayer = i;
         }
@@ -345,7 +345,7 @@ void Game::fold(int playerIndex) {
 int Game::determineIndexOfWinner(){
     int indexOfWinner = -1;
     for (int i = 0; i < players.size(); i++){
-        if (!players[i].getFolded()) {
+        if (players[i].canWinPot()) {
             CardHand currentHand(players[i].heldCards);
             currentHand.calculateBestHand(communityCards);
 
