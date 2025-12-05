@@ -43,6 +43,8 @@ add_library(PokerCore STATIC
     action.h
 
     player.cpp
+    BotAction.h
+
 
 )
 

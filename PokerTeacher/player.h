@@ -13,7 +13,6 @@ using std::monostate;
 class Player {
 public:
     Player();
-    Player(bool isHuman);
     Player(queue<Action> decisions);
     Player(const Player& other);
     Player operator=(const Player& other);
@@ -36,10 +35,10 @@ public:
     Action makeDecision(int currentBet, Action playerAction = Action::None);
     void resetPlayer();
     int getRaiseAmount();
+    void giveNewActions(queue<Action> actions);
 
 private:
     int chips = 1000;
-    bool isHuman;
     int bet = 0;
     bool folded = false;
     queue<Action> decisions;

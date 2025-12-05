@@ -11,12 +11,12 @@
 using std::make_shared;
 using std::random_device;
 using std::default_random_engine;
-using std::variant;
-using std::get;
 
-// TODO: Make this rewritten Lesson 0
-Game::Game(QObject *parent) : QObject(parent), lesson(Lesson(QString(":/Lessons/1-Hand_Types_and_Position"))) {
-
+Game::Game(QObject *parent) : QObject(parent), lesson(Lesson(QString(":/Lessons/0-The_Board"))) {
+    connect(&lesson, &Lesson::newActions,
+            this, &Game::getNewActions);
+    connect(this, &Game::startNewGame,
+            this, &Game::startNextHand);
 }
 
 void Game::newGame() {
@@ -26,7 +26,8 @@ void Game::newGame() {
     players.clear();
 
     for (int i = 0; i < 3; i++) {
-        Player player = Player(i == 0);
+        queue<Action> startingActions = lesson.getPlayerBotActions(i);
+        Player player = Player(startingActions);
         players.push_back(player);
     }
 
@@ -470,5 +471,15 @@ void Game::chooseLesson(int index) {
             break;
         }
         default: { lesson = Lesson(QString(":/Lessons/1-Hand_Types_and_Position")); }
+    }
+
+    // A signal is used here so the new game can run in the background.
+    // Signals and slots are genuinely a really good way to do concurrency, I don't know why they aren't used outside of Qt
+    emit startNewGame();
+}
+
+void Game::getNewActions() {
+    for (int i = 0; i < players.size(); i++) {
+        players[i].giveNewActions(lesson.getPlayerBotActions(i));
     }
 }

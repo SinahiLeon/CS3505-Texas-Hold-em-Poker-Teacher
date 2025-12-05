@@ -58,6 +58,7 @@ signals:    // Since a value changed, signal to update UI
     void updateAvailableActions();
     void handEnded(int winner);
     void playersTurnEnded();
+    void startNewGame();
 
 public slots:
     void onViewInitialized();
@@ -66,6 +67,7 @@ public slots:
     void playerChecks();
     void playerFolds();
     void startNextHand();
+    void getNewActions();
 
 private:
     stack<shared_ptr<Card>> deck;
@@ -105,7 +107,6 @@ private:
     bool validPlayer(int playerIndex);
     /// @brief Helper method that quickly checks if anyone has bid yet this hand.
     bool noBetsYet() { return noBetsYetThisPhase; }
-
 };
 
 #endif // GAME_H

@@ -1,5 +1,4 @@
 #include "lesson.h"
-#include "game.h"
 #include <QFile>
 #include <QTextStream>
 #include <QJsonDocument>
@@ -7,7 +6,6 @@
 #include <QJsonArray>
 #include <QStringList>
 #include <QFileInfo>
-#include <algorithm>
 #include <stdexcept>
 #include <QDebug>
 
@@ -63,8 +61,6 @@ bool Lesson::back() {
     }
 
     pageIndex--;
-    loadDecisionForPage(pageIndex);
-    updateCurrentBotActions();
     emit pageChanged();
     return true;
 }
@@ -78,8 +74,14 @@ bool Lesson::nextPage() {
     loadDecisionForPage(pageIndex);
     updateCurrentBotActions();
     emit pageChanged();
+    emit newActions();
     return true;
 }
+
+QUrl Lesson::getCurrentUrl() const {
+    qDebug() << QUrl("qrc" + lessonPages[pageIndex]);
+    return QUrl("qrc" + lessonPages[pageIndex]);
+};
 
 void Lesson::loadDecisionForPage(int pageIndex) {
     currentDecision = std::nullopt;
@@ -177,9 +179,9 @@ void Lesson::loadBotActionsFromCSV() {
             continue;
         }
 
-        action.action = parts[2].trimmed().toLower();
-        if (action.action != "fold" && action.action != "call" &&
-            action.action != "raise" && action.action != "check") {
+        action.action = stringToAction(parts[2].trimmed().toLower());
+        if (action.action != Action::Fold && action.action != Action::Call &&
+            action.action != Action::Raise && action.action != Action::Check) {
             qWarning() << "Invalid action:" << parts[2];
             continue;
         }
@@ -190,7 +192,7 @@ void Lesson::loadBotActionsFromCSV() {
             continue;
         }
 
-        allBotActions[action.page].append(action);
+        allBotActions[action.page].push_back(action);
     }
 
     csvFile.close();
@@ -203,43 +205,6 @@ void Lesson::updateCurrentBotActions() {
     if (allBotActions.contains(pageIndex)) {
         currentBotActions = allBotActions[pageIndex];
         qDebug() << "Page" << (pageIndex + 1) << "has" << currentBotActions.size() << "bot actions";
-    }
-}
-
-void Lesson::applyBotActionsToGame(Game* game) {
-    if (!game || currentBotActions.isEmpty()) {
-        return;
-    }
-
-    std::sort(currentBotActions.begin(), currentBotActions.end(),
-              [](const BotAction& a, const BotAction& b) {
-                  return a.player < b.player;
-              });
-
-    for (BotAction& action : currentBotActions) {
-        if (action.player == 0) {
-            qDebug() << "Human action scheduled:" << action.action << "amount:" << action.amount;
-            continue;
-        }
-
-        int botIndex = action.player;
-
-        if (action.action == "fold") {
-            // game->foldPlayer(botIndex);
-            qDebug() << "Bot" << botIndex << "folds";
-        }
-        else if (action.action == "call") {
-            // game->makeBet(botIndex, action.amount);
-            qDebug() << "Bot" << botIndex << "calls" << action.amount;
-        }
-        else if (action.action == "raise") {
-            // game->makeBet(botIndex, action.amount);
-            qDebug() << "Bot" << botIndex << "raises to" << action.amount;
-        }
-        else if (action.action == "check") {
-            // game->checkPlayer(botIndex);
-            qDebug() << "Bot" << botIndex << "checks";
-        }
     }
 }
 
@@ -375,4 +340,36 @@ void Lesson::pigeonHoleSort() {
     }
 
     lessonPages = std::move(pigeonHole);
+}
+
+Action Lesson::stringToAction(QString s) {
+    if (s == "check") {
+        return Action::Check;
+    }
+
+    if (s == "call") {
+        return Action::Call;
+    }
+
+    if (s == "raise") {
+        return Action::Raise;
+    }
+
+    if (s == "fold") {
+        return Action::Fold;
+    }
+
+    return Action::None;
+}
+
+queue<Action> Lesson::getPlayerBotActions(int playerIndex) const {
+    queue<Action> playerActions;
+
+    for (const BotAction& action : currentBotActions) {
+        if (action.player == playerIndex) {
+            playerActions.push(action.action);
+        }
+    }
+
+    return playerActions;
 }
