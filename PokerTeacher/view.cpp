@@ -56,6 +56,8 @@ View::View(Game& game, QWidget *parent)
             this, &View::onInfoButtonClicked);
     connect(ui->continueButton, &QPushButton::clicked,
             this, &View::onContinueClicked);
+    connect(ui->actionLesson_0, &QAction::triggered,
+            this, [this]() { this->onLessonActionClicked(0); });
     connect(ui->actionLesson_1, &QAction::triggered,
             this, [this]() { this->onLessonActionClicked(1); });
     connect(ui->actionLesson_2, &QAction::triggered,
