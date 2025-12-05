@@ -1,5 +1,6 @@
 #include "lesson.h"
 #include "game.h"
+#include "cardlibrary.h"
 #include <QFile>
 #include <QTextStream>
 #include <QJsonDocument>
@@ -13,6 +14,7 @@
 
 using std::bad_cast;
 using std::out_of_range;
+using std::make_shared;
 using std::nullopt;
 
 Lesson::Lesson(QString folderPath, QObject *parent): QObject(parent), folder(QDir(folderPath)) {
@@ -241,6 +243,24 @@ void Lesson::applyBotActionsToGame(Game* game) {
             qDebug() << "Bot" << botIndex << "checks";
         }
     }
+}
+
+vector<shared_ptr<Card>> Lesson::getDeck() {
+    vector<shared_ptr<Card>> deck;
+    QFile inputFile = QFile(folder.filesystemAbsolutePath().append("deck.txt"));
+    if (inputFile.open(QIODevice::ReadOnly))
+    {
+        QTextStream in(&inputFile);
+        while (!in.atEnd())
+        {
+            QString line = in.readLine();
+            QString name = Card::toString((line.split(",")[0]).toInt(), line.split(",")[1].toInt());
+            deck.push_back(make_shared<Card>(CardLibrary::cards.at(name)));
+        }
+        inputFile.close();
+    }
+    return deck;
+
 }
 
 QString Lesson::getDecisionPrompt() const {

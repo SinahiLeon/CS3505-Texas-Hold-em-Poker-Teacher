@@ -1,6 +1,8 @@
 #ifndef LESSON_H
 #define LESSON_H
 
+#include "cardhand.h"
+#include "card.h"
 #include <QObject>
 #include <QDir>
 #include <QString>
@@ -62,6 +64,8 @@ public:
         qDebug() << QUrl("qrc" + lessonPages[pageIndex]);
         return QUrl("qrc" + lessonPages[pageIndex]);
     };
+
+    vector<shared_ptr<Card>> getDeck();
 
 
 signals:
