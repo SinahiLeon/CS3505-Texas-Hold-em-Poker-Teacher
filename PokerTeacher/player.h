@@ -33,6 +33,7 @@ public:
     void fold() { folded = true; };
     vector<shared_ptr<Card>> heldCards;
     Action makeDecision(int currentBet, Action playerAction = Action::None);
+    int decideHandValue(bool canRaise);
     void resetPlayer();
     int getRaiseAmount();
     void giveNewActions(queue<Action> actions);
