@@ -230,7 +230,7 @@ void Lesson::updateCurrentBotActions() {
 
 vector<shared_ptr<Card>> Lesson::getDeck(int deckNum) {
     vector<shared_ptr<Card>> deck;
-    QString fileName = "/"+QString::number(deckNum)+".deck";
+    QString fileName = QString::number(deckNum)+".deck";
     qDebug() << "Rigging deck from " << folder.absoluteFilePath(fileName);
     QFile inputFile = QFile(folder.absoluteFilePath(fileName));
     if (inputFile.open(QIODevice::ReadOnly)) {
@@ -433,14 +433,18 @@ void Lesson::setBoard(int dealer, int deck) {
 }
 
 void Lesson::updateBoard() {
-    QString fileName = "/"+QString::number(pageIndex)+".deck";
+    QString fileName = QString::number(pageIndex)+".deck";
     QFile inputFile = QFile(folder.absoluteFilePath(fileName));
+    qDebug() << "trying deck from" << folder.absoluteFilePath(fileName);
     if (inputFile.open(QIODevice::ReadOnly))
     {
         QTextStream in(&inputFile);
         int dealer = in.readLine().toInt();
         setBoard(dealer, pageIndex);
         inputFile.close();
+    }
+    else {
+        qDebug() << inputFile.fileName() << "not found";
     }
 
 }
