@@ -79,6 +79,7 @@ bool Lesson::nextPage() {
 
     if (pageIndex > greatestIndex) {
         loadDecisionForPage(pageIndex);
+        updateBoard();
         updateCurrentBotActions();
         greatestIndex++;
     }
@@ -232,11 +233,10 @@ vector<shared_ptr<Card>> Lesson::getDeck(int deckNum) {
     QString fileName = "/"+QString::number(deckNum)+".deck";
     qDebug() << "Rigging deck from " << folder.absoluteFilePath(fileName);
     QFile inputFile = QFile(folder.absoluteFilePath(fileName));
-    if (inputFile.open(QIODevice::ReadOnly))
-    {
+    if (inputFile.open(QIODevice::ReadOnly)) {
         QTextStream in(&inputFile);
-        while (!in.atEnd())
-        {
+        in.readLine();//skip the first line, that determines the dealer
+        while (!in.atEnd()) {
             QString line = in.readLine();
             QString name = Card::toString((line.split(",")[0]).toInt(), line.split(",")[1].toInt());
             deck.push_back(make_shared<Card>(CardLibrary::cards.at(name)));
@@ -426,4 +426,21 @@ void Lesson::showFeedback(QString feedback) {
 void Lesson::sendDecision() {
     // sendDecision should only be called while the lesson hasn't yet progressed from a valid decision.
     emit displayDecision(*currentDecision);
+}
+
+void Lesson::setBoard(int dealer, int deck) {
+    emit resetGame(dealer, deck);
+}
+
+void Lesson::updateBoard() {
+    QString fileName = "/"+QString::number(pageIndex)+".deck";
+    QFile inputFile = QFile(folder.absoluteFilePath(fileName));
+    if (inputFile.open(QIODevice::ReadOnly))
+    {
+        QTextStream in(&inputFile);
+        int dealer = in.readLine().toInt();
+        setBoard(dealer, pageIndex);
+        inputFile.close();
+    }
+
 }

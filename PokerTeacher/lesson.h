@@ -64,6 +64,7 @@ public slots:
     void allowNext(bool allowed);
     void showFeedback(QString feedback);
     void sendDecision();
+    void setBoard(int dealer, int deck);
 
 
 signals:
@@ -96,6 +97,7 @@ private:
     void findLessonFiles();
     void loadDecisionForPage(int pageIndex);
     void loadBotActionsFromCSV();
+    void updateBoard();
     void updateCurrentBotActions();
     bool isHtmlFile(QString filename);
     void pigeonHoleSort();
