@@ -61,7 +61,6 @@
         <file>Lessons/1-Hand_Types_and_Position/0.html</file>
         <file>Lessons/1-Hand_Types_and_Position/1.html</file>
         <file>hand_hierarchy.txt</file>
-        <file>Lessons/1-Hand_Types_and_Position/d0.txt</file>
         <file>Lessons/1-Hand_Types_and_Position/2.html</file>
         <file>Lessons/1-Hand_Types_and_Position/3.html</file>
         <file>Lessons/1-Hand_Types_and_Position/4.html</file>
@@ -154,7 +153,6 @@
         <file>Lessons/4-The_Chase_Calculator/20.html</file>
         <file>Lessons/4-The_Chase_Calculator/21.html</file>
         <file>Lessons/4-The_Chase_Calculator/22.html</file>
-        <file>Lessons/1-Hand_Types_and_Position/deckStart.txt</file>
         <file>Lessons/2-Hand_and_Board_Harmony/deckStart.txt</file>
         <file>Lessons/5-The_Bluffing_Blueprint/0.html</file>
         <file>Lessons/5-The_Bluffing_Blueprint/1.html</file>
@@ -228,5 +226,6 @@
         <file>Lessons/0-The_Board/glossary.png</file>
         <file>Lessons/0-The_Board/holeCards.png</file>
         <file>Lessons/0-The_Board/pot.png</file>
+        <file>Lessons/1-Hand_Types_and_Position/1.deck</file>
     </qresource>
 </RCC>
