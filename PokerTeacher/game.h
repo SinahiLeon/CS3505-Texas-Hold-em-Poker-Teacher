@@ -8,6 +8,7 @@
 #include <QMap>
 #include "phase.h"
 #include "player.h"
+#include "lesson.h"
 
 using std::stack;
 
@@ -23,6 +24,7 @@ public:
     Player& getPlayer(int index) { return players[index]; }
     vector<shared_ptr<Card>> communityCards;
     vector<Player> players;
+    Lesson& getCurrentLesson() { return lesson; }
     int getDealerIndex() { return dealerIndex; }
     int getPot() const { return pot; }
     int getBetAmount() const { return currentBet; }
@@ -36,13 +38,14 @@ public:
     void call(int playerIndex);
     void raise(int playerIndex, int chipAmount);
     void fold(int playerIndex);
+    void chooseLesson(int index);
     /// @brief Compares players best hands to determine winner.
     /// @return int of the player who will be awarded the pot.
     int determineIndexOfWinner();
     Phase getPhase() const { return phase; }
     bool noBetsYetThisPhase;
 
-signals:    // Since a value changed, signal to update UI
+signals:
     void chipsUpdated(int playerIndex, int chips, int bet);
     void dealerUpdate(int playerIndex);
     void potUpdated(int newAmount);
@@ -55,6 +58,7 @@ signals:    // Since a value changed, signal to update UI
     void updateAvailableActions();
     void handEnded(int winner);
     void playersTurnEnded();
+    void displayFeedback(QString feedback);
 
 public slots:
     void onViewInitialized();
@@ -78,6 +82,7 @@ private:
     bool largeBlindPaid = false;
     int numPlayersChecked = 0;
     int numPlayersCalled = 0;
+    Lesson lesson;
 
     void newGame();
     void newHand();
@@ -88,6 +93,9 @@ private:
 
     /// @brief Resets and shuffles the deck with all cards
     void shuffleDeck();
+    /// @brief Gets the order of cards for the selected lesson.
+    /// @return A vector of cards that is in the order needed for the lesson.
+    vector<shared_ptr<Card>> getLessonDeck();
     /// @brief Stacks the deck for the purpose of lessons
     void rigDeck(vector<shared_ptr<Card>> cardOrder);
     /// @brief Helper method to empty the deck stack
@@ -103,6 +111,9 @@ private:
     /// @brief Helper method that quickly checks if anyone has bid yet this hand.
     bool noBetsYet() { return noBetsYetThisPhase; }
 
+private slots:
+    void getNewActions();
+    void recieveDecision(bool correct, QString feedback, Action action);
 };
 
 #endif // GAME_H

@@ -11,10 +11,13 @@
 using std::make_shared;
 using std::random_device;
 using std::default_random_engine;
-using std::variant;
-using std::get;
 
-Game::Game(QObject *parent) : QObject(parent) {}
+Game::Game(QObject *parent) : QObject(parent), lesson(Lesson(QString(":/Lessons/0-The_Board"))) {
+    connect(&lesson, &Lesson::newActions,
+            this, &Game::getNewActions);
+    connect(&lesson, &Lesson::resetGame,
+            this, &Game::startNextHand);
+}
 
 void Game::newGame() {
     // Set up start of game
@@ -23,7 +26,8 @@ void Game::newGame() {
     players.clear();
 
     for (int i = 0; i < 3; i++) {
-        Player player = Player(i == 0);
+        queue<Action> startingActions = lesson.getPlayerBotActions(i);
+        Player player = Player(startingActions);
         players.push_back(player);
     }
 
@@ -49,15 +53,16 @@ void Game::startRound() {
     makeBet(playerIndex, getSmallBlind(), false);
     smallBlindPaid = true;
     emit updateLastAction(playerIndex, QString("paid the small blind of $%1.").arg(getSmallBlind()));
-    playerIndex++;
-    if (playerIndex >= players.size()) {
-        playerIndex = 0;
-    }
 
+    thinkingDelay(playerIndex);
+
+    playerIndex++;
     makeBet(playerIndex, getLargeBlind(), false);
     largeBlindPaid = true;
     qDebug() << "Player" << playerIndex << "paid the large blind of" << getLargeBlind();
     emit updateLastAction(playerIndex, QString("paid the large blind: $%1.").arg(getLargeBlind()));
+
+    thinkingDelay(playerIndex);
 
     noBetsYetThisPhase = true;
     continueRound(playerIndex);
@@ -98,7 +103,7 @@ void Game::continueRound(int playerIndex) {
         int lastPlayer = -1;
 
         for (int i = 0; i < players.size(); i++) {
-            if (!players[i].getFolded()) {
+            if (players[i].canWinPot()) {
                 activePlayers++;
                 lastPlayer = i;
             }
@@ -115,7 +120,8 @@ void Game::continueRound(int playerIndex) {
             playerIndex = 0;
         }
 
-        if (playerIndex == 0 && !players[playerIndex].getFolded()) {
+        if (playerIndex == 0 && !players[playerIndex].getFolded())
+        {
             break;
         }
 
@@ -206,6 +212,11 @@ void Game::rigDeck(vector<shared_ptr<Card>> cardOrder){
     }
 }
 
+vector<shared_ptr<Card>> Game::getLessonDeck() {
+    vector<shared_ptr<Card>> lessonDeck;
+    return lessonDeck;
+}
+
 void Game::clearDeck() {
     while (!deck.empty()) {
         deck.pop();
@@ -254,20 +265,23 @@ void Game::makeBet(int playerIndex, int chipAmount, bool isCall) {
         return;
     }
 
+    if (players[playerIndex].getFolded()) {
+        return;
+    }
+
     qDebug() << "Player" << playerIndex << "made a bet of" << chipAmount;
 
     Player& player = players[playerIndex];
-    int actualBet = std::min(chipAmount, player.getChips());
 
-    player.subtractChips(actualBet);
-    player.addToBet(actualBet);
-    pot += actualBet;
+    int playerBet = player.makeBet(chipAmount);
+    pot += playerBet;
 
     numPlayersChecked = 0;
     if (!isCall) numPlayersCalled = 0;
     noBetsYetThisPhase = false;
     emit chipsUpdated(playerIndex, player.getChips(), player.getBet());
     emit potUpdated(pot);
+    emit updateLastAction(playerIndex, QString("bet %1.").arg(playerBet));
 }
 
 void Game::raise(int playerIndex, int chipAmount) {
@@ -277,11 +291,10 @@ void Game::raise(int playerIndex, int chipAmount) {
     Player& player = players[playerIndex];
     int totalBet = currentBet + chipAmount;
     int raiseAmount = totalBet - player.getBet();
-    if (totalBet > currentBet) {
-        makeBet(playerIndex, raiseAmount, false);
-        currentBet = totalBet;
-        emit currentBetUpdated(currentBet);
-    }
+    makeBet(playerIndex, raiseAmount, false);
+
+    currentBet = totalBet;
+    emit currentBetUpdated(currentBet);
     emit updateLastAction(playerIndex, QString("raised %1. Total bet: %2").arg(chipAmount).arg(totalBet));
 }
 
@@ -304,7 +317,7 @@ void Game::call(int playerIndex) {
     numPlayersCalled++;
     int activePlayers = 0;
     for (int i = 0; i < players.size(); i++) {
-        if (!players[i].getFolded()) {
+        if (players[i].canWinPot()) {
             activePlayers++;
         }
     }
@@ -325,7 +338,7 @@ void Game::fold(int playerIndex) {
     int activePlayers = 0;
     int lastActivePlayer = -1;
     for (int i = 0; i < players.size(); i++) {
-        if (!players[i].getFolded()) {
+        if (players[i].canWinPot()) {
             activePlayers++;
             lastActivePlayer = i;
         }
@@ -340,7 +353,7 @@ void Game::fold(int playerIndex) {
 int Game::determineIndexOfWinner(){
     int indexOfWinner = -1;
     for (int i = 0; i < players.size(); i++){
-        if (!players[i].getFolded()) {
+        if (players[i].canWinPot()) {
             CardHand currentHand(players[i].heldCards);
             currentHand.calculateBestHand(communityCards);
 
@@ -452,4 +465,53 @@ void Game::startNextHand() {
         dealerIndex = 0;
     }
     startRound();
+}
+
+void Game::chooseLesson(int index) {
+    switch (index) {
+        case 0: {
+            lesson = Lesson(QString(":/Lessons/0-The_Board"));
+            break;
+        }
+        case 1: {
+            lesson = Lesson(QString(":/Lessons/1-Hand_Types_and_Position"));
+            break;
+        }
+        case 2: {
+            lesson = Lesson(QString(":/Lessons/2-Hand_and_Board_Harmony"));
+            break;
+        }
+        case 3: {
+            lesson = Lesson(QString(":/Lessons/3-Push_or_Protect"));
+            break;
+        }
+        case 4: {
+            lesson = Lesson(QString(":/Lessons/4-The_Chase_Calculator"));
+            break;
+        }
+        case 5: {
+            lesson = Lesson(QString(":/Lessons/5-The_Bluffing_Blueprint"));
+            break;
+        }
+        case 6: {
+            lesson = Lesson(QString(":/Lessons/6-Reading_Minds"));
+            break;
+        }
+        default: { lesson = Lesson(QString(":/Lessons/0-The_Board")); }
+    }
+}
+
+void Game::getNewActions() {
+    for (int i = 0; i < players.size(); i++) {
+        players[i].giveNewActions(lesson.getPlayerBotActions(i));
+    }
+}
+
+void Game::recieveDecision(bool correct, QString feedback, Action action) {
+    if (!correct) {
+        emit displayFeedback(feedback);
+        return;
+    }
+
+    // TODO: Implement decision dialogs
 }

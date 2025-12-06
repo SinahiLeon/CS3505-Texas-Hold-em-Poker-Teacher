@@ -1647,7 +1647,7 @@ color: #8fff8f;
                 <number>5</number>
                </property>
                <property name="maximum">
-                <number>95</number>
+                <number>1000</number>
                </property>
                <property name="singleStep">
                 <number>5</number>
@@ -1745,15 +1745,20 @@ color: #fa5e8a;
      <x>0</x>
      <y>0</y>
      <width>950</width>
-     <height>17</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuLessons">
     <property name="title">
      <string>Lessons</string>
     </property>
+    <addaction name="actionLesson_0"/>
     <addaction name="actionLesson_1"/>
     <addaction name="actionLesson_2"/>
+    <addaction name="actionLesson_3"/>
+    <addaction name="actionLesson_4"/>
+    <addaction name="actionLesson_5"/>
+    <addaction name="actionLesson_6"/>
    </widget>
    <widget class="QMenu" name="menuFreeplay">
     <property name="title">
@@ -1777,6 +1782,31 @@ color: #fa5e8a;
   <action name="actionFreeplay">
    <property name="text">
     <string>Freeplay</string>
+   </property>
+  </action>
+  <action name="actionLesson_3">
+   <property name="text">
+    <string>Lesson 3</string>
+   </property>
+  </action>
+  <action name="actionLesson_4">
+   <property name="text">
+    <string>Lesson 4</string>
+   </property>
+  </action>
+  <action name="actionLesson_5">
+   <property name="text">
+    <string>Lesson 5</string>
+   </property>
+  </action>
+  <action name="actionLesson_6">
+   <property name="text">
+    <string>Lesson 6</string>
+   </property>
+  </action>
+  <action name="actionLesson_0">
+   <property name="text">
+    <string>Lesson 0</string>
    </property>
   </action>
  </widget>

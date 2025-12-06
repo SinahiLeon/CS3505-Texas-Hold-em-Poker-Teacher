@@ -1,5 +1,5 @@
 #include "lesson.h"
-#include "game.h"
+#include "cardlibrary.h"
 #include <QFile>
 #include <QTextStream>
 #include <QJsonDocument>
@@ -7,16 +7,13 @@
 #include <QJsonArray>
 #include <QStringList>
 #include <QFileInfo>
-#include <algorithm>
 #include <stdexcept>
 #include <QDebug>
 
 using std::bad_cast;
 using std::out_of_range;
+using std::make_shared;
 using std::nullopt;
-
-const QString Lesson::precedingPath = "";
-const QChar Lesson::underscores = '_';
 
 Lesson::Lesson(QString folderPath, QObject *parent): QObject(parent), folder(QDir(folderPath)) {
     readFolderName();
@@ -31,7 +28,7 @@ Lesson::Lesson(QString folderPath, QObject *parent): QObject(parent), folder(QDi
 Lesson::Lesson(const Lesson& other)
     : folder(other.folder)
     , name(other.name)
-    , getLessonPages(other.getLessonPages)
+    , lessonPages(other.lessonPages)
     , allBotActions(other.allBotActions)
     , currentBotActions(other.currentBotActions)
     , lessonNum(other.lessonNum)
@@ -41,20 +38,37 @@ Lesson::Lesson(const Lesson& other)
     updateCurrentBotActions();
 }
 
+Lesson Lesson::operator=(const Lesson& other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    folder = other.folder;
+    name = other.name;
+    lessonPages = other.lessonPages;
+    allBotActions = other.allBotActions;
+    currentBotActions = other.currentBotActions;
+    lessonNum = other.lessonNum;
+
+    pageIndex = 0;
+    loadDecisionForPage(pageIndex);
+    updateCurrentBotActions();
+
+    return *this;
+}
+
 bool Lesson::back() {
     if (pageIndex <= 0) {
         return false;
     }
 
     pageIndex--;
-    loadDecisionForPage(pageIndex);
-    updateCurrentBotActions();
     emit pageChanged();
     return true;
 }
 
 bool Lesson::nextPage() {
-    if (pageIndex >= getLessonPages.size() - 1) {
+    if (pageIndex >= lessonPages.size() - 1) {
         return false;
     }
 
@@ -62,14 +76,20 @@ bool Lesson::nextPage() {
     loadDecisionForPage(pageIndex);
     updateCurrentBotActions();
     emit pageChanged();
+    emit newActions();
     return true;
 }
+
+QUrl Lesson::getCurrentUrl() const {
+    qDebug() << QUrl("qrc" + lessonPages[pageIndex]);
+    return QUrl("qrc" + lessonPages[pageIndex]);
+};
 
 void Lesson::loadDecisionForPage(int pageIndex) {
     currentDecision = std::nullopt;
 
     // Look for a JSON decision file matching the HTML file
-    QString htmlPath = getLessonPages[pageIndex];
+    QString htmlPath = lessonPages[pageIndex];
     QString baseName = QFileInfo(htmlPath).completeBaseName();
     QString jsonPath = folder.absoluteFilePath(baseName + ".json");
 
@@ -99,8 +119,10 @@ void Lesson::loadDecisionForPage(int pageIndex) {
     decision.correctChoice = obj["correct"].toInt();
     decision.correctFeedback = obj["correctFeedback"].toString();
     decision.incorrectFeedback = obj["incorrectFeedback"].toString();
+    decision.correctAction = stringToAction(obj["correctAction"].toString());
 
     QJsonArray choicesArray = obj["choices"].toArray();
+
     for (const QJsonValue& choice : choicesArray) {
         decision.choices.append(choice.toString());
     }
@@ -160,9 +182,9 @@ void Lesson::loadBotActionsFromCSV() {
             continue;
         }
 
-        action.action = parts[2].trimmed().toLower();
-        if (action.action != "fold" && action.action != "call" &&
-            action.action != "raise" && action.action != "check") {
+        action.action = stringToAction(parts[2].trimmed().toLower());
+        if (action.action != Action::Fold && action.action != Action::Call &&
+            action.action != Action::Raise && action.action != Action::Check) {
             qWarning() << "Invalid action:" << parts[2];
             continue;
         }
@@ -173,7 +195,7 @@ void Lesson::loadBotActionsFromCSV() {
             continue;
         }
 
-        allBotActions[action.page].append(action);
+        allBotActions[action.page].push_back(action);
     }
 
     csvFile.close();
@@ -189,54 +211,36 @@ void Lesson::updateCurrentBotActions() {
     }
 }
 
-void Lesson::applyBotActionsToGame(Game* game) {
-    if (!game || currentBotActions.isEmpty()) {
-        return;
+vector<shared_ptr<Card>> Lesson::getDeck() {
+    vector<shared_ptr<Card>> deck;
+    QFile inputFile = QFile(folder.filesystemAbsolutePath().append("deck.txt"));
+    if (inputFile.open(QIODevice::ReadOnly))
+    {
+        QTextStream in(&inputFile);
+        while (!in.atEnd())
+        {
+            QString line = in.readLine();
+            QString name = Card::toString((line.split(",")[0]).toInt(), line.split(",")[1].toInt());
+            deck.push_back(make_shared<Card>(CardLibrary::cards.at(name)));
+        }
+        inputFile.close();
     }
-
-    std::sort(currentBotActions.begin(), currentBotActions.end(),
-              [](const BotAction& a, const BotAction& b) {
-                  return a.player < b.player;
-              });
-
-    for (const BotAction& action : currentBotActions) {
-        if (action.player == 0) {
-            qDebug() << "Human action scheduled:" << action.action << "amount:" << action.amount;
-            continue;
-        }
-
-        int botIndex = action.player;
-
-        if (action.action == "fold") {
-            // game->foldPlayer(botIndex);
-            qDebug() << "Bot" << botIndex << "folds";
-        }
-        else if (action.action == "call") {
-            // game->makeBet(botIndex, action.amount);
-            qDebug() << "Bot" << botIndex << "calls" << action.amount;
-        }
-        else if (action.action == "raise") {
-            // game->makeBet(botIndex, action.amount);
-            qDebug() << "Bot" << botIndex << "raises to" << action.amount;
-        }
-        else if (action.action == "check") {
-            // game->checkPlayer(botIndex);
-            qDebug() << "Bot" << botIndex << "checks";
-        }
-    }
+    return deck;
 }
 
 QString Lesson::getDecisionPrompt() const {
     if (currentDecision.has_value()) {
         return currentDecision->prompt;
     }
-    return "";
+
+    return "Decision could not be found!";
 }
 
 QStringList Lesson::getDecisionChoices() const {
     if (currentDecision.has_value()) {
         return currentDecision->choices;
     }
+
     return QStringList();
 }
 
@@ -254,13 +258,14 @@ void Lesson::makeChoice(int choiceIndex) {
     bool correct = (choiceIndex == decision.correctChoice);
     QString feedback = correct ? decision.correctFeedback : decision.incorrectFeedback;
 
-    emit choiceResult(correct, feedback);
+    emit choiceResult(correct, feedback, decision.correctAction);
 }
 
 QString Lesson::getCurrentPage() const {
-    if (pageIndex >= 0 && pageIndex < getLessonPages.size()) {
-        return getLessonPages[pageIndex];
+    if (pageIndex >= 0 && pageIndex < lessonPages.size()) {
+        return lessonPages[pageIndex];
     }
+
     return "";
 }
 
@@ -302,7 +307,7 @@ void Lesson::findLessonFiles() {
 
     for (auto& file : allFiles) {
         if (isHtmlFile(file)) {
-            getLessonPages.push_back(folder.absoluteFilePath(file));
+            lessonPages.push_back(folder.absoluteFilePath(file));
         }
     }
 
@@ -339,9 +344,9 @@ std::optional<QString> Lesson::findNextLesson(QDir parentDir, int index) {
 }
 
 void Lesson::pigeonHoleSort() {
-    std::vector<QString> pigeonHole(getLessonPages.size(), "");
+    std::vector<QString> pigeonHole(lessonPages.size(), "");
 
-    for (auto& page : getLessonPages) {
+    for (auto& page : lessonPages) {
         QString filename = page;
         filename.replace(precedingPath, "");
         QString indexStr = filename.split(".")[0];
@@ -350,11 +355,47 @@ void Lesson::pigeonHoleSort() {
         int index = indexStr.toInt(&isNum);
 
         if (isNum) {
-            if (index >= 0 && index < static_cast<int>(pigeonHole.size())) {
+            if (index >= 0 && index < pigeonHole.size()) {
                 pigeonHole[index] = page;
             }
         }
     }
 
-    getLessonPages = std::move(pigeonHole);
+    lessonPages = std::move(pigeonHole);
+}
+
+Action Lesson::stringToAction(QString s) {
+    if (s == "check") {
+        return Action::Check;
+    }
+
+    if (s == "call") {
+        return Action::Call;
+    }
+
+    if (s == "raise") {
+        return Action::Raise;
+    }
+
+    if (s == "fold") {
+        return Action::Fold;
+    }
+
+    return Action::None;
+}
+
+queue<Action> Lesson::getPlayerBotActions(int playerIndex) const {
+    queue<Action> playerActions;
+
+    for (const BotAction& action : currentBotActions) {
+        if (action.player == playerIndex) {
+            playerActions.push(action.action);
+        }
+    }
+
+    return playerActions;
+}
+
+void Lesson::allowNext(bool allowed) {
+    emit updateNext(allowed);
 }

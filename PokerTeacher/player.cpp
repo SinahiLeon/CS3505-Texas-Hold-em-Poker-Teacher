@@ -1,21 +1,18 @@
 #include "player.h"
 #include "QRandomGenerator"
 
-Player::Player() :isHuman(false), fullHand(heldCards) {
+using std::min;
+
+Player::Player() : fullHand(heldCards) {
 
 }
 
-Player::Player(bool isHuman) : isHuman(isHuman), fullHand(heldCards) {
-
-}
-
-Player::Player(queue<Action> decisions) : isHuman(false), fullHand(heldCards), decisions(decisions) {
+Player::Player(queue<Action> decisions) : fullHand(heldCards), decisions(decisions) {
 
 }
 
 Player::Player(const Player& p)
-    : isHuman(p.isHuman)
-    , chips(p.chips)
+    : chips(p.chips)
     , bet(p.bet)
     , folded(p.folded)
     , heldCards(p.heldCards)
@@ -29,7 +26,7 @@ Player Player::operator=(const Player& p) {
     if (this == &p){
         return *this;
     }
-    isHuman = p.isHuman;
+
     chips = p.chips;
     bet = p.bet;
     folded = p.folded;
@@ -44,15 +41,16 @@ void Player::resetPlayer() {
     folded = false;
 }
 
+int Player::makeBet(int amount) {
+    int possibleBet = min(amount, chips);
+    bet += possibleBet;
+    chips -= possibleBet;
+    return possibleBet;
+}
+
 Action Player::makeDecision(int currentBet, Action playerAction) {
-    if (allIn() || folded) {
+    if (allIn() || folded || busted()) {
         return Action::None;
-    }
-
-    if (isHuman) {
-        //If the player is the human player, it needs to receive a signal of what button the user pressed.
-        //it will be assumed that the player's buttons are already disabled so the user can't make any illegal moves.
-
     }
 
     if (!decisions.empty()) {
@@ -99,4 +97,11 @@ Action Player::maintainBet(int currentBet) {
 
     bet = currentBet;
     return Action::Call;
+}
+
+void Player::giveNewActions(queue<Action> actions) {
+    while (!actions.empty()) {
+        decisions.push(actions.front());
+        actions.pop();
+    }
 }

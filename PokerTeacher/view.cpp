@@ -56,8 +56,20 @@ View::View(Game& game, QWidget *parent)
             this, &View::onInfoButtonClicked);
     connect(ui->continueButton, &QPushButton::clicked,
             this, &View::onContinueClicked);
+    connect(ui->actionLesson_0, &QAction::triggered,
+            this, [this]() { this->onLessonActionClicked(0); });
     connect(ui->actionLesson_1, &QAction::triggered,
             this, [this]() { this->onLessonActionClicked(1); });
+    connect(ui->actionLesson_2, &QAction::triggered,
+            this, [this]() { this->onLessonActionClicked(2); });
+    connect(ui->actionLesson_3, &QAction::triggered,
+            this, [this]() { this->onLessonActionClicked(3); });
+    connect(ui->actionLesson_4, &QAction::triggered,
+            this, [this]() { this->onLessonActionClicked(4); });
+    connect(ui->actionLesson_5, &QAction::triggered,
+            this, [this]() { this->onLessonActionClicked(5); });
+    connect(ui->actionLesson_6, &QAction::triggered,
+            this, [this]() { this->onLessonActionClicked(6); });
     connect(ui->actionFreeplay, &QAction::triggered,
             this, &View::freeplayClicked);
     connect(ui->actionFreeplay, &QAction::triggered,
@@ -117,7 +129,6 @@ void View::potUpdate(int newAmount) {
 
 void View::currentBetUpdate(int currentBet) {
     ui->currentBetLabel->setText(QString("Current bet: $%1").arg(std::to_string(game.getBetAmount())));
-    ui->betAmount->setMinimum(game.getBetAmount());
 }
 
 void View::onBetButtonClicked() {
@@ -367,7 +378,14 @@ void View::onInfoButtonClicked()
 
 void View::onLessonActionClicked(int action) {
     qDebug() << "Opening info box.";
-    Lesson* lesson = new Lesson(QString(":/Lessons/1-Hand_Types_and_Position"));
-    InfoBox* infobox = new InfoBox(lesson, this);
+
+    game.chooseLesson(action);
+
+    emit closeInfobox();
+
+    InfoBox* infobox = new InfoBox(game.getCurrentLesson(), this);
+    connect(this, &View::closeInfobox,
+            infobox, &QDialog::close);
+
     infobox->show();
 }
