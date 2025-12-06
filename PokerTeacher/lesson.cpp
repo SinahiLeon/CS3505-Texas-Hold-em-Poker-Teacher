@@ -84,6 +84,12 @@ bool Lesson::nextPage() {
     }
 
     emit pageChanged();
+
+    if (!currentBotActions.empty()) {
+        qDebug() << "Lesson page" << (pageIndex + 1) << "has bot actions, signaling...";
+        emit botActionsReady();
+    }
+
     emit newActions();
     return true;
 }

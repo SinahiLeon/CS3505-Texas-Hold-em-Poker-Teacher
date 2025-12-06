@@ -68,6 +68,7 @@ public slots:
     void playerFolds();
     void startNextHand();
     void startFreeplay();
+    void applyLessonBotActions();
 
 private:
     stack<shared_ptr<Card>> deck;

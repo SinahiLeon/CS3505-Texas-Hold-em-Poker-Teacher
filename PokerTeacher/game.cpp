@@ -21,6 +21,8 @@ Game::Game(QObject *parent) : QObject(parent), lesson(Lesson(QString(":/Lessons/
             &lesson, &Lesson::showFeedback);
     connect(&lesson, &Lesson::choiceResult,
             this, &Game::recieveDecision);
+    connect(&lesson, &Lesson::botActionsReady,
+            this, &Game::applyLessonBotActions);
 }
 
 void Game::newGame() {
@@ -506,8 +508,43 @@ void Game::chooseLesson(int index) {
 }
 
 void Game::getNewActions() {
-    for (int i = 0; i < players.size(); i++) {
-        players[i].giveNewActions(lesson.getPlayerBotActions(i));
+    applyLessonBotActions();
+}
+
+void Game::applyLessonBotActions() {
+    // Get current bot actions from lesson
+    auto botActions = lesson.getCurrentBotActions();
+
+    // Execute each bot action immediately
+    for (const BotAction& action : botActions) {
+        // Skip human player (player 0)
+        if (action.player == 0) {
+            continue;
+        }
+
+        int botIndex = action.player; // 1 or 2 for bots
+
+        // Execute the action immediately
+        switch (action.action) {
+        case Action::Fold:
+            qDebug() << "Lesson bot action: Player" << botIndex << "folds";
+            fold(botIndex);
+            break;
+        case Action::Call:
+            qDebug() << "Lesson bot action: Player" << botIndex << "calls" << action.amount;
+            call(botIndex);
+            break;
+        case Action::Raise:
+            qDebug() << "Lesson bot action: Player" << botIndex << "raises" << action.amount;
+            raise(botIndex, action.amount);
+            break;
+        case Action::Check:
+            qDebug() << "Lesson bot action: Player" << botIndex << "checks";
+            check(botIndex);
+            break;
+        default:
+            break;
+        }
     }
 }
 

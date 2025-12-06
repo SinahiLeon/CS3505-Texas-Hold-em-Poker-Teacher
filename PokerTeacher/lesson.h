@@ -65,6 +65,7 @@ public slots:
     void showFeedback(QString feedback);
     void sendDecision();
 
+
 signals:
     void pageChanged();
     void choiceResult(bool correct, QString feedback, Action action, int amount);
@@ -74,6 +75,7 @@ signals:
     void updateDecision(Decision decision);
     void displayDecision(Decision& decision);
     void displayFeedback(QString feedback);
+    void botActionsReady();
 
 private:
     QDir folder;
