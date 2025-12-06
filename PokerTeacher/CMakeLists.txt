@@ -21,8 +21,11 @@ set(PROJECT_SOURCES
         infobox.h
         infobox.cpp
         infobox.ui
+
+
 )
 
+find_package(Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
 add_library(PokerCore STATIC
@@ -45,6 +48,7 @@ add_library(PokerCore STATIC
 target_include_directories(PokerCore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(PokerCore PUBLIC Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(PokerCore PUBLIC Qt${QT_VERSION_MAJOR}::Core)
+target_link_libraries(PokerCore PRIVATE Qt6::Core)
 target_link_libraries(PokerCore PRIVATE Qt6::Core)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

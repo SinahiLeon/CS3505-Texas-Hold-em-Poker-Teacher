@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
     View view(game);
     // Initialize lesson
     // ...
-    view.viewInitialized();
+    emit view.viewInitialized();
     view.show();
     return a.exec();
 }

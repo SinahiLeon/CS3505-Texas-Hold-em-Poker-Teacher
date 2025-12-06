@@ -12,6 +12,7 @@ struct Decision {
     QString correctFeedback;
     QString incorrectFeedback;
     Action correctAction;
+    int amount;
 };
 
 #endif // DECISION_H

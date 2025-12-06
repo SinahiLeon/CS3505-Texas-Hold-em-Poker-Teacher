@@ -112,7 +112,7 @@ private:
 
 private slots:
     void getNewActions();
-    void recieveDecision(bool correct, QString feedback, Action action);
+    void recieveDecision(bool correct, QString feedback, Action action, int amount);
 };
 
 #endif // GAME_H

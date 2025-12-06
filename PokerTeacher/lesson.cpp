@@ -19,6 +19,7 @@ Lesson::Lesson(QString folderPath, QObject *parent): QObject(parent), folder(QDi
     readFolderName();
     findLessonFiles();
     pageIndex = 0;
+    greatestIndex = 0;
     currentDecision = std::nullopt;
     loadDecisionForPage(pageIndex);
     loadBotActionsFromCSV();
@@ -34,6 +35,7 @@ Lesson::Lesson(const Lesson& other)
     , lessonNum(other.lessonNum)
 {
     pageIndex = 0;
+    greatestIndex = 0;
     loadDecisionForPage(pageIndex);
     updateCurrentBotActions();
 }
@@ -51,6 +53,7 @@ Lesson Lesson::operator=(const Lesson& other) {
     lessonNum = other.lessonNum;
 
     pageIndex = 0;
+    greatestIndex = 0;
     loadDecisionForPage(pageIndex);
     updateCurrentBotActions();
 
@@ -73,8 +76,13 @@ bool Lesson::nextPage() {
     }
 
     pageIndex++;
-    loadDecisionForPage(pageIndex);
-    updateCurrentBotActions();
+
+    if (pageIndex > greatestIndex) {
+        loadDecisionForPage(pageIndex);
+        updateCurrentBotActions();
+        greatestIndex++;
+    }
+
     emit pageChanged();
     emit newActions();
     return true;
@@ -120,6 +128,7 @@ void Lesson::loadDecisionForPage(int pageIndex) {
     decision.correctFeedback = obj["correctFeedback"].toString();
     decision.incorrectFeedback = obj["incorrectFeedback"].toString();
     decision.correctAction = stringToAction(obj["correctAction"].toString());
+    decision.amount = obj["amount"].toInt();
 
     QJsonArray choicesArray = obj["choices"].toArray();
 
@@ -135,6 +144,7 @@ void Lesson::loadDecisionForPage(int pageIndex) {
     }
 
     currentDecision = decision;
+    emit updateDecision(decision);
 }
 
 void Lesson::loadBotActionsFromCSV() {
@@ -258,7 +268,8 @@ void Lesson::makeChoice(int choiceIndex) {
     bool correct = (choiceIndex == decision.correctChoice);
     QString feedback = correct ? decision.correctFeedback : decision.incorrectFeedback;
 
-    emit choiceResult(correct, feedback, decision.correctAction);
+    emit updateNext(correct);
+    emit choiceResult(correct, feedback, decision.correctAction, decision.amount);
 }
 
 QString Lesson::getCurrentPage() const {
@@ -398,4 +409,13 @@ queue<Action> Lesson::getPlayerBotActions(int playerIndex) const {
 
 void Lesson::allowNext(bool allowed) {
     emit updateNext(allowed);
+}
+
+void Lesson::showFeedback(QString feedback) {
+    emit displayFeedback(feedback);
+}
+
+void Lesson::sendDecision() {
+    // sendDecision should only be called while the lesson hasn't yet progressed from a valid decision.
+    emit displayDecision(*currentDecision);
 }

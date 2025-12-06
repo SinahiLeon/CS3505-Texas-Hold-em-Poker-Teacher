@@ -1,12 +1,13 @@
 {
   "prompt": "What do you do with this hand?",
   "choices": [
-    "Raise $3",
-    "Call $1",
+    "Raise $30",
+    "Call $10",
     "Fold"
   ],
   "correct": 0,
   "correctFeedback": "Perfect! With premium hands like AK, AA, KK, QQ, we always raise. These hands are so strong that position doesn't matter much.",
   "incorrectFeedback": "Not quite right. Premium hands should be played aggressively from any position. Try again!",
-  "correctAction": "raise"
+  "correctAction": "raise",
+  "amount": 30
 }

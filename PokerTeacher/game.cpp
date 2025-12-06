@@ -17,6 +17,10 @@ Game::Game(QObject *parent) : QObject(parent), lesson(Lesson(QString(":/Lessons/
             this, &Game::getNewActions);
     connect(&lesson, &Lesson::resetGame,
             this, &Game::startNextHand);
+    connect(this, &Game::displayFeedback,
+            &lesson, &Lesson::showFeedback);
+    connect(&lesson, &Lesson::choiceResult,
+            this, &Game::recieveDecision);
 }
 
 void Game::newGame() {
@@ -503,11 +507,17 @@ void Game::getNewActions() {
     }
 }
 
-void Game::recieveDecision(bool correct, QString feedback, Action action) {
+void Game::recieveDecision(bool correct, QString feedback, Action action, int amount) {
     if (!correct) {
         emit displayFeedback(feedback);
         return;
     }
 
-    // TODO: Implement decision dialogs
+    switch (action) {
+        case (Action::None) : { return; }
+        case (Action::Check) : { return playerChecks(); }
+        case (Action::Call) : { return playerCalls(); }
+        case (Action::Raise) : { return playerMakesBet(amount); };
+        case (Action::Fold) : { return playerFolds(); }
+    }
 }

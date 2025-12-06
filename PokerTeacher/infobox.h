@@ -2,8 +2,10 @@
 #define INFOBOX_H
 
 #include <QDialog>
-#include <qmainwindow.h>
+#include <QMessageBox>
 #include "lesson.h"
+
+using std::nullopt;
 
 namespace Ui {
 class InfoBox;
@@ -17,9 +19,19 @@ public:
     explicit InfoBox(Lesson& _lesson, QWidget* parent = nullptr);
     ~InfoBox();
 
+public slots:
+    void setDecision(Decision d) { decision = optional<Decision>(d); };
+
+signals:
+    void getDecision();
+
 private:
     Ui::InfoBox *ui;
     Lesson& lesson;
+    optional<Decision> decision = nullopt;
+
+    void displayDecision(Decision& decision);
+    void displayFeedback(QString feedback);
 
 private slots:
     void back();

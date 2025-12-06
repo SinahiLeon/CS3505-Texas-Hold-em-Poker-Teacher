@@ -16,6 +16,14 @@ InfoBox::InfoBox(Lesson& _lesson, QWidget* parent)
             this, &InfoBox::next);
     connect(&lesson, &Lesson::updateNext,
             ui->nextButton, &QPushButton::setEnabled);
+    connect(&lesson, &Lesson::updateDecision,
+            this, &InfoBox::setDecision);
+    connect(&lesson, &Lesson::displayFeedback,
+            this, &InfoBox::displayFeedback);
+    connect(this, &InfoBox::getDecision,
+            &lesson, &Lesson::sendDecision);
+    connect(&lesson, &Lesson::displayDecision,
+            this, &InfoBox::displayDecision);
 
     qDebug() << "All connects";
     ui->lessonBrowser->setSource(lesson.getCurrentUrl());
@@ -41,6 +49,13 @@ void InfoBox::back() {
 }
 
 void InfoBox::next() {
+    // This comes first so decisions only appear after a user has read through the game text
+    if (decision.has_value()) {
+        displayDecision(*decision);
+        decision = nullopt;
+        return;
+    }
+
     bool hasNext = lesson.nextPage();
 
     if (hasNext && !ui->backButton->isEnabled()) {
@@ -52,4 +67,33 @@ void InfoBox::next() {
     }
 
     ui->lessonBrowser->setSource(lesson.getCurrentUrl());
+}
+
+void InfoBox::displayDecision(Decision& decision) {
+    ui->nextButton->setEnabled(false);
+
+    // Dialog content
+    QMessageBox decisionBox;
+    decisionBox.setText(decision.prompt);
+
+    // Dialog buttons
+    for (int i = 0; i < decision.choices.size(); i++) {
+        QPushButton* choiceButton = new QPushButton(decision.choices[i]);
+
+        connect(choiceButton, &QPushButton::clicked,
+                &lesson, [this, i]() { lesson.makeChoice(i); });
+
+        decisionBox.addButton(choiceButton, QMessageBox::AcceptRole);
+    }
+
+    decisionBox.exec();
+}
+
+void InfoBox::displayFeedback(QString feedback) {
+    QMessageBox feedbackBox;
+    feedbackBox.setText(feedback);
+    feedbackBox.setStandardButtons(QMessageBox::Ok);
+    feedbackBox.exec();
+
+    emit getDecision();
 }

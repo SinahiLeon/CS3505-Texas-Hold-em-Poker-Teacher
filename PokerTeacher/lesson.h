@@ -62,13 +62,18 @@ public:
 
 public slots:
     void allowNext(bool allowed);
+    void showFeedback(QString feedback);
+    void sendDecision();
 
 signals:
     void pageChanged();
-    void choiceResult(bool correct, QString feedback, Action action);
+    void choiceResult(bool correct, QString feedback, Action action, int amount);
     void newActions();
     void resetGame();
     void updateNext(bool allowed);
+    void updateDecision(Decision decision);
+    void displayDecision(Decision& decision);
+    void displayFeedback(QString feedback);
 
 private:
     QDir folder;
@@ -79,6 +84,7 @@ private:
     vector<QString> lessonPages;
     int lessonNum;
     int pageIndex;
+    int greatestIndex = 0;
 
     // Constants
     const QRegularExpression precedingPath = QRegularExpression("^.*[/]");
