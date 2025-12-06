@@ -227,9 +227,11 @@ void Lesson::updateCurrentBotActions() {
     }
 }
 
-vector<shared_ptr<Card>> Lesson::getDeck() {
+vector<shared_ptr<Card>> Lesson::getDeck(int deckNum) {
     vector<shared_ptr<Card>> deck;
-    QFile inputFile = QFile(folder.filesystemAbsolutePath().append("deck.txt"));
+    QString fileName = "/"+QString::number(deckNum)+".deck";
+    qDebug() << "Rigging deck from " << folder.absoluteFilePath(fileName);
+    QFile inputFile = QFile(folder.absoluteFilePath(fileName));
     if (inputFile.open(QIODevice::ReadOnly))
     {
         QTextStream in(&inputFile);

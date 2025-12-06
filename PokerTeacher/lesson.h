@@ -58,7 +58,7 @@ public:
     QUrl getCurrentUrl() const;
     queue<Action> getPlayerBotActions(int playerIndex) const;
 
-    vector<shared_ptr<Card>> getDeck();
+    vector<shared_ptr<Card>> getDeck(int deckNum = 1);
 
 public slots:
     void allowNext(bool allowed);
@@ -70,7 +70,7 @@ signals:
     void pageChanged();
     void choiceResult(bool correct, QString feedback, Action action, int amount);
     void newActions();
-    void resetGame();
+    void resetGame(int dealerIndex = 0, int deck = -1);
     void updateNext(bool allowed);
     void updateDecision(Decision decision);
     void displayDecision(Decision& decision);

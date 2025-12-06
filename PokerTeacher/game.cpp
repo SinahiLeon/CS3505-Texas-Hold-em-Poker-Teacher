@@ -15,14 +15,15 @@ using std::default_random_engine;
 Game::Game(QObject *parent) : QObject(parent), lesson(Lesson(QString(":/Lessons/0-The_Board"))) {
     connect(&lesson, &Lesson::newActions,
             this, &Game::getNewActions);
-    connect(&lesson, &Lesson::resetGame,
-            this, &Game::startNextHand);
+    //connect(&lesson, &Lesson::resetGame, this, &Game::startNextHand);
     connect(this, &Game::displayFeedback,
             &lesson, &Lesson::showFeedback);
     connect(&lesson, &Lesson::choiceResult,
             this, &Game::recieveDecision);
     connect(&lesson, &Lesson::botActionsReady,
             this, &Game::applyLessonBotActions);
+    connect(&lesson, &Lesson::resetGame,
+            this, &Game::lessonResetBoard);
 }
 
 void Game::newGame() {
@@ -74,7 +75,7 @@ void Game::startRound() {
     continueRound(playerIndex);
 }
 
-void Game::newHand() {
+void Game::newHand(vector<shared_ptr<Card>> cardOrder) {
     qDebug() << "Setting up new hand...";
     currentBet = 0;
     phaseIndex = 0;
@@ -91,8 +92,13 @@ void Game::newHand() {
 
     communityCards.clear();
     emit communityCardsUpdated();
+    if(cardOrder.empty()) {
+        shuffleDeck();
+    }
+    else {
+        rigDeck(cardOrder);
+    }
 
-    shuffleDeck();
     dealHoleCards();
     emit handCardsUpdated();
 
@@ -561,4 +567,16 @@ void Game::recieveDecision(bool correct, QString feedback, Action action, int am
         case (Action::Raise) : { return playerMakesBet(amount); };
         case (Action::Fold) : { return playerFolds(); }
     }
+}
+
+void Game::lessonResetBoard(int dealerIndex, int riggedDeck) {
+    qDebug() << "Lesson lesson has requested the board be reset";
+    resetBoard(dealerIndex, riggedDeck);
+}
+
+void Game::resetBoard(int dealerIndex, int riggedDeck) {
+    qDebug() << "Resetting Board";
+    Game::dealerIndex = dealerIndex;
+    qDebug() << "Set dealer to player " << dealerIndex;
+    newHand(lesson.getDeck(riggedDeck));
 }

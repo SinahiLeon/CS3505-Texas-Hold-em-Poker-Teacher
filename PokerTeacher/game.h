@@ -69,6 +69,7 @@ public slots:
     void startNextHand();
     void startFreeplay();
     void applyLessonBotActions();
+    void lessonResetBoard(int dealerIndex = 0, int riggedDeck = -1);
 
 private:
     stack<shared_ptr<Card>> deck;
@@ -86,11 +87,13 @@ private:
     Lesson lesson;
 
     void newGame();
-    void newHand();
+    void newHand(vector<shared_ptr<Card>> cardOrder = vector<shared_ptr<Card>>());
     void startRound();
     void continueRound(int playerIndex);
     void nextPhase();
     void thinkingDelay(int playerIndex);
+
+    void resetBoard(int dealerIndex, int riggedDeck);
 
     /// @brief Resets and shuffles the deck with all cards
     void shuffleDeck();
