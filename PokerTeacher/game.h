@@ -87,6 +87,8 @@ private:
     Lesson lesson;
 
     void newGame();
+    /// @brief resets players, reshuffles the deck and starts a new hand.
+    /// @param cardOrder the order in which cards will appear. If empty, the deck will be random.
     void newHand(vector<shared_ptr<Card>> cardOrder = vector<shared_ptr<Card>>());
     void startRound();
     void continueRound(int playerIndex);
