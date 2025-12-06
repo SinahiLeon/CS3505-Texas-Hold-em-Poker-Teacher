@@ -95,7 +95,7 @@
         <file>Lessons/2-Hand_and_Board_Harmony/15.html</file>
         <file>Lessons/2-Hand_and_Board_Harmony/d0.txt</file>
         <file>Lessons/2-Hand_and_Board_Harmony/decision1</file>
-        <file>Lessons/2-Hand_and_Board_Harmony/gameMoves.csv</file>
+        <file>Lessons/2-Hand_and_Board_Harmony/actions.csv</file>
         <file>Lessons/2-Hand_and_Board_Harmony/gameResets.txt</file>
         <file>Lessons/2-Hand_and_Board_Harmony/16.html</file>
         <file>Lessons/2-Hand_and_Board_Harmony/17.html</file>
@@ -124,7 +124,7 @@
         <file>Lessons/3-Push_or_Protect/9.html</file>
         <file>Lessons/3-Push_or_Protect/d0.txt</file>
         <file>Lessons/3-Push_or_Protect/decision1</file>
-        <file>Lessons/3-Push_or_Protect/gameMoves.csv</file>
+        <file>Lessons/3-Push_or_Protect/actions.csv</file>
         <file>Lessons/3-Push_or_Protect/gameResets.txt</file>
         <file>Lessons/4-The_Chase_Calculator/0.html</file>
         <file>Lessons/4-The_Chase_Calculator/1.html</file>
@@ -148,7 +148,7 @@
         <file>Lessons/4-The_Chase_Calculator/19.html</file>
         <file>Lessons/4-The_Chase_Calculator/d0.txt</file>
         <file>Lessons/4-The_Chase_Calculator/decision1</file>
-        <file>Lessons/4-The_Chase_Calculator/gameMoves.csv</file>
+        <file>Lessons/4-The_Chase_Calculator/actions.csv</file>
         <file>Lessons/4-The_Chase_Calculator/gameResets.txt</file>
         <file>Lessons/4-The_Chase_Calculator/20.html</file>
         <file>Lessons/4-The_Chase_Calculator/21.html</file>
@@ -176,7 +176,7 @@
         <file>Lessons/5-The_Bluffing_Blueprint/19.html</file>
         <file>Lessons/5-The_Bluffing_Blueprint/d0.txt</file>
         <file>Lessons/5-The_Bluffing_Blueprint/decision1</file>
-        <file>Lessons/5-The_Bluffing_Blueprint/gameMoves.csv</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/actions.csv</file>
         <file>Lessons/5-The_Bluffing_Blueprint/gameResets.txt</file>
         <file>Lessons/6-Reading_Minds/0.html</file>
         <file>Lessons/6-Reading_Minds/1.html</file>
@@ -206,7 +206,7 @@
         <file>Lessons/6-Reading_Minds/25.html</file>
         <file>Lessons/6-Reading_Minds/d0.txt</file>
         <file>Lessons/6-Reading_Minds/decision1</file>
-        <file>Lessons/6-Reading_Minds/gameMoves.csv</file>
+        <file>Lessons/6-Reading_Minds/actions.csv</file>
         <file>Lessons/6-Reading_Minds/gameResets.txt</file>
         <file>Lessons/0-The_Board/0.html</file>
         <file>Lessons/0-The_Board/1.html</file>
