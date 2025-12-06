@@ -93,10 +93,6 @@
         <file>Lessons/2-Hand_and_Board_Harmony/13.html</file>
         <file>Lessons/2-Hand_and_Board_Harmony/14.html</file>
         <file>Lessons/2-Hand_and_Board_Harmony/15.html</file>
-        <file>Lessons/2-Hand_and_Board_Harmony/d0.txt</file>
-        <file>Lessons/2-Hand_and_Board_Harmony/decision1</file>
-        <file>Lessons/2-Hand_and_Board_Harmony/gameMoves.csv</file>
-        <file>Lessons/2-Hand_and_Board_Harmony/gameResets.txt</file>
         <file>Lessons/2-Hand_and_Board_Harmony/16.html</file>
         <file>Lessons/2-Hand_and_Board_Harmony/17.html</file>
         <file>Lessons/2-Hand_and_Board_Harmony/18.html</file>
@@ -153,7 +149,6 @@
         <file>Lessons/4-The_Chase_Calculator/20.html</file>
         <file>Lessons/4-The_Chase_Calculator/21.html</file>
         <file>Lessons/4-The_Chase_Calculator/22.html</file>
-        <file>Lessons/2-Hand_and_Board_Harmony/deckStart.txt</file>
         <file>Lessons/5-The_Bluffing_Blueprint/0.html</file>
         <file>Lessons/5-The_Bluffing_Blueprint/1.html</file>
         <file>Lessons/5-The_Bluffing_Blueprint/2.html</file>
@@ -230,5 +225,10 @@
         <file>Lessons/1-Hand_Types_and_Position/4.deck</file>
         <file>Lessons/1-Hand_Types_and_Position/9.deck</file>
         <file>Lessons/1-Hand_Types_and_Position/12.deck</file>
+        <file>Lessons/1-Hand_Types_and_Position/4.json</file>
+        <file>Lessons/1-Hand_Types_and_Position/7.json</file>
+        <file>Lessons/1-Hand_Types_and_Position/9.json</file>
+        <file>Lessons/1-Hand_Types_and_Position/12.json</file>
+        <file>Lessons/2-Hand_and_Board_Harmony/gameMoves.csv</file>
     </qresource>
 </RCC>

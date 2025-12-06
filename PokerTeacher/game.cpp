@@ -31,6 +31,8 @@ void Game::newGame() {
     qDebug() << "Setting up new game...";
     pot = 0;
     players.clear();
+    smallBlindPaid = false;
+    largeBlindPaid = false;
 
     for (int i = 0; i < 3; i++) {
         queue<Action> startingActions = lesson.getPlayerBotActions(i);
@@ -41,7 +43,7 @@ void Game::newGame() {
     // Set up start of first hand
     newHand();
     // Start the game loop
-    dealerIndex = 2;
+    dealerIndex = 1;
     startRound();
 }
 
@@ -51,7 +53,6 @@ void Game::startRound() {
 
     // Force small and large blinds if they haven't been paid yet
     int playerIndex = getDealerIndex();
-    playerIndex++;
 
     if (playerIndex >= players.size()) {
         playerIndex = 0;
@@ -209,12 +210,20 @@ void Game::shuffleDeck() {
 }
 
 void Game::thinkingDelay(int playerIndex) {
-    emit updateLastAction(playerIndex, QString("is thinking..."));
+    emit updateLastAction(playerIndex, getCorrectVerb(playerIndex) + " thinking...");
     qDebug() << "Starting sleep delay for player" << playerIndex << "thinking...";
     QTime delayTime = QTime::currentTime().addMSecs(1000);
     while (QTime::currentTime() < delayTime) {
         QThread::msleep(50);
     }
+}
+
+QString Game::getCorrectVerb(int playerIndex) {
+    if (playerIndex == 0) {
+        return "are";
+    }
+
+    return "is";
 }
 
 void Game::rigDeck(vector<shared_ptr<Card>> cardOrder){
@@ -523,11 +532,6 @@ void Game::applyLessonBotActions() {
 
     // Execute each bot action immediately
     for (const BotAction& action : botActions) {
-        // Skip human player (player 0)
-        if (action.player == 0) {
-            continue;
-        }
-
         int botIndex = action.player; // 1 or 2 for bots
 
         // Execute the action immediately
@@ -555,8 +559,9 @@ void Game::applyLessonBotActions() {
 }
 
 void Game::recieveDecision(bool correct, QString feedback, Action action, int amount) {
+    emit displayFeedback(feedback, correct);
+
     if (!correct) {
-        emit displayFeedback(feedback);
         return;
     }
 
@@ -578,5 +583,6 @@ void Game::resetBoard(int dealerIndex, int riggedDeck) {
     qDebug() << "Resetting Board";
     Game::dealerIndex = dealerIndex;
     qDebug() << "Set dealer to player " << dealerIndex;
+    newGame();
     newHand(lesson.getDeck(riggedDeck));
 }

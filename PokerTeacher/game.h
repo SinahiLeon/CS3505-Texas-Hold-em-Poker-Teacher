@@ -58,7 +58,7 @@ signals:
     void updateAvailableActions();
     void handEnded(int winner);
     void playersTurnEnded();
-    void displayFeedback(QString feedback);
+    void displayFeedback(QString feedback, bool correct);
 
 public slots:
     void onViewInitialized();
@@ -116,6 +116,8 @@ private:
     bool validPlayer(int playerIndex);
     /// @brief Helper method that quickly checks if anyone has bid yet this hand.
     bool noBetsYet() { return noBetsYetThisPhase; }
+    /// @brief Returns the correct verb depending on whether the action player is a human player or a bot.
+    QString getCorrectVerb(int playerIndex);
 
 private slots:
     void getNewActions();

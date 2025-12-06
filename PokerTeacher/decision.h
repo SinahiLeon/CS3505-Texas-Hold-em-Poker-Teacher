@@ -9,7 +9,6 @@ struct Decision {
     QString prompt;
     QStringList choices;
     int correctChoice;
-    QString correctFeedback;
     QString incorrectFeedback;
     Action correctAction;
     int amount;

@@ -4,10 +4,10 @@ What is left for lessons:
 
 [] - Write actions, decisions, and decks for all lessons
 
-[] - Fix current code for running predetermined actions
+[X] - Fix current code for running predetermined actions
 
-[] - Implement decision dialog boxes
+[X] - Implement decision dialog boxes
 
-[] - Finish implementing deck rigging (probably using Ben's code)
+[X] - Finish implementing deck rigging (probably using Ben's code)
 
 [] - Pausing game execution

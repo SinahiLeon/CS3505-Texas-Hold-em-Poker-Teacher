@@ -305,7 +305,7 @@ background: rgba(0, 0, 0, 55);
          <item>
           <widget class="QLabel" name="opp1LastAction">
            <property name="text">
-            <string>opp 1 last action</string>
+            <string>Opponent 1 is thinking...</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -1103,7 +1103,7 @@ background: rgb(109, 0, 164)
          <item>
           <widget class="QLabel" name="playerLastAction">
            <property name="text">
-            <string>player last action</string>
+            <string>You are thinking...</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -1334,7 +1334,7 @@ background: rgb(109, 0, 164)
          <item>
           <widget class="QLabel" name="opp2LastAction">
            <property name="text">
-            <string>opp 2 last action</string>
+            <string>Opponent 2 is thinking...</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -1745,7 +1745,7 @@ color: #fa5e8a;
      <x>0</x>
      <y>0</y>
      <width>950</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuLessons">

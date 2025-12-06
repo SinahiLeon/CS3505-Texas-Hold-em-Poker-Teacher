@@ -1,0 +1,12 @@
+{
+  "prompt": "Your turn. With this hand, do you:",
+  "choices": [
+    "Raise $30",
+    "Call $20",
+    "Fold"
+  ],
+  "correct": 0,
+  "incorrectFeedback": "Not right. You are in a good position to play a speculative hand right now. Try again!",
+  "correctAction": "raise",
+  "amount": 30
+}
