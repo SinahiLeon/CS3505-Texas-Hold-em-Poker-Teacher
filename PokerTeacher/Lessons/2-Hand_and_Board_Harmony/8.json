@@ -1,5 +1,5 @@
 {
-  "prompt": "Opponent bets $5. With these draws, do you:",
+  "prompt": "Opponent bets $50. With these draws, do you:",
   "choices": [
     "Call $50",
     "Fold"

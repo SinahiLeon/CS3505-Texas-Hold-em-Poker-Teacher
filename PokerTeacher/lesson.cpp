@@ -193,7 +193,7 @@ void Lesson::loadBotActionsFromCSV() {
         action.page = csvPage - 1;
 
         action.player = parts[1].toInt(&ok);
-        if (!ok || action.player < 0 || action.player > 2) {
+        if (!ok || action.player < -1 || action.player > 2) {
             qWarning() << "Invalid player number:" << parts[1];
             continue;
         }

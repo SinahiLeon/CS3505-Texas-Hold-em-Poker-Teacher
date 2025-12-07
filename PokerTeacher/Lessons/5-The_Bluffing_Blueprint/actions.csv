@@ -2,6 +2,7 @@ page,player,action,change
 1,0,raise,10
 1,1,fold,0
 1,2,call,10
+1,-1,advphase,0
 2,2,check,0
 3,0,raise,15
 3,2,fold,0
