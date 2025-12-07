@@ -73,7 +73,7 @@ public slots:
 
 private:
     stack<shared_ptr<Card>> deck;
-    int dealerIndex = 2;
+    int dealerIndex = 1;
     int pot = 0;
     int currentBet = 0;
     int bigBlind = 10;
@@ -86,7 +86,7 @@ private:
     int numPlayersCalled = 0;
     Lesson lesson;
 
-    void newGame();
+    void newGame(int gameDealerIndex = 1);
     /// @brief resets players, reshuffles the deck and starts a new hand.
     /// @param cardOrder the order in which cards will appear. If empty, the deck will be random.
     void newHand(vector<shared_ptr<Card>> cardOrder = vector<shared_ptr<Card>>());

@@ -95,29 +95,22 @@
         <file>Lessons/2-Hand_and_Board_Harmony/15.html</file>
         <file>Lessons/2-Hand_and_Board_Harmony/16.html</file>
         <file>Lessons/2-Hand_and_Board_Harmony/17.html</file>
-        <file>Lessons/2-Hand_and_Board_Harmony/18.html</file>
-        <file>Lessons/2-Hand_and_Board_Harmony/19.html</file>
-        <file>Lessons/2-Hand_and_Board_Harmony/20.html</file>
-        <file>Lessons/2-Hand_and_Board_Harmony/21.html</file>
-        <file>Lessons/2-Hand_and_Board_Harmony/22.html</file>
         <file>Lessons/3-Push_or_Protect/0.html</file>
         <file>Lessons/3-Push_or_Protect/1.html</file>
+        <file>Lessons/3-Push_or_Protect/8.html</file>
+        <file>Lessons/3-Push_or_Protect/9.html</file>
         <file>Lessons/3-Push_or_Protect/10.html</file>
         <file>Lessons/3-Push_or_Protect/11.html</file>
         <file>Lessons/3-Push_or_Protect/12.html</file>
         <file>Lessons/3-Push_or_Protect/13.html</file>
         <file>Lessons/3-Push_or_Protect/14.html</file>
         <file>Lessons/3-Push_or_Protect/15.html</file>
-        <file>Lessons/3-Push_or_Protect/16.html</file>
-        <file>Lessons/3-Push_or_Protect/17.html</file>
         <file>Lessons/3-Push_or_Protect/2.html</file>
         <file>Lessons/3-Push_or_Protect/3.html</file>
         <file>Lessons/3-Push_or_Protect/4.html</file>
         <file>Lessons/3-Push_or_Protect/5.html</file>
         <file>Lessons/3-Push_or_Protect/6.html</file>
         <file>Lessons/3-Push_or_Protect/7.html</file>
-        <file>Lessons/3-Push_or_Protect/8.html</file>
-        <file>Lessons/3-Push_or_Protect/9.html</file>
         <file>Lessons/3-Push_or_Protect/d0.txt</file>
         <file>Lessons/3-Push_or_Protect/decision1</file>
         <file>Lessons/3-Push_or_Protect/gameMoves.csv</file>
@@ -229,6 +222,14 @@
         <file>Lessons/1-Hand_Types_and_Position/7.json</file>
         <file>Lessons/1-Hand_Types_and_Position/9.json</file>
         <file>Lessons/1-Hand_Types_and_Position/12.json</file>
-        <file>Lessons/2-Hand_and_Board_Harmony/gameMoves.csv</file>
+        <file>Lessons/2-Hand_and_Board_Harmony/2.json</file>
+        <file>Lessons/2-Hand_and_Board_Harmony/6.json</file>
+        <file>Lessons/2-Hand_and_Board_Harmony/8.json</file>
+        <file>Lessons/2-Hand_and_Board_Harmony/12.json</file>
+        <file>Lessons/2-Hand_and_Board_Harmony/14.json</file>
+        <file>Lessons/3-Push_or_Protect/2.json</file>
+        <file>Lessons/3-Push_or_Protect/5.json</file>
+        <file>Lessons/3-Push_or_Protect/8.json</file>
+        <file>Lessons/3-Push_or_Protect/12.json</file>
     </qresource>
 </RCC>

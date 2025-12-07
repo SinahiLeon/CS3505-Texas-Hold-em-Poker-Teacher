@@ -1,0 +1,12 @@
+{
+  "prompt": "Action checks to you. With this dry board, do you:",
+  "choices": [
+    "Bet $40",
+    "Check",
+    "Fold"
+  ],
+  "correct": 1,
+  "incorrectFeedback": "We need to be careful here, we should do a cautious move. Try again!",
+  "correctAction": "check",
+  "amount": 0
+}

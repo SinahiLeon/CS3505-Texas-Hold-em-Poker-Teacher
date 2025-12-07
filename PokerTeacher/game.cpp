@@ -26,7 +26,7 @@ Game::Game(QObject *parent) : QObject(parent), lesson(Lesson(QString(":/Lessons/
             this, &Game::lessonResetBoard);
 }
 
-void Game::newGame() {
+void Game::newGame(int gameDealerIndex) {
     // Set up start of game
     qDebug() << "Setting up new game...";
     pot = 0;
@@ -43,7 +43,7 @@ void Game::newGame() {
     // Set up start of first hand
     newHand();
     // Start the game loop
-    dealerIndex = 1;
+    dealerIndex = gameDealerIndex;
     startRound();
 }
 
@@ -581,8 +581,7 @@ void Game::lessonResetBoard(int dealerIndex, int riggedDeck) {
 
 void Game::resetBoard(int dealerIndex, int riggedDeck) {
     qDebug() << "Resetting Board";
-    Game::dealerIndex = dealerIndex;
     qDebug() << "Set dealer to player " << dealerIndex;
-    newGame();
+    newGame(dealerIndex);
     newHand(lesson.getDeck(riggedDeck));
 }

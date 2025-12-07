@@ -1,0 +1,12 @@
+{
+  "prompt": "Opponent checks. With this strong hand on this safe board, do you:",
+  "choices": [
+    "Bet $80",
+    "Bet $40",
+    "Check",
+  ],
+  "correct": 0,
+  "incorrectFeedback": "We need to be aggressive here to take out other players. Try again!",
+  "correctAction": "raise",
+  "amount": 80
+}
