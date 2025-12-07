@@ -1,0 +1,11 @@
+{
+  "prompt": "Pot is $40. Do you:",
+  "choices": [
+    "Check",
+    "Bet $15"
+  ],
+  "correct": 1,
+  "incorrectFeedback": "Check over your math. Try again!",
+  "correctAction": "raise",
+  "amount": 15
+}

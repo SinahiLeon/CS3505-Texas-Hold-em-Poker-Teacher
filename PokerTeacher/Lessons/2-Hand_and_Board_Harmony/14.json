@@ -2,7 +2,7 @@
   "prompt": "What do you do with this hand?",
   "choices": [
     "Bet $60",
-    "Check",
+    "Check"
   ],
   "correct": 0,
   "incorrectFeedback": "These are ideal conditions, we can be a little more aggressive than just checking. Try again!",

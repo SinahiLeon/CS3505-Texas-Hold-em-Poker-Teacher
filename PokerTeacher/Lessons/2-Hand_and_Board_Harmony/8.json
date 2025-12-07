@@ -2,7 +2,7 @@
   "prompt": "Opponent bets $5. With these draws, do you:",
   "choices": [
     "Call $50",
-    "Fold",
+    "Fold"
   ],
   "correct": 0,
   "incorrectFeedback": "The odds are on our side here, there's no reason to fold. Try again!",

@@ -1,0 +1,11 @@
+{
+  "prompt": "Pot odds: 10 to 30 = 1:3 (25%). Your flush draw needs ~18%. Do you:",
+  "choices": [
+    "Call 10",
+    "Fold"
+  ],
+  "correct": 0,
+  "incorrectFeedback": "Check over your math. Try again!",
+  "correctAction": "call",
+  "amount": 10
+}

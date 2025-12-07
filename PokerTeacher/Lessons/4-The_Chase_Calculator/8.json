@@ -1,0 +1,12 @@
+{
+  "prompt": "Mathematically, this is a clear:",
+  "choices": [
+    "Call",
+    "Fold",
+    "Raise"
+  ],
+  "correct": 1,
+  "incorrectFeedback": "Check over your math. Try again!",
+  "correctAction": "fold",
+  "amount": 10
+}
