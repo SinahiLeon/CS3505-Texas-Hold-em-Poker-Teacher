@@ -1,0 +1,11 @@
+{
+  "prompt": "Opponent checks. With this scary board, do you:",
+  "choices": [
+    "Bet 15 dollars (three quarters pot)",
+    "Check"
+  ],
+  "correct": 0,
+  "incorrectFeedback": "Take initiative and bluff! This is a scary board for your opponent.",
+  "correctAction": "raise",
+  "amount": 15
+}

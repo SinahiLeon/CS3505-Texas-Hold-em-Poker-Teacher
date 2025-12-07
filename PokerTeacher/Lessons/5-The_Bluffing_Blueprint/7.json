@@ -1,0 +1,11 @@
+{
+  "prompt": "Opponent checks. With this dry board, do you:",
+  "choices": [
+    "Bet 10 dollars (bluff)",
+    "Check"
+  ],
+  "correct": 1,
+  "incorrectFeedback": "Bad bluff! On dry, low boards, opponents can call with any pair. Your story isn't believable - why would you bet here?",
+  "correctAction": "check",
+  "amount": 0
+}

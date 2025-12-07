@@ -1,0 +1,11 @@
+{
+  "prompt": "With about 45 percent fold chance, do you bluff:",
+  "choices": [
+    "Bet 15 dollars",
+    "Check"
+  ],
+  "correct": 0,
+  "incorrectFeedback": "The fold equity is high here. Take advantage of it.",
+  "correctAction": "raise",
+  "amount": 15
+}

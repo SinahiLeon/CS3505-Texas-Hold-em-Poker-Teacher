@@ -1,0 +1,12 @@
+{
+  "prompt": "Opponent checks river. To represent a big hand, do you:",
+  "choices": [
+    "Bet 25 dollars (large)",
+    "Bet 15 dollars (medium)",
+    "Check"
+  ],
+  "correct": 1,
+  "incorrectFeedback": "We want to play it in the middle here. Try again.",
+  "correctAction": "raise",
+  "amount": 15
+}

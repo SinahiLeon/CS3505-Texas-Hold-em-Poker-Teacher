@@ -159,8 +159,6 @@
         <file>Lessons/5-The_Bluffing_Blueprint/16.html</file>
         <file>Lessons/5-The_Bluffing_Blueprint/17.html</file>
         <file>Lessons/5-The_Bluffing_Blueprint/18.html</file>
-        <file>Lessons/5-The_Bluffing_Blueprint/19.html</file>
-        <file>Lessons/5-The_Bluffing_Blueprint/d0.txt</file>
         <file>Lessons/5-The_Bluffing_Blueprint/decision1</file>
         <file>Lessons/5-The_Bluffing_Blueprint/actions.csv</file>
         <file>Lessons/5-The_Bluffing_Blueprint/gameResets.txt</file>
@@ -190,7 +188,6 @@
         <file>Lessons/6-Reading_Minds/23.html</file>
         <file>Lessons/6-Reading_Minds/24.html</file>
         <file>Lessons/6-Reading_Minds/25.html</file>
-        <file>Lessons/6-Reading_Minds/d0.txt</file>
         <file>Lessons/6-Reading_Minds/decision1</file>
         <file>Lessons/6-Reading_Minds/actions.csv</file>
         <file>Lessons/6-Reading_Minds/gameResets.txt</file>
@@ -244,8 +241,8 @@
         <file>Lessons/4-The_Chase_Calculator/16.deck</file>
         <file>Lessons/5-The_Bluffing_Blueprint/1.deck</file>
         <file>Lessons/5-The_Bluffing_Blueprint/5.deck</file>
-        <file>Lessons/5-The_Bluffing_Blueprint/11.deck</file>
-        <file>Lessons/5-The_Bluffing_Blueprint/15.deck</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/10.deck</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/14.deck</file>
         <file>Lessons/6-Reading_Minds/2.deck</file>
         <file>Lessons/6-Reading_Minds/7.deck</file>
         <file>Lessons/6-Reading_Minds/11.deck</file>
@@ -254,5 +251,9 @@
         <file>Lessons/4-The_Chase_Calculator/8.json</file>
         <file>Lessons/4-The_Chase_Calculator/13.json</file>
         <file>Lessons/4-The_Chase_Calculator/16.json</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/2.json</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/7.json</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/11.json</file>
+        <file>Lessons/5-The_Bluffing_Blueprint/15.json</file>
     </qresource>
 </RCC>
