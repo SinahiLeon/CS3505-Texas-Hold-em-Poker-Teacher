@@ -5,7 +5,7 @@
     "Call",
     "Fold"
   ],
-  "correct": 0,
+  "correct": 2,
   "incorrectFeedback": "Remember that you need to cut your losses sometimes. Try again!",
   "correctAction": "fold",
   "amount": 0
