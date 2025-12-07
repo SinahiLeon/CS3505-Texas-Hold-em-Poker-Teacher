@@ -98,4 +98,9 @@ void InfoBox::displayFeedback(QString feedback, bool correct) {
     if (!correct) {
         emit getDecision();
     }
+
+    else {
+        decision = nullopt;
+        next();
+    }
 }
