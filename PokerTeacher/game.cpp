@@ -584,4 +584,7 @@ void Game::resetBoard(int dealerIndex, int riggedDeck) {
     qDebug() << "Set dealer to player " << dealerIndex;
     newGame(dealerIndex);
     newHand(lesson.getDeck(riggedDeck));
+    if (phase == Phase::Preflop) {
+        nextPhase();
+    }
 }
