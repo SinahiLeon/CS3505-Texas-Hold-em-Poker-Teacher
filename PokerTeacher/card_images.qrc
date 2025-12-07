@@ -93,35 +93,25 @@
         <file>Lessons/2-Hand_and_Board_Harmony/13.html</file>
         <file>Lessons/2-Hand_and_Board_Harmony/14.html</file>
         <file>Lessons/2-Hand_and_Board_Harmony/15.html</file>
-        <file>Lessons/2-Hand_and_Board_Harmony/d0.txt</file>
-        <file>Lessons/2-Hand_and_Board_Harmony/decision1</file>
         <file>Lessons/2-Hand_and_Board_Harmony/actions.csv</file>
-        <file>Lessons/2-Hand_and_Board_Harmony/gameResets.txt</file>
         <file>Lessons/2-Hand_and_Board_Harmony/16.html</file>
         <file>Lessons/2-Hand_and_Board_Harmony/17.html</file>
-        <file>Lessons/2-Hand_and_Board_Harmony/18.html</file>
-        <file>Lessons/2-Hand_and_Board_Harmony/19.html</file>
-        <file>Lessons/2-Hand_and_Board_Harmony/20.html</file>
-        <file>Lessons/2-Hand_and_Board_Harmony/21.html</file>
-        <file>Lessons/2-Hand_and_Board_Harmony/22.html</file>
         <file>Lessons/3-Push_or_Protect/0.html</file>
         <file>Lessons/3-Push_or_Protect/1.html</file>
+        <file>Lessons/3-Push_or_Protect/8.html</file>
+        <file>Lessons/3-Push_or_Protect/9.html</file>
         <file>Lessons/3-Push_or_Protect/10.html</file>
         <file>Lessons/3-Push_or_Protect/11.html</file>
         <file>Lessons/3-Push_or_Protect/12.html</file>
         <file>Lessons/3-Push_or_Protect/13.html</file>
         <file>Lessons/3-Push_or_Protect/14.html</file>
         <file>Lessons/3-Push_or_Protect/15.html</file>
-        <file>Lessons/3-Push_or_Protect/16.html</file>
-        <file>Lessons/3-Push_or_Protect/17.html</file>
         <file>Lessons/3-Push_or_Protect/2.html</file>
         <file>Lessons/3-Push_or_Protect/3.html</file>
         <file>Lessons/3-Push_or_Protect/4.html</file>
         <file>Lessons/3-Push_or_Protect/5.html</file>
         <file>Lessons/3-Push_or_Protect/6.html</file>
         <file>Lessons/3-Push_or_Protect/7.html</file>
-        <file>Lessons/3-Push_or_Protect/8.html</file>
-        <file>Lessons/3-Push_or_Protect/9.html</file>
         <file>Lessons/3-Push_or_Protect/d0.txt</file>
         <file>Lessons/3-Push_or_Protect/decision1</file>
         <file>Lessons/3-Push_or_Protect/actions.csv</file>
@@ -153,7 +143,6 @@
         <file>Lessons/4-The_Chase_Calculator/20.html</file>
         <file>Lessons/4-The_Chase_Calculator/21.html</file>
         <file>Lessons/4-The_Chase_Calculator/22.html</file>
-        <file>Lessons/2-Hand_and_Board_Harmony/deckStart.txt</file>
         <file>Lessons/5-The_Bluffing_Blueprint/0.html</file>
         <file>Lessons/5-The_Bluffing_Blueprint/1.html</file>
         <file>Lessons/5-The_Bluffing_Blueprint/2.html</file>
@@ -230,15 +219,28 @@
         <file>Lessons/1-Hand_Types_and_Position/4.deck</file>
         <file>Lessons/1-Hand_Types_and_Position/9.deck</file>
         <file>Lessons/1-Hand_Types_and_Position/12.deck</file>
+        <file>Lessons/1-Hand_Types_and_Position/4.json</file>
+        <file>Lessons/1-Hand_Types_and_Position/7.json</file>
+        <file>Lessons/1-Hand_Types_and_Position/9.json</file>
+        <file>Lessons/1-Hand_Types_and_Position/12.json</file>
+        <file>Lessons/2-Hand_and_Board_Harmony/2.json</file>
+        <file>Lessons/2-Hand_and_Board_Harmony/6.json</file>
+        <file>Lessons/2-Hand_and_Board_Harmony/8.json</file>
+        <file>Lessons/2-Hand_and_Board_Harmony/12.json</file>
+        <file>Lessons/2-Hand_and_Board_Harmony/14.json</file>
         <file>Lessons/2-Hand_and_Board_Harmony/1.deck</file>
-        <file>Lessons/2-Hand_and_Board_Harmony/6.deck</file>
-        <file>Lessons/2-Hand_and_Board_Harmony/10.deck</file>
+        <file>Lessons/2-Hand_and_Board_Harmony/5.deck</file>
+        <file>Lessons/2-Hand_and_Board_Harmony/8.deck</file>
+        <file>Lessons/2-Hand_and_Board_Harmony/11.deck</file>
         <file>Lessons/2-Hand_and_Board_Harmony/14.deck</file>
-        <file>Lessons/2-Hand_and_Board_Harmony/18.deck</file>
         <file>Lessons/3-Push_or_Protect/1.deck</file>
-        <file>Lessons/3-Push_or_Protect/6.deck</file>
+        <file>Lessons/3-Push_or_Protect/5.deck</file>
+        <file>Lessons/3-Push_or_Protect/8.deck</file>
         <file>Lessons/3-Push_or_Protect/10.deck</file>
-        <file>Lessons/3-Push_or_Protect/13.deck</file>
+        <file>Lessons/3-Push_or_Protect/2.json</file>
+        <file>Lessons/3-Push_or_Protect/5.json</file>
+        <file>Lessons/3-Push_or_Protect/8.json</file>
+        <file>Lessons/3-Push_or_Protect/12.json</file>
         <file>Lessons/4-The_Chase_Calculator/1.deck</file>
         <file>Lessons/4-The_Chase_Calculator/7.deck</file>
         <file>Lessons/4-The_Chase_Calculator/13.deck</file>

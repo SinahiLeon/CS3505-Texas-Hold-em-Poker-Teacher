@@ -1,0 +1,12 @@
+{
+  "prompt": "They checked to you. Do you:",
+  "choices": [
+    "Bet $40",
+    "Check",
+    "Fold"
+  ],
+  "correct": 2,
+  "incorrectFeedback": "You're in control of the game right now, it's time to get aggressive. Try again!",
+  "correctAction": "raise",
+  "amount": 40
+}

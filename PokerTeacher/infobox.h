@@ -31,7 +31,7 @@ private:
     optional<Decision> decision = nullopt;
 
     void displayDecision(Decision& decision);
-    void displayFeedback(QString feedback);
+    void displayFeedback(QString feedback, bool correct);
 
 private slots:
     void back();

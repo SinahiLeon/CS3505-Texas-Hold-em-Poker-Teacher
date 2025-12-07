@@ -1,0 +1,11 @@
+{
+  "prompt": "You act first. With medium strength on this scary board, do you:",
+  "choices": [
+    "Bet $30 (small)",
+    "Bet $100 (large)",
+  ],
+  "correct": 0,
+  "incorrectFeedback": "We need to be cautious here not to alert tight players. Try again!",
+  "correctAction": "raise",
+  "amount": 80
+}

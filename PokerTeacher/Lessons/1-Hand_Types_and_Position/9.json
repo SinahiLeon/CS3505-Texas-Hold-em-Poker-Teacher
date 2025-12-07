@@ -1,0 +1,12 @@
+{
+  "prompt": "This is a trouble hand. From the button, do you:",
+  "choices": [
+    "Raise",
+    "Call",
+    "Fold"
+  ],
+  "correct": 0,
+  "incorrectFeedback": "Remember that you need to cut your losses sometimes. Try again!",
+  "correctAction": "fold",
+  "amount": 0
+}

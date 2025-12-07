@@ -7,9 +7,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     Game game;
     View view(game);
-    // Initialize lesson
-    // ...
-    emit view.viewInitialized();
     view.show();
+    emit view.viewInitialized();
     return a.exec();
 }

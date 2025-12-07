@@ -132,7 +132,6 @@ void Lesson::loadDecisionForPage(int pageIndex) {
 
     decision.prompt = obj["prompt"].toString();
     decision.correctChoice = obj["correct"].toInt();
-    decision.correctFeedback = obj["correctFeedback"].toString();
     decision.incorrectFeedback = obj["incorrectFeedback"].toString();
     decision.correctAction = stringToAction(obj["correctAction"].toString());
     decision.amount = obj["amount"].toInt();
@@ -274,7 +273,7 @@ void Lesson::makeChoice(int choiceIndex) {
     }
 
     bool correct = (choiceIndex == decision.correctChoice);
-    QString feedback = correct ? decision.correctFeedback : decision.incorrectFeedback;
+    QString feedback = correct ? "Good choice! Click Next to proceed." : decision.incorrectFeedback;
 
     emit updateNext(correct);
     emit choiceResult(correct, feedback, decision.correctAction, decision.amount);
@@ -419,8 +418,8 @@ void Lesson::allowNext(bool allowed) {
     emit updateNext(allowed);
 }
 
-void Lesson::showFeedback(QString feedback) {
-    emit displayFeedback(feedback);
+void Lesson::showFeedback(QString feedback, bool correct) {
+    emit displayFeedback(feedback, correct);
 }
 
 void Lesson::sendDecision() {

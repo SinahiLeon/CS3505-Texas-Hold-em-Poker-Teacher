@@ -1,0 +1,12 @@
+{
+  "prompt": "74s are very weak, but you've noticed the other players fold a lot. Do you:",
+  "choices": [
+    "Raise to $20",
+    "Call",
+    "Fold"
+  ],
+  "correct": 0,
+  "incorrectFeedback": "Normally this might be a good choice, but we've been given an opportunity to take control. Try again!",
+  "correctAction": "Raise",
+  "amount": 20
+}

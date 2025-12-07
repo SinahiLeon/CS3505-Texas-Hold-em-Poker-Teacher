@@ -89,11 +89,13 @@ void InfoBox::displayDecision(Decision& decision) {
     decisionBox.exec();
 }
 
-void InfoBox::displayFeedback(QString feedback) {
+void InfoBox::displayFeedback(QString feedback, bool correct) {
     QMessageBox feedbackBox;
     feedbackBox.setText(feedback);
     feedbackBox.setStandardButtons(QMessageBox::Ok);
     feedbackBox.exec();
 
-    emit getDecision();
+    if (!correct) {
+        emit getDecision();
+    }
 }

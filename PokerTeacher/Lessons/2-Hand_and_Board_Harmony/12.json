@@ -1,0 +1,11 @@
+{
+  "prompt": "Opponent checks. Do you:",
+  "choices": [
+    "Bet $60",
+    "Check",
+  ],
+  "correct": 0,
+  "incorrectFeedback": "These are ideal conditions, we can be a little more aggressive than just checking. Try again!",
+  "correctAction": "raise",
+  "amount": 60
+}

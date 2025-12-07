@@ -62,7 +62,7 @@ public:
 
 public slots:
     void allowNext(bool allowed);
-    void showFeedback(QString feedback);
+    void showFeedback(QString feedback, bool correct);
     void sendDecision();
     void setBoard(int dealer, int deck);
 
@@ -75,7 +75,7 @@ signals:
     void updateNext(bool allowed);
     void updateDecision(Decision decision);
     void displayDecision(Decision& decision);
-    void displayFeedback(QString feedback);
+    void displayFeedback(QString feedback, bool correct);
     void botActionsReady();
 
 private:

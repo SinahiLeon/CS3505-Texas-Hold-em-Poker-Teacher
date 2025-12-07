@@ -1,0 +1,12 @@
+{
+  "prompt": "Opponent checks. With this dry board, do you:",
+  "choices": [
+    "Bet $40",
+    "Check",
+    "Bet $80"
+  ],
+  "correct": 2,
+  "incorrectFeedback": "Not bad, but we can stand to be more aggressive here. Try again!",
+  "correctAction": "raise",
+  "amount": 80
+}

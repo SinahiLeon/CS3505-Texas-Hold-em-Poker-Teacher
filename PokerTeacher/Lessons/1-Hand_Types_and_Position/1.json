@@ -6,7 +6,6 @@
     "Fold"
   ],
   "correct": 0,
-  "correctFeedback": "Perfect! With premium hands like AK, AA, KK, QQ, we always raise. These hands are so strong that position doesn't matter much.",
   "incorrectFeedback": "Not quite right. Premium hands should be played aggressively from any position. Try again!",
   "correctAction": "raise",
   "amount": 30
