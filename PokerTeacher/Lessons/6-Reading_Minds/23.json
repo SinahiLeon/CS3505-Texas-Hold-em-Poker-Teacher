@@ -1,0 +1,12 @@
+{
+  "prompt": "Based on this, what is the best course of action?",
+  "choices": [
+    "Call",
+    "Fold",
+    "Raise"
+  ],
+  "correct": 0,
+  "incorrectFeedback": "They could be value betting a worse hand or bluffing. Try again.",
+  "correctAction": "call",
+  "amount": 20
+}

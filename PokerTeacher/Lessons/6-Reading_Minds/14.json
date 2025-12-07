@@ -1,0 +1,11 @@
+{
+  "prompt": "Do you:",
+  "choices": [
+    "Check",
+    "Bet half pot"
+  ],
+  "correct": 1,
+  "incorrectFeedback": "We can be aggressive here, seeing as our reading is likely accurate.",
+  "correctAction": "raise",
+  "amount": 10
+}

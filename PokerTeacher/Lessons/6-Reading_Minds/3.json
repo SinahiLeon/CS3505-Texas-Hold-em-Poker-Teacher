@@ -1,0 +1,12 @@
+{
+  "prompt": "Against a calling station, what is your plan?",
+  "choices": [
+    "Bet small for value",
+    "Bet large for value",
+    "Check to trap"
+  ],
+  "correct": 0,
+  "incorrectFeedback": "We don't want to scare them off with something big or allow them to get condifent. Try again.",
+  "correctAction": "raise",
+  "amount": 15
+}

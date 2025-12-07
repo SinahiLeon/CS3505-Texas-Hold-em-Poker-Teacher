@@ -1,0 +1,12 @@
+{
+  "prompt": "Mickey just put in a bet worth three quarters of the pot. Knowing he is a maniac, do you:",
+  "choices": [
+    "Fold",
+    "Call",
+    "Raise"
+  ],
+  "correct": 2,
+  "incorrectFeedback": "We have a strong hand and a player known for bluffing. We can be aggressive here.",
+  "correctAction": "raise",
+  "amount": 25
+}
