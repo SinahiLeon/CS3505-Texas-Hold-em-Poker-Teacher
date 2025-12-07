@@ -368,6 +368,7 @@ void Game::fold(int playerIndex) {
     if (activePlayers == 1) {
         awardPotToPlayer(lastActivePlayer);
     }
+    emit handCardsUpdated();//to gray out folded player's cards
     emit updateLastAction(playerIndex, QString("folded."));
 }
 

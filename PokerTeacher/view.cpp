@@ -220,39 +220,46 @@ void View::handsUpdate() {
     ui->playerCard1->setFixedSize(playerCardSize);
     ui->playerCard2->setFixedSize(playerCardSize);
     // Opponent 1
-    QPixmap opp1card1 = (game.players[1].heldCards.size() > 0)
+    QPixmap opp1Card1Pix = (game.players[1].heldCards.size() > 0)
                             ? ((game.getPhase() == Phase::Showdown)
                                    ? game.players[1].heldCards.at(0)->image
                                    : CardLibrary::cardBack)
                             : CardLibrary::noCard;
-    QPixmap opp1card2 = (game.players[1].heldCards.size() > 1)
+    QPixmap opp1Card2Pix = (game.players[1].heldCards.size() > 1)
                             ? ((game.getPhase() == Phase::Showdown)
                                    ? game.players[1].heldCards.at(1)->image
                                    : CardLibrary::cardBack)
                             : CardLibrary::noCard;
-    ui->opp1Card1->setPixmap(opp1card1);
-    ui->opp1Card2->setPixmap(opp1card2);
+    ui->opp1Card1->setPixmap(opp1Card1Pix);
+    ui->opp1Card2->setPixmap(opp1Card2Pix);
     ui->opp1Card1->setScaledContents(true);
     ui->opp1Card2->setScaledContents(true);
     ui->opp1Card1->setFixedSize(opponentCardSize);
     ui->opp1Card2->setFixedSize(opponentCardSize);
     // Opponent 2
-    QPixmap opp2card1 = (game.players[2].heldCards.size() > 0)
+    QPixmap opp2Card1Pix = (game.players[2].heldCards.size() > 0)
                             ? ((game.getPhase() == Phase::Showdown)
                                    ? game.players[2].heldCards.at(0)->image
                                    : CardLibrary::cardBack)
                             : CardLibrary::noCard;
-    QPixmap opp2card2 = (game.players[2].heldCards.size() > 1)
+    QPixmap opp2Card2Pix = (game.players[2].heldCards.size() > 1)
                             ? ((game.getPhase() == Phase::Showdown)
                                    ? game.players[2].heldCards.at(1)->image
                                    : CardLibrary::cardBack)
                             : CardLibrary::noCard;
-    ui->opp2card1->setPixmap(opp2card1);
-    ui->opp2card2->setPixmap(opp2card2);
-    ui->opp2card1->setScaledContents(true);
-    ui->opp2card2->setScaledContents(true);
-    ui->opp2card1->setFixedSize(opponentCardSize);
-    ui->opp2card2->setFixedSize(opponentCardSize);
+    ui->opp2Card1->setPixmap(opp2Card1Pix);
+    ui->opp2Card2->setPixmap(opp2Card2Pix);
+    ui->opp2Card1->setScaledContents(true);
+    ui->opp2Card2->setScaledContents(true);
+    ui->opp2Card1->setFixedSize(opponentCardSize);
+    ui->opp2Card2->setFixedSize(opponentCardSize);
+
+    ui->playerCard1->setDisabled(game.players[0].getFolded());
+    ui->playerCard2->setDisabled(game.players[0].getFolded());
+    ui->opp1Card1->setDisabled(game.players[1].getFolded());
+    ui->opp1Card2->setDisabled(game.players[1].getFolded());
+    ui->opp2Card1->setDisabled(game.players[2].getFolded());
+    ui->opp2Card2->setDisabled(game.players[2].getFolded());
 }
 
 void View::phaseUpdate(Phase currPhase) {

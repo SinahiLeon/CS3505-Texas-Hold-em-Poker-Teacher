@@ -1251,7 +1251,7 @@ background: rgb(109, 0, 164)
                 <number>0</number>
                </property>
                <item row="0" column="0">
-                <widget class="QLabel" name="opp2card1">
+                <widget class="QLabel" name="opp2Card1">
                  <property name="text">
                   <string>image</string>
                  </property>
@@ -1303,7 +1303,7 @@ background: rgb(109, 0, 164)
                 <number>0</number>
                </property>
                <item row="0" column="0">
-                <widget class="QLabel" name="opp2card2">
+                <widget class="QLabel" name="opp2Card2">
                  <property name="text">
                   <string>image</string>
                  </property>
@@ -1745,7 +1745,7 @@ color: #fa5e8a;
      <x>0</x>
      <y>0</y>
      <width>950</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuLessons">
