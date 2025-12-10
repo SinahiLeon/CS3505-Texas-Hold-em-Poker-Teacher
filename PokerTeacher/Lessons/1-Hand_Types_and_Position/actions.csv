@@ -6,8 +6,7 @@ page,player,action,change
 7,0,check,0
 7,1,check,0
 7,2,check,0
-9,1,fold,0
-9,2,fold,0
-10,0,fold,0
+10,1,fold,0
+10,2,fold,0
 15,1,fold,0
 15,2,fold,0
