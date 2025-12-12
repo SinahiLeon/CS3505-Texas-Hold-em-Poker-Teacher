@@ -2,7 +2,7 @@
   "prompt": "You act first. With medium strength on this scary board, do you:",
   "choices": [
     "Bet $60",
-    "Check",
+    "Check"
   ],
   "correct": 0,
   "incorrectFeedback": "We need to be aggressive here to take out other players. Try again!",
