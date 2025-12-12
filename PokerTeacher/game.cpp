@@ -29,6 +29,7 @@ Game::Game(QObject *parent) : QObject(parent), lesson(Lesson(QString(":/Lessons/
 void Game::newGame(int gameDealerIndex) {
     // Set up start of game
     qDebug() << "Setting up new game...";
+    emit gameReset();
     pot = 0;
     players.clear();
     smallBlindPaid = false;
@@ -42,6 +43,7 @@ void Game::newGame(int gameDealerIndex) {
 
     // Set up start of first hand
     newHand();
+
     // Start the game loop
     dealerIndex = gameDealerIndex;
     startRound();

@@ -59,6 +59,7 @@ signals:
     void handEnded(int winner);
     void playersTurnEnded();
     void displayFeedback(QString feedback, bool correct);
+    void gameReset();
 
 public slots:
     void onViewInitialized();

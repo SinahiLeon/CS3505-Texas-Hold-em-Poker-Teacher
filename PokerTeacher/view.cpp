@@ -40,6 +40,8 @@ View::View(Game& game, QWidget *parent)
             this, &View::handEnded);
     connect(&game, &Game::playersTurnEnded,
             this, &View::playersTurnEnded);
+    connect(&game, &Game::gameReset,
+            this, [this]() { this->ui->continueButton->setVisible(false); });
     connect(this, &View::viewInitialized,
             &game, &Game::onViewInitialized);
     connect(this, &View::continueToNextHand,
@@ -385,9 +387,7 @@ void View::onInfoButtonClicked()
 
 void View::onLessonActionClicked(int action) {
     qDebug() << "Opening info box.";
-
     game.chooseLesson(action);
-
     emit closeInfobox();
 
     InfoBox* infobox = new InfoBox(game.getCurrentLesson(), this);
