@@ -5,7 +5,7 @@
     "Check"
   ],
   "correct": 0,
-  "incorrectFeedback": "These are ideal conditions, we can be a little more aggressive than just checking. Try again!",
+  "incorrectFeedback": "We have to protect our strong hand by betting high. Try again!",
   "correctAction": "raise",
   "amount": 60
 }
