@@ -1,0 +1,1 @@
+The Poker project is built around a state-driven game engine that models the full Texas Hold’em lifecycle — pre-flop through river. The engine enforces rules, manages betting rounds, pots, and hand evaluation, while the Qt UI simply reflects the current game state
